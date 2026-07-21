@@ -13,6 +13,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.location.href = 'index.html';
     return;
   }
+  // Check approval status
+  if (currentUser.status && currentUser.status !== 'Approved') {
+    window.location.href = 'waiting-approval.html';
+    return;
+  }
 
   document.getElementById('commName').textContent = currentUser.name;
 

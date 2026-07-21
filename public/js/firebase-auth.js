@@ -67,12 +67,13 @@ async function firebaseLoginWithEmail(email, password) {
 // ────────────────────────────────────────────────
 // POST /api/auth/register  —  Create new account
 // ────────────────────────────────────────────────
-async function firebaseRegisterWithEmail(name, email, password, role, flat) {
+async function firebaseRegisterWithEmail(name, email, password, role, extra) {
   try {
+    const body = { name, email, password, role, ...(extra || {}) };
     const res = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password, role, flat }),
+      body: JSON.stringify(body),
     });
 
     const data = await res.json();

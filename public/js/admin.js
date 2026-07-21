@@ -83,6 +83,7 @@ function loadAdminDashboard() {
   renderNotices();
   renderVisitorsTable();
   renderRoleSettingsTable();
+  loadPendingApprovals();
 }
 
 function renderKPIs() {
@@ -366,4 +367,287 @@ function openChangeRoleModal(id, name, role) {
 function logout() {
   SystemDB.logout();
   window.location.href = 'index.html';
+}
+
+// ─── Member Approval Center ─────────────────────────────────────
+
+async function loadPendingApprovals() {
+  const token = SystemDB.getToken();
+  if (!token) return;
+
+  try {
+    const res = await fetch('/api/auth/pending', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const data = await res.json();
+    if (data.success) {
+      renderPendingResidents(data.users.filter(u => u.role === 'Resident'));
+      renderPendingGuards(data.users.filter(u => u.role === 'Security Guard'));
+
+      // Update badge
+      const badge = document.getElementById('pendingCountBadge');
+      if (badge) {
+        const count = data.users.length;
+        badge.textContent = count;
+        badge.style.display = count > 0 ? 'inline' : 'none';
+      }
+    }
+  } catch (err) {
+    console.error('Failed to load pending approvals:', err);
+  }
+
+  // Also load all members
+  loadAllMembers();
+}
+
+function renderPendingResidents(users) {
+  const tbody = document.getElementById('pendingResidentsBody');
+  const empty = document.getElementById('noPendingResidents');
+  if (!tbody) return;
+
+  if (users.length === 0) {
+    tbody.innerHTML = '';
+    empty.classList.remove('d-none');
+    return;
+  }
+  empty.classList.add('d-none');
+
+  tbody.innerHTML = users.map(u => `
+    <tr>
+      <td>
+        <div class="d-flex align-items-center gap-2">
+          <img src="${u.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + u.name}" class="rounded-circle" width="36" height="36">
+          <div>
+            <div class="fw-semibold">${u.name}</div>
+            <small class="text-muted">${u.email}</small>
+          </div>
+        </div>
+      </td>
+      <td class="fs-7">${u.phone || '--'}</td>
+      <td class="fs-7 text-muted">${u.registeredAt || '--'}</td>
+      <td>
+        ${u.aadhaar ? `<span class="badge bg-light text-dark border"><i class="fa-solid fa-id-card me-1"></i>${u.aadhaar}</span>` : '<span class="text-muted">None</span>'}
+        ${u.familyMembers ? `<br><small class="text-muted">Family: ${u.familyMembers}</small>` : ''}
+      </td>
+      <td class="text-end">
+        <button class="btn btn-sm btn-outline-success rounded-pill px-3 me-1" onclick="openApproveModal('${u.id}', '${u.name.replace(/'/g, "\\'")}', '${u.email}', '${u.role}', '${u.avatar || ''}')">
+          <i class="fa-solid fa-check me-1"></i> Approve
+        </button>
+        <button class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="openRejectModal('${u.id}', '${u.name.replace(/'/g, "\\'")}')">
+          <i class="fa-solid fa-xmark me-1"></i> Reject
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderPendingGuards(users) {
+  const tbody = document.getElementById('pendingGuardsBody');
+  const empty = document.getElementById('noPendingGuards');
+  if (!tbody) return;
+
+  if (users.length === 0) {
+    tbody.innerHTML = '';
+    empty.classList.remove('d-none');
+    return;
+  }
+  empty.classList.add('d-none');
+
+  tbody.innerHTML = users.map(u => `
+    <tr>
+      <td>
+        <div class="d-flex align-items-center gap-2">
+          <img src="${u.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + u.name}" class="rounded-circle" width="36" height="36">
+          <div>
+            <div class="fw-semibold">${u.name}</div>
+            <small class="text-muted">${u.email}</small>
+          </div>
+        </div>
+      </td>
+      <td class="fs-7">${u.phone || '--'}</td>
+      <td class="fs-7">${u.employeeId || '--'}</td>
+      <td class="fs-7 text-muted">${u.registeredAt || '--'}</td>
+      <td class="text-end">
+        <button class="btn btn-sm btn-outline-success rounded-pill px-3 me-1" onclick="openApproveModal('${u.id}', '${u.name.replace(/'/g, "\\'")}', '${u.email}', '${u.role}', '${u.avatar || ''}')">
+          <i class="fa-solid fa-check me-1"></i> Approve
+        </button>
+        <button class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="openRejectModal('${u.id}', '${u.name.replace(/'/g, "\\'")}')">
+          <i class="fa-solid fa-xmark me-1"></i> Reject
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openApproveModal(userId, name, email, role, avatar) {
+  document.getElementById('approveUserId').value = userId;
+  document.getElementById('approveUserName').textContent = name;
+  document.getElementById('approveUserEmail').textContent = email;
+  document.getElementById('approveUserRole').textContent = role;
+  document.getElementById('approveUserAvatar').src = avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + name;
+
+  // Show/hide role-specific fields
+  const isGuard = role === 'Security Guard';
+  document.getElementById('residentAssignmentFields').classList.toggle('d-none', isGuard);
+  document.getElementById('guardAssignmentFields').classList.toggle('d-none', !isGuard);
+
+  new bootstrap.Modal(document.getElementById('approveMemberModal')).show();
+}
+
+function openRejectModal(userId, name) {
+  document.getElementById('rejectUserId').value = userId;
+  document.getElementById('rejectReason').value = '';
+  new bootstrap.Modal(document.getElementById('rejectMemberModal')).show();
+}
+
+// Approve form handler
+document.getElementById('approveMemberForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const token = SystemDB.getToken();
+  const userId = document.getElementById('approveUserId').value;
+  const isGuard = document.getElementById('approveUserRole').textContent === 'Security Guard';
+
+  const body = { userId };
+  if (isGuard) {
+    body.guardId = document.getElementById('approveGuardId').value;
+    body.gateAssignment = document.getElementById('approveGate').value;
+    body.shift = document.getElementById('approveShift').value;
+    body.salary = document.getElementById('approveSalary').value;
+    body.joiningDate = document.getElementById('approveJoiningDate').value;
+  } else {
+    body.tower = document.getElementById('approveTower').value;
+    body.floor = document.getElementById('approveFloor').value;
+    body.flat = document.getElementById('approveFlat').value;
+    body.residentType = document.getElementById('approveResidentType').value;
+    body.moveInDate = document.getElementById('approveMoveInDate').value;
+    body.parkingSlot = document.getElementById('approveParking').value;
+    body.rent = document.getElementById('approveRent').value;
+    body.maintenanceAmount = document.getElementById('approveMaintenance').value;
+    body.emergencyContact = document.getElementById('approveEmergency').value;
+    body.vehicleNumbers = document.getElementById('approveVehicles').value;
+    body.waterMeter = document.getElementById('approveWaterMeter').value;
+    body.electricMeter = document.getElementById('approveElectricMeter').value;
+  }
+  body.notes = document.getElementById('approveNotes').value;
+
+  try {
+    const res = await fetch('/api/auth/approve', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (data.success) {
+      bootstrap.Modal.getInstance(document.getElementById('approveMemberModal')).hide();
+      alert('Member approved successfully!');
+      loadPendingApprovals();
+      loadAdminDashboard();
+    } else {
+      alert('Error: ' + data.message);
+    }
+  } catch (err) {
+    alert('Server error. Please try again.');
+  }
+});
+
+// Reject form handler
+document.getElementById('rejectMemberForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const token = SystemDB.getToken();
+  const userId = document.getElementById('rejectUserId').value;
+  const reason = document.getElementById('rejectReason').value;
+
+  try {
+    const res = await fetch('/api/auth/reject', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ userId, reason }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      bootstrap.Modal.getInstance(document.getElementById('rejectMemberModal')).hide();
+      alert('Member registration rejected.');
+      loadPendingApprovals();
+    } else {
+      alert('Error: ' + data.message);
+    }
+  } catch (err) {
+    alert('Server error. Please try again.');
+  }
+});
+
+// Load all members
+async function loadAllMembers() {
+  const token = SystemDB.getToken();
+  if (!token) return;
+
+  try {
+    const res = await fetch('/api/auth/all', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const data = await res.json();
+    if (data.success) {
+      renderAllMembers(data.users);
+    }
+  } catch (err) {
+    console.error('Failed to load all members:', err);
+  }
+}
+
+function renderAllMembers(users) {
+  const tbody = document.getElementById('allMembersBody');
+  if (!tbody) return;
+
+  tbody.innerHTML = users.map(u => {
+    const statusBadge = u.status === 'Approved' ? 'bg-success' :
+                        u.status === 'Pending' ? 'bg-warning text-dark' :
+                        u.status === 'Rejected' ? 'bg-danger' : 'bg-secondary';
+    return `
+      <tr>
+        <td>
+          <div class="d-flex align-items-center gap-2">
+            <img src="${u.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + u.name}" class="rounded-circle" width="32" height="32">
+            <div>
+              <div class="fw-semibold">${u.name}</div>
+              <small class="text-muted">${u.email}</small>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge ${u.role === 'Admin' ? 'bg-danger' : u.role === 'Resident' ? 'bg-primary' : u.role === 'Security Guard' ? 'bg-warning text-dark' : 'bg-info'}">${u.role}</span></td>
+        <td class="fs-7">${u.flat || '--'}</td>
+        <td><span class="badge ${statusBadge}">${u.status || 'Approved'}</span></td>
+        <td class="fs-7 text-muted">${u.registeredAt || '--'}</td>
+        <td class="text-end">
+          <button class="btn btn-sm btn-outline-primary border-0 rounded-pill px-2" onclick="viewMemberDetails('${u.id}', '${u.name.replace(/'/g, "\\'")}', '${u.email}', '${u.role}', '${u.flat || ''}', '${u.phone || ''}', '${u.status || 'Approved'}', '${u.registeredAt || ''}', '${u.approvedAt || ''}')" title="View Details">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+          ${u.status === 'Pending' ? `
+            <button class="btn btn-sm btn-outline-success border-0 rounded-pill px-2" onclick="openApproveModal('${u.id}', '${u.name.replace(/'/g, "\\'")}', '${u.email}', '${u.role}', '${u.avatar || ''}')" title="Approve">
+              <i class="fa-solid fa-check"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger border-0 rounded-pill px-2" onclick="openRejectModal('${u.id}', '${u.name.replace(/'/g, "\\'")}')" title="Reject">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          ` : ''}
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function viewMemberDetails(id, name, email, role, flat, phone, status, registeredAt, approvedAt) {
+  const body = document.getElementById('memberDetailsBody');
+  body.innerHTML = `
+    <div class="row g-3">
+      <div class="col-6"><strong>Name:</strong> ${name}</div>
+      <div class="col-6"><strong>Email:</strong> ${email}</div>
+      <div class="col-6"><strong>Role:</strong> ${role}</div>
+      <div class="col-6"><strong>Status:</strong> <span class="badge ${status === 'Approved' ? 'bg-success' : status === 'Pending' ? 'bg-warning text-dark' : 'bg-danger'}">${status}</span></div>
+      <div class="col-6"><strong>Flat/Gate:</strong> ${flat || 'Not assigned'}</div>
+      <div class="col-6"><strong>Phone:</strong> ${phone || '--'}</div>
+      <div class="col-6"><strong>Registered:</strong> ${registeredAt || '--'}</div>
+      <div class="col-6"><strong>Approved:</strong> ${approvedAt || '--'}</div>
+    </div>
+  `;
+  new bootstrap.Modal(document.getElementById('memberDetailsModal')).show();
 }

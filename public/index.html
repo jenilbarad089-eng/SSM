@@ -163,17 +163,41 @@
                   </div>
                   <div class="row g-2 mb-3">
                     <div class="col-6">
-                      <label class="form-label fw-semibold small text-light opacity-75">Flat No</label>
-                      <input type="text" class="form-control bg-dark text-white border-secondary" id="regFlat" placeholder="e.g. B-303" required>
+                      <label class="form-label fw-semibold small text-light opacity-75">Mobile Number</label>
+                      <input type="tel" class="form-control bg-dark text-white border-secondary" id="regPhone" placeholder="e.g. 9876543210" required>
                     </div>
                     <div class="col-6">
-                      <label class="form-label fw-semibold small text-light opacity-75">Role</label>
-                      <select class="form-select bg-dark text-white border-secondary" id="regRole">
+                      <label class="form-label fw-semibold small text-light opacity-75">Registering as</label>
+                      <select class="form-select bg-dark text-white border-secondary" id="regRole" onchange="toggleRegFields()">
                         <option value="Resident">Resident</option>
-                        <option value="Admin">Admin</option>
                         <option value="Security Guard">Security Guard</option>
-                        <option value="Committee Member">Committee Member</option>
                       </select>
+                    </div>
+                  </div>
+                  <!-- Guard-specific fields -->
+                  <div id="guardFields" class="d-none">
+                    <div class="row g-2 mb-3">
+                      <div class="col-6">
+                        <label class="form-label fw-semibold small text-light opacity-75">Employee ID</label>
+                        <input type="text" class="form-control bg-dark text-white border-secondary" id="regEmployeeId" placeholder="e.g. EMP-045">
+                      </div>
+                      <div class="col-6">
+                        <label class="form-label fw-semibold small text-light opacity-75">Aadhaar Number</label>
+                        <input type="text" class="form-control bg-dark text-white border-secondary" id="regAadhaar" placeholder="e.g. 1234-5678-9012">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Resident-specific fields -->
+                  <div id="residentFields">
+                    <div class="row g-2 mb-3">
+                      <div class="col-6">
+                        <label class="form-label fw-semibold small text-light opacity-75">Aadhaar / ID (optional)</label>
+                        <input type="text" class="form-control bg-dark text-white border-secondary" id="regAadhaarRes" placeholder="e.g. 1234-5678-9012">
+                      </div>
+                      <div class="col-6">
+                        <label class="form-label fw-semibold small text-light opacity-75">Family Members</label>
+                        <input type="number" class="form-control bg-dark text-white border-secondary" id="regFamily" placeholder="e.g. 4" min="1">
+                      </div>
                     </div>
                   </div>
                   <div class="mb-4">
@@ -184,8 +208,11 @@
                   <div id="regAlert" class="alert alert-danger d-none py-2 small mb-3"></div>
 
                   <button type="submit" class="btn btn-success w-100 py-2.5 fw-bold rounded-pill">
-                    <i class="fa-solid fa-user-plus me-2"></i> Register SocietyHub Account
+                    <i class="fa-solid fa-user-plus me-2"></i> Submit Registration
                   </button>
+                  <p class="text-center text-muted small mt-3 mb-0">
+                    <i class="fa-solid fa-info-circle me-1"></i> Admin and Committee accounts can only be created by an existing Admin.
+                  </p>
                 </form>
               </div>
 
@@ -271,7 +298,7 @@
 
       const currentUser = SystemDB.getCurrentUser();
       if (currentUser) {
-        redirectToDashboard(currentUser.role);
+        redirectToDashboard(currentUser.role, currentUser.status);
       }
 
       // Login Form Listener
@@ -279,12 +306,13 @@
         e.preventDefault();
         const emailOrUser = document.getElementById('usernameInput').value;
         const password = document.getElementById('passwordInput').value;
+        const alertEl = document.getElementById('loginAlert');
+        alertEl.classList.add('d-none');
 
         const res = await firebaseLoginWithEmail(emailOrUser, password);
         if (res.success) {
-          redirectToDashboard(res.user.role);
+          redirectToDashboard(res.user.role, res.user.status);
         } else {
-          const alertEl = document.getElementById('loginAlert');
           alertEl.textContent = res.message || 'Invalid credentials';
           alertEl.classList.remove('d-none');
         }
@@ -295,27 +323,43 @@
         e.preventDefault();
         const name = document.getElementById('regName').value;
         const email = document.getElementById('regEmail').value;
-        const flat = document.getElementById('regFlat').value;
+        const phone = document.getElementById('regPhone').value;
         const role = document.getElementById('regRole').value;
         const password = document.getElementById('regPassword').value;
+        const alertEl = document.getElementById('regAlert');
+        alertEl.classList.add('d-none');
 
-        const res = await firebaseRegisterWithEmail(name, email, password, role, flat);
-        if (res.success) {
-          redirectToDashboard(res.user.role);
+        const extra = { phone };
+        if (role === 'Security Guard') {
+          extra.employeeId = document.getElementById('regEmployeeId').value;
+          extra.aadhaar = document.getElementById('regAadhaar').value;
         } else {
-          const alertEl = document.getElementById('regAlert');
+          extra.aadhaar = document.getElementById('regAadhaarRes').value;
+          extra.familyMembers = document.getElementById('regFamily').value;
+        }
+
+        const res = await firebaseRegisterWithEmail(name, email, password, role, extra);
+        if (res.success) {
+          redirectToDashboard(res.user.role, res.user.status);
+        } else {
           alertEl.textContent = res.message || 'Registration failed';
           alertEl.classList.remove('d-none');
         }
       });
     });
 
+    function toggleRegFields() {
+      const role = document.getElementById('regRole').value;
+      document.getElementById('guardFields').classList.toggle('d-none', role !== 'Security Guard');
+      document.getElementById('residentFields').classList.toggle('d-none', role !== 'Resident');
+    }
+
     async function handleGoogleSignIn() {
       const res = await firebaseLoginWithGoogle();
       if (res.success) {
-        redirectToDashboard(res.user.role);
+        redirectToDashboard(res.user.role, res.user.status);
       } else {
-        alert("Google Sign-In: " + (res.message || "Coming soon."));
+        alert("Google Sign-In: " + (res.message || "Please try again."));
       }
     }
 
@@ -325,7 +369,20 @@
       document.getElementById('loginForm').dispatchEvent(new Event('submit'));
     }
 
-    function redirectToDashboard(role) {
+    function redirectToDashboard(role, status) {
+      // Check approval status first
+      if (status === 'Pending') {
+        window.location.href = 'waiting-approval.html';
+        return;
+      }
+      if (status === 'Rejected') {
+        const alertEl = document.getElementById('loginAlert');
+        if (alertEl) {
+          alertEl.textContent = 'Your registration has been rejected. Please contact the Society Office.';
+          alertEl.classList.remove('d-none');
+        }
+        return;
+      }
       switch (role) {
         case 'Admin': window.location.href = 'admin.html'; break;
         case 'Resident': window.location.href = 'resident.html'; break;

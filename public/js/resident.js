@@ -9,12 +9,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   currentUser = SystemDB.getCurrentUser();
   if (!currentUser || currentUser.role !== 'Resident') {
-    // If admin logged in, redirect to admin
     if (currentUser && currentUser.role === 'Admin') {
       window.location.href = 'admin.html';
       return;
     }
     window.location.href = 'index.html';
+    return;
+  }
+  // Check approval status
+  if (currentUser.status && currentUser.status !== 'Approved') {
+    window.location.href = 'waiting-approval.html';
     return;
   }
 
