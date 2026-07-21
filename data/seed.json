@@ -3,7 +3,7 @@
     {
       "id": "USR-101",
       "username": "jenilbarad089",
-      "password": "admin123",
+      "password": "$2a$10$kRqRobIgS8Z/kXCg3gxobOm9QETHTIKzkEFe6eZ232HfuqaLxEwXi",
       "name": "Jenil Barad (Admin)",
       "role": "Admin",
       "flat": "A-101",
@@ -14,7 +14,7 @@
     {
       "id": "USR-102",
       "username": "resident1",
-      "password": "resident123",
+      "password": "$2a$10$dn.36Xt5q0KMyOZAU2ykoeEs9V0Vn7r1uTqePw1MqwHcBknaoihMO",
       "name": "Amit Patel",
       "role": "Resident",
       "flat": "B-204",
@@ -25,7 +25,7 @@
     {
       "id": "USR-103",
       "username": "resident2",
-      "password": "resident123",
+      "password": "$2a$10$nZyZF0vaAvkO82.HJWmYauCkpUxnCnpNhI2vKazgd6GMxZctnh3yi",
       "name": "Priya Verma",
       "role": "Resident",
       "flat": "C-501",
@@ -36,7 +36,7 @@
     {
       "id": "USR-104",
       "username": "guard",
-      "password": "guard123",
+      "password": "$2a$10$bEKklmed8M2G2Za5w8Z4f.UDv1VUm2QzbdlGIrszaJhVUvAsMi3BC",
       "name": "Bahadur Singh",
       "role": "Security Guard",
       "flat": "Main Gate 1",
@@ -47,7 +47,7 @@
     {
       "id": "USR-105",
       "username": "committee",
-      "password": "committee123",
+      "password": "$2a$10$pS6V.WzooWLB0Z2hT/LucO9FqBM4UK5bzaf2wRdKrjvF9RK1u28Oy",
       "name": "Suresh Kumar",
       "role": "Committee Member",
       "flat": "A-402",

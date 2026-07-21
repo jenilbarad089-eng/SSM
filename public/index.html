@@ -12,10 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Custom CSS -->
   <link href="css/style.css" rel="stylesheet">
-  <!-- Firebase SDK Compat -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
+
 </head>
 <body>
 
@@ -29,7 +26,6 @@
         <span>Society<span class="text-primary">Hub</span></span>
       </a>
       <div class="d-flex align-items-center gap-2">
-        <span class="firebase-live-badge"><i class="fa-solid fa-fire"></i> Firebase Auth Live</span>
         <span class="navbar-text text-light opacity-75 d-none d-md-inline fs-7 ms-2">
           <i class="fa-solid fa-shield-halved me-1 text-success"></i> Digital Residential Administration Engine
         </span>
@@ -37,7 +33,7 @@
     </div>
   </nav>
 
-  <!-- Hero & Firebase Login Section -->
+  <!-- Hero & Login Section -->
   <section class="hero-hub">
     <div class="container">
       <div class="row align-items-center g-5">
@@ -56,8 +52,8 @@
             </div>
             <div class="vr bg-light opacity-25"></div>
             <div>
-              <h3 class="fw-bold text-success mb-0">Firebase</h3>
-              <small class="text-light opacity-75">Real Cloud Auth</small>
+              <h3 class="fw-bold text-success mb-0">Secure</h3>
+              <small class="text-light opacity-75">Server-Side Auth</small>
             </div>
             <div class="vr bg-light opacity-25"></div>
             <div>
@@ -86,7 +82,7 @@
 
             <div class="tab-content" id="authTabContent">
 
-              <!-- TAB 1: Firebase Sign In -->
+              <!-- TAB 1: Sign In -->
               <div class="tab-pane fade show active" id="signin-pane">
                 <form id="loginForm">
                   <div class="mb-3">
@@ -108,7 +104,7 @@
                   <div id="loginAlert" class="alert alert-danger d-none py-2 small mb-3"></div>
 
                   <button type="submit" class="btn btn-primary-custom w-100 py-2.5 mb-3">
-                    <i class="fa-solid fa-fire me-2"></i> Firebase Sign In
+                    <i class="fa-solid fa-right-to-bracket me-2"></i> Sign In
                   </button>
 
                   <button type="button" class="btn btn-google-auth mb-3" onclick="handleGoogleSignIn()">
@@ -147,7 +143,7 @@
                 </form>
               </div>
 
-              <!-- TAB 2: Firebase Registration -->
+              <!-- TAB 2: Registration -->
               <div class="tab-pane fade" id="register-pane">
                 <form id="registerForm">
                   <div class="mb-3">
@@ -253,7 +249,7 @@
   <footer class="bg-dark text-white py-4 mt-auto border-top border-secondary border-opacity-25">
     <div class="container text-center">
       <p class="mb-1 text-light opacity-75 small">&copy; 2026 SocietyHub - Modern Residential Administration System</p>
-      <small class="text-muted">Powered by Firebase Authentication, Node.js Express API & Bootstrap 5</small>
+      <small class="text-muted">Powered by Node.js Express API, bcrypt + JWT Authentication & Bootstrap 5</small>
     </div>
   </footer>
 
@@ -312,7 +308,7 @@
       if (res.success) {
         redirectToDashboard(res.user.role);
       } else {
-        alert("Google Sign-In: " + (res.message || "Please complete setup in Firebase console."));
+        alert("Google Sign-In: " + (res.message || "Coming soon."));
       }
     }
 

@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const authRoutes = require('./auth-routes');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -10,14 +11,17 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static frontend files
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/data', express.static(path.join(__dirname, 'data')));
+// Auth API routes (must be before static file middleware)
+app.use('/api/auth', authRoutes);
 
 // Health check API
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Smart Society Management System API active' });
 });
+
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/data', express.static(path.join(__dirname, 'data')));
 
 // Fallback to index.html for SPA routing
 app.get('*', (req, res) => {

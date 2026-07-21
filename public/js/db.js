@@ -4,6 +4,7 @@
 
 const STORAGE_KEY = 'ssm_database_v1';
 const SESSION_KEY = 'ssm_current_user';
+const TOKEN_KEY = 'ssm_auth_token';
 
 const SystemDB = {
   data: null,
@@ -48,20 +49,35 @@ const SystemDB = {
     return this.init();
   },
 
+  // ──────────────────────────────────────────────
+  // JWT Token Management
+  // ──────────────────────────────────────────────
+
+  setToken(token) {
+    if (token) {
+      localStorage.setItem(TOKEN_KEY, token);
+    }
+  },
+
+  getToken() {
+    return localStorage.getItem(TOKEN_KEY);
+  },
+
+  clearToken() {
+    localStorage.removeItem(TOKEN_KEY);
+  },
+
+  authHeaders() {
+    const token = this.getToken();
+    return token ? { 'Authorization': 'Bearer ' + token } : {};
+  },
+
   // Auth Operations
   login(username, password) {
-    if (!this.data) return { success: false, message: 'Database not initialized' };
-    const user = this.data.users.find(
-      u => u.username.toLowerCase() === username.trim().toLowerCase() && u.password === password
-    );
-
-    if (user) {
-      const sessionUser = { ...user };
-      delete sessionUser.password;
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify(sessionUser));
-      return { success: true, user: sessionUser };
-    }
-    return { success: false, message: 'Invalid username or password' };
+    // Auth now handled server-side via firebase-auth.js -> /api/auth/login
+    // This method is kept as a synchronous fallback for the local data layer
+    // but no longer performs password comparison (passwords are hashed server-side).
+    return { success: false, message: 'Authentication is handled server-side. Please use the login form.' };
   },
 
   getCurrentUser() {
@@ -70,6 +86,7 @@ const SystemDB = {
   },
 
   logout() {
+    this.clearToken();
     sessionStorage.removeItem(SESSION_KEY);
   },
 
@@ -79,11 +96,12 @@ const SystemDB = {
   },
 
   addResident(residentData) {
+    // Note: password hashing is handled server-side via /api/auth/register
+    // The password field is not stored in localStorage for security
     const newId = 'USR-' + Math.floor(100 + Math.random() * 900);
     const newResident = {
       id: newId,
       username: residentData.username || residentData.email.split('@')[0],
-      password: residentData.password || 'resident123',
       name: residentData.name,
       role: 'Resident',
       flat: residentData.flat,
@@ -317,11 +335,11 @@ const SystemDB = {
   getDefaultData() {
     return {
       users: [
-        { id: "USR-101", username: "admin", password: "admin123", name: "Rajesh Sharma", role: "Admin", flat: "A-101", email: "admin@smartsociety.com", phone: "9876543210" },
-        { id: "USR-102", username: "resident1", password: "resident123", name: "Amit Patel", role: "Resident", flat: "B-204", email: "amit.patel@gmail.com", phone: "9812345678" },
-        { id: "USR-103", username: "resident2", password: "resident123", name: "Priya Verma", role: "Resident", flat: "C-501", email: "priya.v@gmail.com", phone: "9823456789" },
-        { id: "USR-104", username: "guard", password: "guard123", name: "Bahadur Singh", role: "Security Guard", flat: "Main Gate 1", email: "guard@smartsociety.com", phone: "9988776655" },
-        { id: "USR-105", username: "committee", password: "committee123", name: "Suresh Kumar", role: "Committee Member", flat: "A-402", email: "suresh@smartsociety.com", phone: "9765432109" }
+        { id: "USR-101", username: "admin", name: "Rajesh Sharma", role: "Admin", flat: "A-101", email: "admin@smartsociety.com", phone: "9876543210" },
+        { id: "USR-102", username: "resident1", name: "Amit Patel", role: "Resident", flat: "B-204", email: "amit.patel@gmail.com", phone: "9812345678" },
+        { id: "USR-103", username: "resident2", name: "Priya Verma", role: "Resident", flat: "C-501", email: "priya.v@gmail.com", phone: "9823456789" },
+        { id: "USR-104", username: "guard", name: "Bahadur Singh", role: "Security Guard", flat: "Main Gate 1", email: "guard@smartsociety.com", phone: "9988776655" },
+        { id: "USR-105", username: "committee", name: "Suresh Kumar", role: "Committee Member", flat: "A-402", email: "suresh@smartsociety.com", phone: "9765432109" }
       ],
       complaints: [],
       maintenance: [],
