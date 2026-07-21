@@ -2,14 +2,15 @@
  * Smart Society Management System - Firebase Authentication Service
  */
 
-// Default Firebase Configuration (Users can replace with their Firebase Project Config)
+// Firebase Project Configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDemoKey_SmartSocietyManagement360",
-  authDomain: "smart-society-360.firebaseapp.com",
-  projectId: "smart-society-360",
-  storageBucket: "smart-society-360.appspot.com",
-  messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:abcdef1234567890"
+  apiKey: "AIzaSyAQKGxFLBwKpE-Rg5SkqhXGBNMoLzOz_as",
+  authDomain: "smart-sm-c30db.firebaseapp.com",
+  projectId: "smart-sm-c30db",
+  storageBucket: "smart-sm-c30db.firebasestorage.app",
+  messagingSenderId: "730008445249",
+  appId: "1:730008445249:web:477cd1cba54490b39481c0",
+  measurementId: "G-7WEFSX4VFV"
 };
 
 let firebaseApp = null;
