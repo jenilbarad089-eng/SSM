@@ -1,22 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SocietyHub | Smart Residential Administration Platform</title>
+  <!-- Google Fonts: Lora (Headings) & Plus Jakarta Sans (Body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Theme toggle pre-loader -->
+  <script src="js/theme.js"></script>
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- FontAwesome Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Custom CSS -->
   <link href="css/style.css" rel="stylesheet">
-  <!-- Firebase SDK (for Google Sign-In only) -->
+  <!-- Firebase SDK Compat -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-  <!-- Theme: apply saved preference before body renders -->
-  <script src="js/theme.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
 </head>
 <body>
 
@@ -29,43 +32,42 @@
         </div>
         <span>Society<span class="text-primary">Hub</span></span>
       </a>
-      <div class="d-flex align-items-center gap-2">
-        <button class="btn theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">
+      
+      <div class="d-flex align-items-center gap-3">
+        <span class="firebase-live-badge d-none d-sm-inline-flex"><i class="fa-solid fa-fire"></i> Firebase Auth</span>
+        <button class="btn-theme-toggle" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
           <i class="fa-solid fa-sun" id="themeIcon"></i>
         </button>
-        <span class="navbar-text text-light opacity-75 d-none d-md-inline fs-7 ms-2">
-          <i class="fa-solid fa-shield-halved me-1 text-success"></i> Digital Residential Administration Engine
-        </span>
       </div>
     </div>
   </nav>
 
-  <!-- Hero & Login Section -->
+  <!-- Hero Section -->
   <section class="hero-hub">
     <div class="container">
       <div class="row align-items-center g-5">
-        <div class="col-lg-7 text-white">
+        <div class="col-lg-7">
           <span class="badge bg-primary bg-opacity-25 text-info border border-info border-opacity-25 px-3 py-2 rounded-pill mb-3">
             <i class="fa-solid fa-bolt me-1"></i> SocietyHub MIS Platform v2.0
           </span>
-          <h1 class="display-4 fw-extrabold lh-sm mb-3">Next-Generation Society Administration</h1>
-          <p class="lead text-light opacity-75 mb-4">
-            Digitize society operations with <strong>SocietyHub</strong>—eliminate paperwork, collect maintenance fees online, track complaints, approve visitor gate passes, and reserve society facilities.
+          <h1 class="display-4 fw-bold lh-sm mb-3">Next-Generation Society Administration</h1>
+          <p class="lead text-sub mb-4">
+            Digitize society operations with <strong>SocietyHub</strong>—eliminate manual paperwork, collect maintenance fees online, track complaints, approve visitor gate passes, and reserve society facilities seamlessly on any mobile or desktop device.
           </p>
           <div class="d-flex flex-wrap gap-4 pt-2">
             <div>
-              <h3 class="fw-bold text-info mb-0"><i class="fa-solid fa-leaf me-1"></i> 100%</h3>
-              <small class="text-light opacity-75">Paperless Operations</small>
+              <h3 class="fw-bold text-info mb-0"><i class="fa-solid fa-file-shield me-1"></i> 100%</h3>
+              <small class="text-sub">Paperless Operations</small>
             </div>
-            <div class="vr bg-light opacity-25"></div>
+            <div class="vr bg-secondary opacity-25"></div>
             <div>
-              <h3 class="fw-bold text-success mb-0"><i class="fa-solid fa-lock me-1"></i> Secure</h3>
-              <small class="text-light opacity-75">Server-Side Auth</small>
+              <h3 class="fw-bold text-success mb-0"><i class="fa-solid fa-lock me-1"></i> Firebase</h3>
+              <small class="text-sub">Real Cloud Auth</small>
             </div>
-            <div class="vr bg-light opacity-25"></div>
+            <div class="vr bg-secondary opacity-25"></div>
             <div>
               <h3 class="fw-bold text-warning mb-0"><i class="fa-solid fa-users-gear me-1"></i> 4 Roles</h3>
-              <small class="text-light opacity-75">Admin, Resident, Guard, Committee</small>
+              <small class="text-sub">Admin, Resident, Guard, Committee</small>
             </div>
           </div>
         </div>
@@ -89,29 +91,29 @@
 
             <div class="tab-content" id="authTabContent">
 
-              <!-- TAB 1: Sign In -->
+              <!-- TAB 1: Firebase Sign In -->
               <div class="tab-pane fade show active" id="signin-pane">
                 <form id="loginForm">
                   <div class="mb-3">
-                    <label for="usernameInput" class="form-label fw-semibold small text-light opacity-75">Email Address / Username</label>
+                    <label for="usernameInput" class="form-label fw-semibold small text-sub"><i class="fa-solid fa-at me-1"></i> Email Address / Username</label>
                     <div class="input-group">
                       <span class="input-group-text bg-dark border-secondary text-muted"><i class="fa-solid fa-envelope"></i></span>
-                      <input type="text" class="form-control bg-dark text-white border-secondary" id="usernameInput" placeholder="jenilbarad089@gmail.com" required>
+                      <input type="text" class="form-control" id="usernameInput" placeholder="jenilbarad089@gmail.com" required>
                     </div>
                   </div>
 
                   <div class="mb-4">
-                    <label for="passwordInput" class="form-label fw-semibold small text-light opacity-75">Password</label>
+                    <label for="passwordInput" class="form-label fw-semibold small text-sub"><i class="fa-solid fa-key me-1"></i> Password</label>
                     <div class="input-group">
                       <span class="input-group-text bg-dark border-secondary text-muted"><i class="fa-solid fa-lock"></i></span>
-                      <input type="password" class="form-control bg-dark text-white border-secondary" id="passwordInput" placeholder="Enter password" required>
+                      <input type="password" class="form-control" id="passwordInput" placeholder="Enter password" required>
                     </div>
                   </div>
 
-                  <div id="loginAlert" class="alert alert-danger d-none py-2 small mb-3"></div>
+                  <div id="loginAlert" class="alert alert-danger d-none py-2 small mb-3"><i class="fa-solid fa-triangle-exclamation me-1"></i> <span id="loginAlertMsg"></span></div>
 
                   <button type="submit" class="btn btn-primary-custom w-100 py-2.5 mb-3">
-                    <i class="fa-solid fa-right-to-bracket me-2"></i> Sign In
+                    <i class="fa-solid fa-fire me-2"></i> Sign In to Account
                   </button>
 
                   <button type="button" class="btn btn-google-auth mb-3" onclick="handleGoogleSignIn()">
@@ -119,7 +121,7 @@
                     Continue with Google Auth
                   </button>
 
-                  <div class="text-center my-3 text-muted small">1-CLICK DEMO LOGIN PRESETS</div>
+                  <div class="text-center my-3 text-muted small"><i class="fa-solid fa-wand-magic-sparkles me-1"></i> 1-CLICK DEMO LOGIN PRESETS</div>
 
                   <div class="row g-2">
                     <div class="col-6">
@@ -150,69 +152,42 @@
                 </form>
               </div>
 
-              <!-- TAB 2: Registration -->
+              <!-- TAB 2: Firebase Registration -->
               <div class="tab-pane fade" id="register-pane">
                 <form id="registerForm">
                   <div class="mb-3">
-                    <label class="form-label fw-semibold small text-light opacity-75">Full Name</label>
-                    <input type="text" class="form-control bg-dark text-white border-secondary" id="regName" placeholder="e.g. Vikramaditya Singh" required>
+                    <label class="form-label fw-semibold small text-sub"><i class="fa-solid fa-id-card me-1"></i> Full Name</label>
+                    <input type="text" class="form-control" id="regName" placeholder="e.g. Vikramaditya Singh" required>
                   </div>
                   <div class="mb-3">
-                    <label class="form-label fw-semibold small text-light opacity-75">Email Address</label>
-                    <input type="email" class="form-control bg-dark text-white border-secondary" id="regEmail" placeholder="e.g. resident@gmail.com" required>
+                    <label class="form-label fw-semibold small text-sub"><i class="fa-solid fa-envelope me-1"></i> Email Address</label>
+                    <input type="email" class="form-control" id="regEmail" placeholder="e.g. resident@gmail.com" required>
                   </div>
                   <div class="row g-2 mb-3">
                     <div class="col-6">
-                      <label class="form-label fw-semibold small text-light opacity-75">Mobile Number</label>
-                      <input type="tel" class="form-control bg-dark text-white border-secondary" id="regPhone" placeholder="e.g. 9876543210" required>
+                      <label class="form-label fw-semibold small text-sub"><i class="fa-solid fa-building me-1"></i> Flat No</label>
+                      <input type="text" class="form-control" id="regFlat" placeholder="e.g. B-303" required>
                     </div>
                     <div class="col-6">
-                      <label class="form-label fw-semibold small text-light opacity-75">Registering as</label>
-                      <select class="form-select bg-dark text-white border-secondary" id="regRole" onchange="toggleRegFields()">
+                      <label class="form-label fw-semibold small text-sub"><i class="fa-solid fa-user-tag me-1"></i> Role</label>
+                      <select class="form-select" id="regRole">
                         <option value="Resident">Resident</option>
+                        <option value="Admin">Admin</option>
                         <option value="Security Guard">Security Guard</option>
+                        <option value="Committee Member">Committee Member</option>
                       </select>
                     </div>
                   </div>
-                  <!-- Guard-specific fields -->
-                  <div id="guardFields" class="d-none">
-                    <div class="row g-2 mb-3">
-                      <div class="col-6">
-                        <label class="form-label fw-semibold small text-light opacity-75">Employee ID</label>
-                        <input type="text" class="form-control bg-dark text-white border-secondary" id="regEmployeeId" placeholder="e.g. EMP-045">
-                      </div>
-                      <div class="col-6">
-                        <label class="form-label fw-semibold small text-light opacity-75">Aadhaar Number</label>
-                        <input type="text" class="form-control bg-dark text-white border-secondary" id="regAadhaar" placeholder="e.g. 1234-5678-9012">
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Resident-specific fields -->
-                  <div id="residentFields">
-                    <div class="row g-2 mb-3">
-                      <div class="col-6">
-                        <label class="form-label fw-semibold small text-light opacity-75">Aadhaar / ID (optional)</label>
-                        <input type="text" class="form-control bg-dark text-white border-secondary" id="regAadhaarRes" placeholder="e.g. 1234-5678-9012">
-                      </div>
-                      <div class="col-6">
-                        <label class="form-label fw-semibold small text-light opacity-75">Family Members</label>
-                        <input type="number" class="form-control bg-dark text-white border-secondary" id="regFamily" placeholder="e.g. 4" min="1">
-                      </div>
-                    </div>
-                  </div>
                   <div class="mb-4">
-                    <label class="form-label fw-semibold small text-light opacity-75">Password</label>
-                    <input type="password" class="form-control bg-dark text-white border-secondary" id="regPassword" placeholder="Min 6 characters" required minlength="6">
+                    <label class="form-label fw-semibold small text-sub"><i class="fa-solid fa-lock me-1"></i> Password</label>
+                    <input type="password" class="form-control" id="regPassword" placeholder="Min 6 characters" required minlength="6">
                   </div>
 
-                  <div id="regAlert" class="alert alert-danger d-none py-2 small mb-3"></div>
+                  <div id="regAlert" class="alert alert-danger d-none py-2 small mb-3"><i class="fa-solid fa-circle-exclamation me-1"></i> <span id="regAlertMsg"></span></div>
 
                   <button type="submit" class="btn btn-success w-100 py-2.5 fw-bold rounded-pill">
-                    <i class="fa-solid fa-user-plus me-2"></i> Submit Registration
+                    <i class="fa-solid fa-user-plus me-2"></i> Register Account
                   </button>
-                  <p class="text-center text-muted small mt-3 mb-0">
-                    <i class="fa-solid fa-info-circle me-1"></i> Admin and Committee accounts can only be created by an existing Admin.
-                  </p>
                 </form>
               </div>
 
@@ -225,54 +200,54 @@
   </section>
 
   <!-- Features Highlight Section -->
-  <section class="py-5" style="background-color: #0b0f19;">
+  <section class="py-5" style="background-color: var(--hub-body-bg);">
     <div class="container">
       <div class="text-center max-w-700 mx-auto mb-5">
-        <h2 class="fw-bold text-white">Comprehensive SocietyHub Features</h2>
-        <p class="text-muted">Designed to eliminate paperwork, improve transparency, and automate residential operations.</p>
+        <h2 class="fw-bold">Comprehensive SocietyHub Operations</h2>
+        <p class="text-sub">Designed to eliminate paperwork, improve transparency, and automate residential operations.</p>
       </div>
 
       <div class="row g-4">
         <div class="col-md-4">
-          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 bg-dark text-white">
+          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 hub-card">
             <div class="metric-icon bg-icon-primary mb-3"><i class="fa-solid fa-receipt"></i></div>
-            <h5 class="fw-bold">Digital Maintenance Bills</h5>
-            <p class="text-muted small">Auto-generated monthly billing, online payment simulation, and instant downloadable PDF receipts.</p>
+            <h5 class="fw-bold"><i class="fa-solid fa-file-invoice-dollar text-primary me-2"></i> Digital Maintenance Bills</h5>
+            <p class="text-sub small">Auto-generated monthly billing, online payment simulation, and instant downloadable PDF receipts.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 bg-dark text-white">
+          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 hub-card">
             <div class="metric-icon bg-icon-success mb-3"><i class="fa-solid fa-door-open"></i></div>
-            <h5 class="fw-bold">Gate Visitor Approvals</h5>
-            <p class="text-muted small">Security guards issue digital gate passes with real-time approval notifications sent to residents.</p>
+            <h5 class="fw-bold"><i class="fa-solid fa-shield-halved text-success me-2"></i> Gate Visitor Approvals</h5>
+            <p class="text-sub small">Security guards issue digital gate passes with real-time approval notifications sent to residents.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 bg-dark text-white">
+          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 hub-card">
             <div class="metric-icon bg-icon-warning mb-3"><i class="fa-solid fa-headset"></i></div>
-            <h5 class="fw-bold">Online Complaint System</h5>
-            <p class="text-muted small">Track resolution lifecycle from Pending to Resolved with admin updates and status history.</p>
+            <h5 class="fw-bold"><i class="fa-solid fa-wrench text-warning me-2"></i> Online Complaint System</h5>
+            <p class="text-sub small">Track resolution lifecycle from Pending to Resolved with admin updates and status history.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 bg-dark text-white">
+          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 hub-card">
             <div class="metric-icon bg-icon-info mb-3"><i class="fa-solid fa-calendar-check"></i></div>
-            <h5 class="fw-bold">Amenity Booking Engine</h5>
-            <p class="text-muted small">Reserve Community Hall, Clubhouse, and Lawn with automatic double-booking collision prevention.</p>
+            <h5 class="fw-bold"><i class="fa-solid fa-calendar-days text-info me-2"></i> Amenity Booking Engine</h5>
+            <p class="text-sub small">Reserve Community Hall, Clubhouse, and Lawn with automatic double-booking collision prevention.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 bg-dark text-white">
+          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 hub-card">
             <div class="metric-icon bg-icon-primary mb-3"><i class="fa-solid fa-bullhorn"></i></div>
-            <h5 class="fw-bold">Digital Notice Board</h5>
-            <p class="text-muted small">Post society announcements, emergency water/power alerts, and AGM meeting schedules instantly.</p>
+            <h5 class="fw-bold"><i class="fa-solid fa-bullhorn text-primary me-2"></i> Digital Notice Board</h5>
+            <p class="text-sub small">Post society announcements, emergency water/power alerts, and AGM meeting schedules instantly.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 bg-dark text-white">
+          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 hub-card">
             <div class="metric-icon bg-icon-success mb-3"><i class="fa-solid fa-chart-line"></i></div>
-            <h5 class="fw-bold">Executive Analytics</h5>
-            <p class="text-muted small">Interactive dashboards for Administrators and Committee members to monitor financial audits.</p>
+            <h5 class="fw-bold"><i class="fa-solid fa-chart-pie text-success me-2"></i> Executive Analytics</h5>
+            <p class="text-sub small">Interactive dashboards for Administrators and Committee members to monitor financial audits.</p>
           </div>
         </div>
       </div>
@@ -280,10 +255,10 @@
   </section>
 
   <!-- Footer -->
-  <footer class="bg-dark text-white py-4 mt-auto border-top border-secondary border-opacity-25">
+  <footer class="py-4 mt-auto border-top border-secondary border-opacity-25" style="background-color: var(--hub-card-bg);">
     <div class="container text-center">
-      <p class="mb-1 text-light opacity-75 small"><i class="fa-solid fa-building-user me-1"></i> &copy; 2026 SocietyHub - Modern Residential Administration System</p>
-      <small class="text-muted">Powered by Node.js Express API, bcrypt + JWT Authentication & Bootstrap 5</small>
+      <p class="mb-1 text-sub small">&copy; 2026 SocietyHub - Modern Residential Administration System</p>
+      <small class="text-muted">Powered by Firebase Authentication, Node.js Express API & Bootstrap 5</small>
     </div>
   </footer>
 
@@ -297,8 +272,8 @@
       initFirebaseAuth();
 
       const currentUser = SystemDB.getCurrentUser();
-      if (currentUser) {
-        redirectToDashboard(currentUser.role, currentUser.status);
+      if (currentUser && currentUser.role) {
+        redirectToDashboard(currentUser.role);
       }
 
       // Login Form Listener
@@ -306,14 +281,13 @@
         e.preventDefault();
         const emailOrUser = document.getElementById('usernameInput').value;
         const password = document.getElementById('passwordInput').value;
-        const alertEl = document.getElementById('loginAlert');
-        alertEl.classList.add('d-none');
 
         const res = await firebaseLoginWithEmail(emailOrUser, password);
         if (res.success) {
-          redirectToDashboard(res.user.role, res.user.status);
+          redirectToDashboard(res.user.role);
         } else {
-          alertEl.textContent = res.message || 'Invalid credentials';
+          const alertEl = document.getElementById('loginAlert');
+          document.getElementById('loginAlertMsg').textContent = res.message || 'Invalid credentials';
           alertEl.classList.remove('d-none');
         }
       });
@@ -323,43 +297,27 @@
         e.preventDefault();
         const name = document.getElementById('regName').value;
         const email = document.getElementById('regEmail').value;
-        const phone = document.getElementById('regPhone').value;
+        const flat = document.getElementById('regFlat').value;
         const role = document.getElementById('regRole').value;
         const password = document.getElementById('regPassword').value;
-        const alertEl = document.getElementById('regAlert');
-        alertEl.classList.add('d-none');
 
-        const extra = { phone };
-        if (role === 'Security Guard') {
-          extra.employeeId = document.getElementById('regEmployeeId').value;
-          extra.aadhaar = document.getElementById('regAadhaar').value;
-        } else {
-          extra.aadhaar = document.getElementById('regAadhaarRes').value;
-          extra.familyMembers = document.getElementById('regFamily').value;
-        }
-
-        const res = await firebaseRegisterWithEmail(name, email, password, role, extra);
+        const res = await firebaseRegisterWithEmail(name, email, password, role, flat);
         if (res.success) {
-          redirectToDashboard(res.user.role, res.user.status);
+          redirectToDashboard(res.user.role);
         } else {
-          alertEl.textContent = res.message || 'Registration failed';
+          const alertEl = document.getElementById('regAlert');
+          document.getElementById('regAlertMsg').textContent = res.message || 'Registration failed';
           alertEl.classList.remove('d-none');
         }
       });
     });
 
-    function toggleRegFields() {
-      const role = document.getElementById('regRole').value;
-      document.getElementById('guardFields').classList.toggle('d-none', role !== 'Security Guard');
-      document.getElementById('residentFields').classList.toggle('d-none', role !== 'Resident');
-    }
-
     async function handleGoogleSignIn() {
       const res = await firebaseLoginWithGoogle();
       if (res.success) {
-        redirectToDashboard(res.user.role, res.user.status);
+        redirectToDashboard(res.user.role);
       } else {
-        alert("Google Sign-In: " + (res.message || "Please try again."));
+        alert("Google Sign-In: " + (res.message || "Please complete setup in Firebase console."));
       }
     }
 
@@ -369,20 +327,7 @@
       document.getElementById('loginForm').dispatchEvent(new Event('submit'));
     }
 
-    function redirectToDashboard(role, status) {
-      // Check approval status first
-      if (status === 'Pending') {
-        window.location.href = 'waiting-approval.html';
-        return;
-      }
-      if (status === 'Rejected') {
-        const alertEl = document.getElementById('loginAlert');
-        if (alertEl) {
-          alertEl.textContent = 'Your registration has been rejected. Please contact the Society Office.';
-          alertEl.classList.remove('d-none');
-        }
-        return;
-      }
+    function redirectToDashboard(role) {
       switch (role) {
         case 'Admin': window.location.href = 'admin.html'; break;
         case 'Resident': window.location.href = 'resident.html'; break;
