@@ -21,6 +21,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   loadAdminDashboard();
 
+  document.getElementById('changeRoleForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const id = document.getElementById('roleUserId').value;
+    const newRole = document.getElementById('roleSelect').value;
+
+    SystemDB.updateUserRole(id, newRole);
+    const modalEl = document.getElementById('changeRoleModal');
+    bootstrap.Modal.getInstance(modalEl).hide();
+    loadAdminDashboard();
+    alert(`Role updated to ${newRole}!`);
+  });
+
   // Modal forms
   document.getElementById('addResidentForm').addEventListener('submit', (e) => {
     e.preventDefault();
@@ -70,6 +82,7 @@ function loadAdminDashboard() {
   renderBillingTable();
   renderNotices();
   renderVisitorsTable();
+  renderRoleSettingsTable();
 }
 
 function renderKPIs() {
@@ -300,6 +313,54 @@ function renderVisitorsTable() {
       </td>
     </tr>
   `).join('');
+}
+
+function renderRoleSettingsTable() {
+  const tbody = document.getElementById('roleSettingsTableBody');
+  if (!tbody) return;
+  const users = SystemDB.data.users || [];
+
+  tbody.innerHTML = users.map(u => `
+    <tr>
+      <td>
+        <div class="d-flex align-items-center gap-2">
+          <img src="${u.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + u.name}" class="rounded-circle" width="32" height="32">
+          <span class="fw-semibold">${u.name}</span>
+        </div>
+      </td>
+      <td class="fs-7 text-muted">${u.email}</td>
+      <td><span class="badge bg-light text-dark border">${u.flat}</span></td>
+      <td>
+        <span class="badge ${u.role === 'Admin' ? 'bg-danger text-white' : u.role === 'Resident' ? 'bg-primary-subtle text-primary' : u.role === 'Security Guard' ? 'bg-warning text-dark' : 'bg-info-subtle text-info'}">
+          ${u.role}
+        </span>
+      </td>
+      <td class="text-end">
+        <button class="btn btn-sm ${u.role === 'Admin' ? 'btn-outline-danger' : 'btn-outline-success'} rounded-pill px-3 me-1" onclick="toggleAdminRole('${u.id}', '${u.role}')">
+          <i class="fa-solid ${u.role === 'Admin' ? 'fa-user-minus' : 'fa-user-shield'} me-1"></i>
+          ${u.role === 'Admin' ? 'Revoke Admin' : 'Grant Admin'}
+        </button>
+        <button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="openChangeRoleModal('${u.id}', '${u.name.replace(/'/g, "\\'")}', '${u.role}')">
+          <i class="fa-solid fa-pen-to-square me-1"></i> Set Role
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function toggleAdminRole(userId, currentRole) {
+  const newRole = currentRole === 'Admin' ? 'Resident' : 'Admin';
+  if (confirm(`Are you sure you want to ${newRole === 'Admin' ? 'Grant Admin Rights to' : 'Remove Admin Rights from'} this user?`)) {
+    SystemDB.updateUserRole(userId, newRole);
+    loadAdminDashboard();
+  }
+}
+
+function openChangeRoleModal(id, name, role) {
+  document.getElementById('roleUserId').value = id;
+  document.getElementById('roleUserName').value = name;
+  document.getElementById('roleSelect').value = role;
+  new bootstrap.Modal(document.getElementById('changeRoleModal')).show();
 }
 
 function logout() {

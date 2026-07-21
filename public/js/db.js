@@ -111,6 +111,22 @@ const SystemDB = {
     return { success: true, resident: newResident };
   },
 
+  updateUserRole(userId, newRole) {
+    const user = this.data.users.find(u => u.id === userId || u.email === userId);
+    if (user) {
+      user.role = newRole;
+      this.save();
+      // If current logged in user changed their own role, update session
+      const curr = this.getCurrentUser();
+      if (curr && (curr.id === userId || curr.email === userId)) {
+        curr.role = newRole;
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify(curr));
+      }
+      return { success: true, user };
+    }
+    return { success: false, message: 'User not found' };
+  },
+
   deleteResident(userId) {
     this.data.users = this.data.users.filter(u => u.id !== userId);
     this.save();
