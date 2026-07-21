@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Society Management System | Digital Residential Administration</title>
+  <title>SocietyHub | Smart Residential Administration Platform</title>
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- FontAwesome Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Custom CSS -->
   <link href="css/style.css" rel="stylesheet">
   <!-- Firebase SDK Compat -->
@@ -22,30 +22,32 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top py-3">
     <div class="container">
-      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
-        <i class="fa-solid fa-city fa-lg"></i>
-        <span>SmartSociety<span class="text-info">360</span></span>
+      <a class="navbar-brand" href="#">
+        <div class="brand-icon">
+          <i class="fa-solid fa-building-user fa-lg"></i>
+        </div>
+        <span>Society<span class="text-primary">Hub</span></span>
       </a>
       <div class="d-flex align-items-center gap-2">
         <span class="firebase-live-badge"><i class="fa-solid fa-fire"></i> Firebase Auth Live</span>
         <span class="navbar-text text-light opacity-75 d-none d-md-inline fs-7 ms-2">
-          <i class="fa-solid fa-shield-halved me-1 text-success"></i> Digital Residential Administration Platform
+          <i class="fa-solid fa-shield-halved me-1 text-success"></i> Digital Residential Administration Engine
         </span>
       </div>
     </div>
   </nav>
 
   <!-- Hero & Firebase Login Section -->
-  <section class="hero-gradient">
+  <section class="hero-hub">
     <div class="container">
       <div class="row align-items-center g-5">
         <div class="col-lg-7 text-white">
           <span class="badge bg-primary bg-opacity-25 text-info border border-info border-opacity-25 px-3 py-2 rounded-pill mb-3">
-            <i class="fa-solid fa-bolt me-1"></i> Smart MIS Platform v1.0 • Firebase Enabled
+            <i class="fa-solid fa-bolt me-1"></i> SocietyHub MIS Platform v2.0
           </span>
-          <h1 class="display-4 fw-bold lh-sm mb-3">Modern Digital Administration for Residential Societies</h1>
+          <h1 class="display-4 fw-extrabold lh-sm mb-3">Next-Generation Society Administration</h1>
           <p class="lead text-light opacity-75 mb-4">
-            Digitize daily society operations—eliminate manual paperwork, streamline maintenance billing, track complaints, approve gate visitors, and book amenities with Firebase Authentication.
+            Digitize society operations with <strong>SocietyHub</strong>—eliminate paperwork, collect maintenance fees online, track complaints, approve visitor gate passes, and reserve society facilities.
           </p>
           <div class="d-flex flex-wrap gap-4 pt-2">
             <div>
@@ -55,7 +57,7 @@
             <div class="vr bg-light opacity-25"></div>
             <div>
               <h3 class="fw-bold text-success mb-0">Firebase</h3>
-              <small class="text-light opacity-75">Secure Real Auth</small>
+              <small class="text-light opacity-75">Real Cloud Auth</small>
             </div>
             <div class="vr bg-light opacity-25"></div>
             <div>
@@ -66,10 +68,10 @@
         </div>
 
         <div class="col-lg-5">
-          <div class="glass-card p-4 p-md-5">
+          <div class="hub-card p-4 p-md-5">
 
             <!-- Auth Mode Tabs: Sign In / Register -->
-            <ul class="nav nav-pills nav-fill bg-light rounded-pill p-1 mb-4" id="authTabs" role="tablist">
+            <ul class="nav nav-pills nav-fill bg-dark rounded-pill p-1 mb-4" id="authTabs" role="tablist">
               <li class="nav-item">
                 <button class="nav-link active rounded-pill fw-semibold py-2 fs-7" id="signin-tab" data-bs-toggle="tab" data-bs-target="#signin-pane">
                   <i class="fa-solid fa-right-to-bracket me-1"></i> Sign In
@@ -88,18 +90,18 @@
               <div class="tab-pane fade show active" id="signin-pane">
                 <form id="loginForm">
                   <div class="mb-3">
-                    <label for="usernameInput" class="form-label fw-semibold small text-secondary">Email or Username</label>
+                    <label for="usernameInput" class="form-label fw-semibold small text-light opacity-75">Email Address / Username</label>
                     <div class="input-group">
-                      <span class="input-group-text bg-light text-muted"><i class="fa-solid fa-envelope"></i></span>
-                      <input type="text" class="form-control" id="usernameInput" placeholder="e.g. admin@smartsociety.com or admin" required>
+                      <span class="input-group-text bg-dark border-secondary text-muted"><i class="fa-solid fa-envelope"></i></span>
+                      <input type="text" class="form-control bg-dark text-white border-secondary" id="usernameInput" placeholder="jenilbarad089@gmail.com" required>
                     </div>
                   </div>
 
                   <div class="mb-4">
-                    <label for="passwordInput" class="form-label fw-semibold small text-secondary">Password</label>
+                    <label for="passwordInput" class="form-label fw-semibold small text-light opacity-75">Password</label>
                     <div class="input-group">
-                      <span class="input-group-text bg-light text-muted"><i class="fa-solid fa-lock"></i></span>
-                      <input type="password" class="form-control" id="passwordInput" placeholder="Enter password" required>
+                      <span class="input-group-text bg-dark border-secondary text-muted"><i class="fa-solid fa-lock"></i></span>
+                      <input type="password" class="form-control bg-dark text-white border-secondary" id="passwordInput" placeholder="Enter password" required>
                     </div>
                   </div>
 
@@ -114,30 +116,30 @@
                     Continue with Google Auth
                   </button>
 
-                  <div class="text-center my-3 text-muted small">OR USE DEMO PRESETS</div>
+                  <div class="text-center my-3 text-muted small">1-CLICK DEMO LOGIN PRESETS</div>
 
                   <div class="row g-2">
                     <div class="col-6">
-                      <button type="button" class="demo-role-btn" onclick="fillDemo('admin@smartsociety.com', 'admin123')">
-                        <div class="fw-bold text-dark fs-7"><i class="fa-solid fa-user-gear text-primary me-1"></i> Admin</div>
-                        <small class="text-muted d-block" style="font-size: 11px;">Rajesh (A-101)</small>
+                      <button type="button" class="demo-role-btn" onclick="fillDemo('jenilbarad089@gmail.com', 'admin123')">
+                        <div class="fw-bold fs-7 text-info"><i class="fa-solid fa-user-gear me-1"></i> Admin</div>
+                        <small class="text-muted d-block" style="font-size: 11px;">Jenil (A-101)</small>
                       </button>
                     </div>
                     <div class="col-6">
-                      <button type="button" class="demo-role-btn" onclick="fillDemo('amit@gmail.com', 'resident123')">
-                        <div class="fw-bold text-dark fs-7"><i class="fa-solid fa-house-user text-success me-1"></i> Resident</div>
+                      <button type="button" class="demo-role-btn" onclick="fillDemo('amit.patel@gmail.com', 'resident123')">
+                        <div class="fw-bold fs-7 text-success"><i class="fa-solid fa-house-user me-1"></i> Resident</div>
                         <small class="text-muted d-block" style="font-size: 11px;">Amit (B-204)</small>
                       </button>
                     </div>
                     <div class="col-6">
                       <button type="button" class="demo-role-btn" onclick="fillDemo('guard@smartsociety.com', 'guard123')">
-                        <div class="fw-bold text-dark fs-7"><i class="fa-solid fa-user-shield text-warning me-1"></i> Guard</div>
-                        <small class="text-muted d-block" style="font-size: 11px;">Gate 1 Pass</small>
+                        <div class="fw-bold fs-7 text-warning"><i class="fa-solid fa-user-shield me-1"></i> Guard</div>
+                        <small class="text-muted d-block" style="font-size: 11px;">Gate Pass 1</small>
                       </button>
                     </div>
                     <div class="col-6">
                       <button type="button" class="demo-role-btn" onclick="fillDemo('suresh@smartsociety.com', 'committee123')">
-                        <div class="fw-bold text-dark fs-7"><i class="fa-solid fa-chart-pie text-info me-1"></i> Committee</div>
+                        <div class="fw-bold fs-7 text-primary"><i class="fa-solid fa-chart-pie me-1"></i> Committee</div>
                         <small class="text-muted d-block" style="font-size: 11px;">Suresh (Treasurer)</small>
                       </button>
                     </div>
@@ -149,21 +151,21 @@
               <div class="tab-pane fade" id="register-pane">
                 <form id="registerForm">
                   <div class="mb-3">
-                    <label class="form-label fw-semibold small text-secondary">Full Name</label>
-                    <input type="text" class="form-control" id="regName" placeholder="e.g. Vikramaditya Singh" required>
+                    <label class="form-label fw-semibold small text-light opacity-75">Full Name</label>
+                    <input type="text" class="form-control bg-dark text-white border-secondary" id="regName" placeholder="e.g. Vikramaditya Singh" required>
                   </div>
                   <div class="mb-3">
-                    <label class="form-label fw-semibold small text-secondary">Email Address</label>
-                    <input type="email" class="form-control" id="regEmail" placeholder="e.g. resident@gmail.com" required>
+                    <label class="form-label fw-semibold small text-light opacity-75">Email Address</label>
+                    <input type="email" class="form-control bg-dark text-white border-secondary" id="regEmail" placeholder="e.g. resident@gmail.com" required>
                   </div>
                   <div class="row g-2 mb-3">
                     <div class="col-6">
-                      <label class="form-label fw-semibold small text-secondary">Flat No</label>
-                      <input type="text" class="form-control" id="regFlat" placeholder="e.g. B-303" required>
+                      <label class="form-label fw-semibold small text-light opacity-75">Flat No</label>
+                      <input type="text" class="form-control bg-dark text-white border-secondary" id="regFlat" placeholder="e.g. B-303" required>
                     </div>
                     <div class="col-6">
-                      <label class="form-label fw-semibold small text-secondary">Role</label>
-                      <select class="form-select" id="regRole">
+                      <label class="form-label fw-semibold small text-light opacity-75">Role</label>
+                      <select class="form-select bg-dark text-white border-secondary" id="regRole">
                         <option value="Resident">Resident</option>
                         <option value="Admin">Admin</option>
                         <option value="Security Guard">Security Guard</option>
@@ -172,14 +174,14 @@
                     </div>
                   </div>
                   <div class="mb-4">
-                    <label class="form-label fw-semibold small text-secondary">Password</label>
-                    <input type="password" class="form-control" id="regPassword" placeholder="Min 6 characters" required minlength="6">
+                    <label class="form-label fw-semibold small text-light opacity-75">Password</label>
+                    <input type="password" class="form-control bg-dark text-white border-secondary" id="regPassword" placeholder="Min 6 characters" required minlength="6">
                   </div>
 
                   <div id="regAlert" class="alert alert-danger d-none py-2 small mb-3"></div>
 
                   <button type="submit" class="btn btn-success w-100 py-2.5 fw-bold rounded-pill">
-                    <i class="fa-solid fa-user-plus me-2"></i> Register Firebase Account
+                    <i class="fa-solid fa-user-plus me-2"></i> Register SocietyHub Account
                   </button>
                 </form>
               </div>
@@ -193,51 +195,51 @@
   </section>
 
   <!-- Features Highlight Section -->
-  <section class="py-5 bg-white">
+  <section class="py-5" style="background-color: #0b0f19;">
     <div class="container">
       <div class="text-center max-w-700 mx-auto mb-5">
-        <h2 class="fw-bold text-dark">Comprehensive Society Operations</h2>
-        <p class="text-muted">Designed to eliminate paperwork, improve transparency, and automate residential workflows.</p>
+        <h2 class="fw-bold text-white">Comprehensive SocietyHub Features</h2>
+        <p class="text-muted">Designed to eliminate paperwork, improve transparency, and automate residential operations.</p>
       </div>
 
       <div class="row g-4">
         <div class="col-md-4">
-          <div class="p-4 border rounded-4 h-100 bg-light-subtle">
+          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 bg-dark text-white">
             <div class="metric-icon bg-icon-primary mb-3"><i class="fa-solid fa-receipt"></i></div>
             <h5 class="fw-bold">Digital Maintenance Bills</h5>
             <p class="text-muted small">Auto-generated monthly billing, online payment simulation, and instant downloadable PDF receipts.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="p-4 border rounded-4 h-100 bg-light-subtle">
+          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 bg-dark text-white">
             <div class="metric-icon bg-icon-success mb-3"><i class="fa-solid fa-door-open"></i></div>
             <h5 class="fw-bold">Gate Visitor Approvals</h5>
             <p class="text-muted small">Security guards issue digital gate passes with real-time approval notifications sent to residents.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="p-4 border rounded-4 h-100 bg-light-subtle">
+          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 bg-dark text-white">
             <div class="metric-icon bg-icon-warning mb-3"><i class="fa-solid fa-headset"></i></div>
             <h5 class="fw-bold">Online Complaint System</h5>
             <p class="text-muted small">Track resolution lifecycle from Pending to Resolved with admin updates and status history.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="p-4 border rounded-4 h-100 bg-light-subtle">
+          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 bg-dark text-white">
             <div class="metric-icon bg-icon-info mb-3"><i class="fa-solid fa-calendar-check"></i></div>
             <h5 class="fw-bold">Amenity Booking Engine</h5>
             <p class="text-muted small">Reserve Community Hall, Clubhouse, and Lawn with automatic double-booking collision prevention.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="p-4 border rounded-4 h-100 bg-light-subtle">
+          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 bg-dark text-white">
             <div class="metric-icon bg-icon-primary mb-3"><i class="fa-solid fa-bullhorn"></i></div>
             <h5 class="fw-bold">Digital Notice Board</h5>
             <p class="text-muted small">Post society announcements, emergency water/power alerts, and AGM meeting schedules instantly.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="p-4 border rounded-4 h-100 bg-light-subtle">
+          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 bg-dark text-white">
             <div class="metric-icon bg-icon-success mb-3"><i class="fa-solid fa-chart-line"></i></div>
             <h5 class="fw-bold">Executive Analytics</h5>
             <p class="text-muted small">Interactive dashboards for Administrators and Committee members to monitor financial audits.</p>
@@ -248,10 +250,10 @@
   </section>
 
   <!-- Footer -->
-  <footer class="bg-dark text-white py-4 mt-auto">
+  <footer class="bg-dark text-white py-4 mt-auto border-top border-secondary border-opacity-25">
     <div class="container text-center">
-      <p class="mb-1 text-light opacity-75 small">&copy; 2026 Smart Society Management System (MIS Platform)</p>
-      <small class="text-muted">Powered by Firebase Authentication, Node.js Express API & Bootstrap 5 UI</small>
+      <p class="mb-1 text-light opacity-75 small">&copy; 2026 SocietyHub - Modern Residential Administration System</p>
+      <small class="text-muted">Powered by Firebase Authentication, Node.js Express API & Bootstrap 5</small>
     </div>
   </footer>
 
@@ -275,7 +277,6 @@
         const emailOrUser = document.getElementById('usernameInput').value;
         const password = document.getElementById('passwordInput').value;
 
-        // Try Firebase Auth
         const res = await firebaseLoginWithEmail(emailOrUser, password);
         if (res.success) {
           redirectToDashboard(res.user.role);

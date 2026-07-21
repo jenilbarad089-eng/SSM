@@ -7,7 +7,7 @@ function generateReceiptHTML(bill) {
     <div id="printableReceipt" class="receipt-box">
       <div class="d-flex align-items-center justify-content-between border-bottom pb-3 mb-3">
         <div>
-          <h4 class="fw-bold text-primary mb-0"><i class="fa-solid fa-city me-2"></i>Smart Society 360</h4>
+          <h4 class="fw-bold text-primary mb-0"><i class="fa-solid fa-building-user me-2"></i>SocietyHub Platform</h4>
           <small class="text-muted">Digital Residential Administration & Maintenance Receipt</small>
         </div>
         <div class="text-end">
