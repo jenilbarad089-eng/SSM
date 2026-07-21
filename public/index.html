@@ -12,7 +12,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Custom CSS -->
   <link href="css/style.css" rel="stylesheet">
-
+  <!-- Firebase SDK (for Google Sign-In only) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <!-- Theme: apply saved preference before body renders -->
+  <script src="js/theme.js"></script>
 </head>
 <body>
 
@@ -26,6 +30,9 @@
         <span>Society<span class="text-primary">Hub</span></span>
       </a>
       <div class="d-flex align-items-center gap-2">
+        <button class="btn theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">
+          <i class="fa-solid fa-sun" id="themeIcon"></i>
+        </button>
         <span class="navbar-text text-light opacity-75 d-none d-md-inline fs-7 ms-2">
           <i class="fa-solid fa-shield-halved me-1 text-success"></i> Digital Residential Administration Engine
         </span>
@@ -47,17 +54,17 @@
           </p>
           <div class="d-flex flex-wrap gap-4 pt-2">
             <div>
-              <h3 class="fw-bold text-info mb-0">100%</h3>
+              <h3 class="fw-bold text-info mb-0"><i class="fa-solid fa-leaf me-1"></i> 100%</h3>
               <small class="text-light opacity-75">Paperless Operations</small>
             </div>
             <div class="vr bg-light opacity-25"></div>
             <div>
-              <h3 class="fw-bold text-success mb-0">Secure</h3>
+              <h3 class="fw-bold text-success mb-0"><i class="fa-solid fa-lock me-1"></i> Secure</h3>
               <small class="text-light opacity-75">Server-Side Auth</small>
             </div>
             <div class="vr bg-light opacity-25"></div>
             <div>
-              <h3 class="fw-bold text-warning mb-0">4 Roles</h3>
+              <h3 class="fw-bold text-warning mb-0"><i class="fa-solid fa-users-gear me-1"></i> 4 Roles</h3>
               <small class="text-light opacity-75">Admin, Resident, Guard, Committee</small>
             </div>
           </div>
@@ -248,7 +255,7 @@
   <!-- Footer -->
   <footer class="bg-dark text-white py-4 mt-auto border-top border-secondary border-opacity-25">
     <div class="container text-center">
-      <p class="mb-1 text-light opacity-75 small">&copy; 2026 SocietyHub - Modern Residential Administration System</p>
+      <p class="mb-1 text-light opacity-75 small"><i class="fa-solid fa-building-user me-1"></i> &copy; 2026 SocietyHub - Modern Residential Administration System</p>
       <small class="text-muted">Powered by Node.js Express API, bcrypt + JWT Authentication & Bootstrap 5</small>
     </div>
   </footer>

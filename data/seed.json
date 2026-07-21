@@ -9,7 +9,11 @@
       "flat": "A-101",
       "email": "jenilbarad089@gmail.com",
       "phone": "9876543210",
-      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=JenilAdmin"
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=JenilAdmin",
+      "status": "Approved",
+      "registeredAt": "2026-01-15",
+      "approvedAt": "2026-01-15",
+      "approvedBy": "USR-101"
     },
     {
       "id": "USR-102",
@@ -20,7 +24,11 @@
       "flat": "B-204",
       "email": "amit.patel@gmail.com",
       "phone": "9812345678",
-      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Amit"
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Amit",
+      "status": "Approved",
+      "registeredAt": "2026-01-15",
+      "approvedAt": "2026-01-15",
+      "approvedBy": "USR-101"
     },
     {
       "id": "USR-103",
@@ -31,7 +39,11 @@
       "flat": "C-501",
       "email": "priya.v@gmail.com",
       "phone": "9823456789",
-      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Priya"
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Priya",
+      "status": "Approved",
+      "registeredAt": "2026-01-15",
+      "approvedAt": "2026-01-15",
+      "approvedBy": "USR-101"
     },
     {
       "id": "USR-104",
@@ -42,7 +54,11 @@
       "flat": "Main Gate 1",
       "email": "guard@smartsociety.com",
       "phone": "9988776655",
-      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Guard"
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Guard",
+      "status": "Approved",
+      "registeredAt": "2026-01-15",
+      "approvedAt": "2026-01-15",
+      "approvedBy": "USR-101"
     },
     {
       "id": "USR-105",
@@ -53,7 +69,64 @@
       "flat": "A-402",
       "email": "suresh.treasurer@smartsociety.com",
       "phone": "9765432109",
-      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Suresh"
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Suresh",
+      "status": "Approved",
+      "registeredAt": "2026-01-15",
+      "approvedAt": "2026-01-15",
+      "approvedBy": "USR-101"
+    },
+    {
+      "id": "USR-201",
+      "username": "rahul.sharma",
+      "password": "",
+      "name": "Rahul Sharma",
+      "role": "Resident",
+      "flat": "",
+      "email": "rahul.sharma@gmail.com",
+      "phone": "9811223344",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Rahul",
+      "status": "Pending",
+      "registeredAt": "2026-07-20",
+      "approvedAt": null,
+      "approvedBy": null,
+      "aadhaar": "1234-5678-9012",
+      "familyMembers": "3",
+      "residentType": ""
+    },
+    {
+      "id": "USR-202",
+      "username": "neha.gupta",
+      "password": "",
+      "name": "Neha Gupta",
+      "role": "Resident",
+      "flat": "",
+      "email": "neha.gupta@gmail.com",
+      "phone": "9822334455",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Neha",
+      "status": "Pending",
+      "registeredAt": "2026-07-21",
+      "approvedAt": null,
+      "approvedBy": null,
+      "aadhaar": "",
+      "familyMembers": "2",
+      "residentType": ""
+    },
+    {
+      "id": "USR-203",
+      "username": "vikram.yadav",
+      "password": "",
+      "name": "Vikram Yadav",
+      "role": "Security Guard",
+      "flat": "",
+      "email": "vikram.yadav@gmail.com",
+      "phone": "9833445566",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Vikram",
+      "status": "Pending",
+      "registeredAt": "2026-07-21",
+      "approvedAt": null,
+      "approvedBy": null,
+      "employeeId": "EMP-045",
+      "aadhaar": "5678-1234-5678"
     }
   ],
   "complaints": [

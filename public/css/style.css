@@ -1,260 +1,108 @@
-/* SocietyHub - Ultra-Modern Premium UI & Design System */
-
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+/* SocietyHub - Premium Design System */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-  --hub-bg: #090d16;
-  --hub-card-bg: #111827;
-  --hub-card-glass: rgba(17, 24, 39, 0.85);
-  --hub-border: rgba(255, 255, 255, 0.08);
-  --hub-border-glow: rgba(59, 130, 246, 0.3);
-  
-  --primary: #3b82f6;
-  --primary-glow: rgba(59, 130, 246, 0.4);
-  --secondary: #8b5cf6;
-  --cyan-accent: #06b6d4;
-  --emerald-accent: #10b981;
-  --amber-accent: #f59e0b;
-  --rose-accent: #f43f5e;
-
-  --text-main: #f8fafc;
-  --text-sub: #94a3b8;
-  --text-muted: #64748b;
-
-  --radius-xl: 24px;
-  --radius-lg: 18px;
+  --bg-primary: #0B1220;
+  --bg-secondary: #111827;
+  --bg-card: #172033;
+  --bg-elevated: #1C2640;
+  --surface-1: #1E293B;
+  --surface-2: #243145;
+  --surface-3: #2A3750;
+  --accent-blue: #3B82F6;
+  --accent-blue-hover: #2563EB;
+  --accent-indigo: #6366F1;
+  --accent-purple: #8B5CF6;
+  --accent-green: #10B981;
+  --accent-green-hover: #059669;
+  --accent-amber: #F59E0B;
+  --accent-red: #EF4444;
+  --accent-red-hover: #DC2626;
+  --accent-cyan: #06B6D4;
+  --gradient-primary: linear-gradient(135deg, #3B82F6 0%, #6366F1 50%, #8B5CF6 100%);
+  --gradient-blue: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+  --gradient-green: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  --gradient-surface: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(99,102,241,0.08) 100%);
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --text-inverse: #0F172A;
+  --border-subtle: rgba(255,255,255,0.06);
+  --border-default: rgba(255,255,255,0.08);
+  --border-strong: rgba(255,255,255,0.12);
+  --border-accent: rgba(59,130,246,0.4);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -2px rgba(0,0,0,0.2);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.3), 0 4px 6px -4px rgba(0,0,0,0.2);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.3), 0 8px 10px -6px rgba(0,0,0,0.2);
+  --shadow-glow: 0 0 30px rgba(59,130,246,0.15);
+  --radius-sm: 8px;
   --radius-md: 12px;
-
-  --shadow-main: 0 20px 40px -15px rgba(0, 0, 0, 0.4);
-  --shadow-glow: 0 0 30px rgba(59, 130, 246, 0.25);
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
 }
+
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  background-color: #0b0f19;
-  color: var(--text-main);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   min-height: 100vh;
   margin: 0;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* SocietyHub Navbar */
+/* Theme Toggle */
+.theme-toggle {
+  color: var(--text-secondary) !important;
+  font-size: 1.1rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  border: 1px solid var(--border-default);
+  background: transparent;
+  cursor: pointer;
+}
+.theme-toggle:hover {
+  background: var(--surface-1);
+  border-color: var(--border-strong);
+  color: var(--text-primary) !important;
+  transform: rotate(15deg);
+}
+
+/* Navbar */
 .navbar-custom {
-  background: rgba(9, 13, 22, 0.9);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--hub-border);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  background: rgba(11, 18, 32, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 12px 0;
 }
-
 .navbar-brand {
   font-weight: 800;
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   letter-spacing: -0.5px;
-  color: #ffffff !important;
+  color: var(--text-primary) !important;
   display: flex;
   align-items: center;
   gap: 10px;
 }
-
 .brand-icon {
-  width: 42px;
-  height: 42px;
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-  border-radius: 12px;
+  width: 38px;
+  height: 38px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+  color: #fff;
+  font-size: 1rem;
 }
-
-/* SocietyHub Hero Section */
-.hero-hub {
-  background: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.15) 0%, rgba(9, 13, 22, 0) 70%),
-              linear-gradient(180deg, #090d16 0%, #0d1322 100%);
-  padding: 100px 0 120px;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-hub::before {
-  content: '';
-  position: absolute;
-  top: -20%;
-  right: -10%;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-/* Glassmorphic Cards */
-.hub-card {
-  background: var(--hub-card-glass);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--hub-border);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-main);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.hub-card:hover {
-  border-color: var(--hub-border-glow);
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-glow);
-}
-
-/* Demo Role Buttons */
-.demo-role-btn {
-  border: 1px solid var(--hub-border);
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: var(--radius-md);
-  padding: 12px;
-  text-align: left;
-  transition: all 0.25s ease;
-  cursor: pointer;
-  width: 100%;
-  color: var(--text-main);
-}
-
-.demo-role-btn:hover {
-  border-color: var(--primary);
-  background: rgba(59, 130, 246, 0.1);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
-}
-
-/* Google Auth Button */
-.btn-google-auth {
-  background: rgba(255, 255, 255, 0.05);
-  color: #ffffff;
-  border: 1px solid var(--hub-border);
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  padding: 12px 18px;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  width: 100%;
-}
-
-.btn-google-auth:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-/* Metric KPI Cards */
-.metric-card {
-  border: 1px solid var(--hub-border);
-  border-radius: var(--radius-xl);
-  padding: 24px;
-  background: var(--hub-card-bg);
-  box-shadow: var(--shadow-main);
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.metric-card:hover {
-  border-color: var(--hub-border-glow);
-  transform: translateY(-4px);
-}
-
-.metric-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-}
-
-.bg-icon-primary { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
-.bg-icon-success { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-.bg-icon-warning { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
-.bg-icon-info { background: rgba(6, 182, 212, 0.15); color: #22d3ee; }
-
-/* Status Badges */
-.badge-pending { background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-weight: 700; padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(245, 158, 11, 0.3); }
-.badge-progress { background: rgba(6, 182, 212, 0.2); color: #22d3ee; font-weight: 700; padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(6, 182, 212, 0.3); }
-.badge-resolved { background: rgba(16, 185, 129, 0.2); color: #34d399; font-weight: 700; padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.3); }
-.badge-paid { background: rgba(16, 185, 129, 0.2); color: #34d399; font-weight: 700; padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.3); }
-.badge-unpaid { background: rgba(244, 63, 94, 0.2); color: #fb7185; font-weight: 700; padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(244, 63, 94, 0.3); }
-
-/* Tables */
-.table-custom {
-  background: transparent;
-  color: var(--text-main);
-}
-
-.table-custom th {
-  background: rgba(255, 255, 255, 0.02);
-  color: var(--text-sub);
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: 0.72rem;
-  letter-spacing: 0.8px;
-  border-bottom: 1px solid var(--hub-border);
-  padding: 16px;
-}
-
-.table-custom td {
-  padding: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  color: var(--text-main);
-}
-
-/* Action Buttons */
-.btn-primary-custom {
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-  color: #ffffff;
-  border: none;
-  border-radius: var(--radius-md);
-  font-weight: 700;
-  padding: 12px 24px;
-  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.35);
-  transition: all 0.25s ease;
-}
-
-.btn-primary-custom:hover {
-  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-  color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
-}
-
-/* Sidebar Navigation */
-.sidebar-nav {
-  background: var(--hub-card-bg);
-  border-radius: var(--radius-xl);
-  padding: 20px;
-  box-shadow: var(--shadow-main);
-  border: 1px solid var(--hub-border);
-}
-
-.sidebar-nav .nav-link {
-  color: var(--text-sub);
-  font-weight: 600;
-  padding: 14px 20px;
-  border-radius: var(--radius-md);
-  transition: all 0.25s ease;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 6px;
-}
-
-.sidebar-nav .nav-link:hover,
-.sidebar-nav .nav-link.active {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
-  border: 1px solid var(--hub-border-glow);
-  color: #60a5fa;
-}
-
-/* Receipt Print Styles */
-.receipt-box {

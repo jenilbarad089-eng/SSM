@@ -15,6 +15,8 @@
 
   <!-- Custom CSS -->
   <link href="css/style.css" rel="stylesheet">
+  <!-- Theme: apply saved preference before body renders -->
+  <script src="js/theme.js"></script>
 </head>
 <body class="bg-light">
 
@@ -30,6 +32,9 @@
       </a>
 
       <div class="d-flex align-items-center gap-3">
+        <button class="btn theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">
+          <i class="fa-solid fa-sun" id="themeIcon"></i>
+        </button>
         <div class="d-flex align-items-center gap-2 text-white me-2">
           <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Suresh" class="rounded-circle border border-2 border-white" width="36" height="36" alt="Committee">
           <div>
