@@ -2,14 +2,14 @@
   "users": [
     {
       "id": "USR-101",
-      "username": "admin",
+      "username": "jenilbarad089",
       "password": "admin123",
-      "name": "Rajesh Sharma",
+      "name": "Jenil Barad (Admin)",
       "role": "Admin",
       "flat": "A-101",
-      "email": "admin@smartsociety.com",
+      "email": "jenilbarad089@gmail.com",
       "phone": "9876543210",
-      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Rajesh"
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=JenilAdmin"
     },
     {
       "id": "USR-102",

@@ -47,12 +47,17 @@ async function firebaseLoginWithEmail(email, password) {
       const userCredential = await firebaseAuth.signInWithEmailAndPassword(email, password);
       const fbUser = userCredential.user;
       
-      // Determine role from database or email prefix
+      // Determine role from database or email
       let role = 'Resident';
       let flat = 'B-204';
-      if (email.includes('admin')) { role = 'Admin'; flat = 'A-101'; }
-      else if (email.includes('guard')) { role = 'Security Guard'; flat = 'Main Gate 1'; }
-      else if (email.includes('committee')) { role = 'Committee Member'; flat = 'A-402'; }
+      const userEmail = email.toLowerCase().trim();
+      
+      if (userEmail === 'jenilbarad089@gmail.com' || userEmail.includes('admin')) { 
+        role = 'Admin'; 
+        flat = 'A-101'; 
+      }
+      else if (userEmail.includes('guard')) { role = 'Security Guard'; flat = 'Main Gate 1'; }
+      else if (userEmail.includes('committee')) { role = 'Committee Member'; flat = 'A-402'; }
 
       const sessionUser = {
         id: fbUser.uid,

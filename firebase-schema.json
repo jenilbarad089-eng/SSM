@@ -1,0 +1,96 @@
+{
+  "users": {
+    "USR-101": {
+      "uid": "USR-101",
+      "name": "Jenil Barad (Admin)",
+      "email": "jenilbarad089@gmail.com",
+      "role": "Admin",
+      "flat": "A-101",
+      "phone": "9876543210",
+      "createdAt": "2026-07-21"
+    },
+    "USR-102": {
+      "uid": "USR-102",
+      "name": "Amit Patel",
+      "email": "amit.patel@gmail.com",
+      "role": "Resident",
+      "flat": "B-204",
+      "phone": "9812345678",
+      "createdAt": "2026-07-21"
+    }
+  },
+  "complaints": {
+    "CMP-101": {
+      "id": "CMP-101",
+      "residentName": "Amit Patel",
+      "flat": "B-204",
+      "category": "Plumbing",
+      "title": "Severe water leakage in master bathroom",
+      "description": "Pipe joint broken under washbasin.",
+      "status": "Pending",
+      "priority": "High",
+      "date": "2026-07-20",
+      "notes": "Admin notified plumbing maintenance team."
+    }
+  },
+  "maintenance": {
+    "INV-2026-07-001": {
+      "id": "INV-2026-07-001",
+      "residentName": "Amit Patel",
+      "flat": "B-204",
+      "month": "July 2026",
+      "amount": 3500,
+      "status": "Unpaid",
+      "dueDate": "2026-07-31"
+    }
+  },
+  "visitors": {
+    "VIS-101": {
+      "id": "VIS-101",
+      "name": "Ramesh Kumar (Courier)",
+      "phone": "9123456780",
+      "flat": "B-204",
+      "residentName": "Amit Patel",
+      "purpose": "Amazon Parcel Delivery",
+      "vehicleNo": "MH-12-AB-3456",
+      "entryTime": "2026-07-21 14:10",
+      "exitTime": "2026-07-21 14:25",
+      "status": "Approved",
+      "gatePassCode": "GP-9821"
+    }
+  },
+  "notices": {
+    "NOT-101": {
+      "id": "NOT-101",
+      "title": "Annual General Body Meeting (AGM) Notice",
+      "category": "General",
+      "postedBy": "Society Secretary",
+      "date": "2026-07-20",
+      "content": "The AGM for all society flat owners is scheduled for Sunday, July 28th at 10:00 AM."
+    }
+  },
+  "amenities": {
+    "AMN-101": {
+      "id": "AMN-101",
+      "name": "Grand Community Hall",
+      "capacity": 200,
+      "rate": 2000,
+      "icon": "fa-building",
+      "description": "Air-conditioned hall with sound system and stage for events."
+    }
+  },
+  "bookings": {
+    "BK-501": {
+      "id": "BK-501",
+      "amenityId": "AMN-101",
+      "amenityName": "Grand Community Hall",
+      "residentName": "Priya Verma",
+      "flat": "C-501",
+      "date": "2026-07-25",
+      "timeSlot": "Morning (09:00 AM - 02:00 PM)",
+      "purpose": "Birthday Celebration",
+      "amount": 2000,
+      "status": "Confirmed"
+    }
+  }
+}
