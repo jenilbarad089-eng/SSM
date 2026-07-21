@@ -28,8 +28,11 @@ function initFirebaseAuth() {
       }
       firebaseAuth = firebase.auth();
       googleProvider = new firebase.auth.GoogleAuthProvider();
+      if (typeof firebase.analytics === 'function') {
+        try { firebase.analytics(); } catch(e){}
+      }
       isFirebaseInitialized = true;
-      console.log("Firebase Auth Initialized Successfully");
+      console.log("Firebase Auth & Analytics Initialized Successfully for project smart-sm-c30db");
     }
   } catch (err) {
     console.warn("Firebase Auth Init Warning (Using fallback simulation if config unlinked):", err);
