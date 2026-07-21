@@ -1,0 +1,221 @@
+{
+  "users": [
+    {
+      "id": "USR-101",
+      "username": "admin",
+      "password": "admin123",
+      "name": "Rajesh Sharma",
+      "role": "Admin",
+      "flat": "A-101",
+      "email": "admin@smartsociety.com",
+      "phone": "9876543210",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Rajesh"
+    },
+    {
+      "id": "USR-102",
+      "username": "resident1",
+      "password": "resident123",
+      "name": "Amit Patel",
+      "role": "Resident",
+      "flat": "B-204",
+      "email": "amit.patel@gmail.com",
+      "phone": "9812345678",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Amit"
+    },
+    {
+      "id": "USR-103",
+      "username": "resident2",
+      "password": "resident123",
+      "name": "Priya Verma",
+      "role": "Resident",
+      "flat": "C-501",
+      "email": "priya.v@gmail.com",
+      "phone": "9823456789",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Priya"
+    },
+    {
+      "id": "USR-104",
+      "username": "guard",
+      "password": "guard123",
+      "name": "Bahadur Singh",
+      "role": "Security Guard",
+      "flat": "Main Gate 1",
+      "email": "guard@smartsociety.com",
+      "phone": "9988776655",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Guard"
+    },
+    {
+      "id": "USR-105",
+      "username": "committee",
+      "password": "committee123",
+      "name": "Suresh Kumar",
+      "role": "Committee Member",
+      "flat": "A-402",
+      "email": "suresh.treasurer@smartsociety.com",
+      "phone": "9765432109",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Suresh"
+    }
+  ],
+  "complaints": [
+    {
+      "id": "CMP-101",
+      "residentName": "Amit Patel",
+      "flat": "B-204",
+      "category": "Plumbing",
+      "title": "Severe water leakage in master bathroom",
+      "description": "Pipe joint broken under washbasin, water overflowing into hallway.",
+      "status": "Pending",
+      "priority": "High",
+      "date": "2026-07-20",
+      "notes": "Admin notified plumbing maintenance team."
+    },
+    {
+      "id": "CMP-102",
+      "residentName": "Priya Verma",
+      "flat": "C-501",
+      "category": "Electrical",
+      "title": "Corridor lights flickering on 5th floor",
+      "description": "Two LED tubelights are malfunctioning near elevator lobby C.",
+      "status": "In Progress",
+      "priority": "Medium",
+      "date": "2026-07-19",
+      "notes": "Electrician assigned; parts ordered."
+    },
+    {
+      "id": "CMP-103",
+      "residentName": "Rajesh Sharma",
+      "flat": "A-101",
+      "category": "Security",
+      "title": "Automatic boom barrier remote slow response",
+      "description": "Gate sensor delay observed during peak evening rush.",
+      "status": "Resolved",
+      "priority": "Low",
+      "date": "2026-07-15",
+      "notes": "Sensor recalibrated and battery replaced."
+    }
+  ],
+  "maintenance": [
+    {
+      "id": "INV-2026-07-001",
+      "residentName": "Amit Patel",
+      "flat": "B-204",
+      "month": "July 2026",
+      "amount": 3500,
+      "status": "Unpaid",
+      "dueDate": "2026-07-31",
+      "txnId": null,
+      "paymentDate": null,
+      "receiptNo": null
+    },
+    {
+      "id": "INV-2026-07-002",
+      "residentName": "Priya Verma",
+      "flat": "C-501",
+      "month": "July 2026",
+      "amount": 3500,
+      "status": "Paid",
+      "dueDate": "2026-07-31",
+      "txnId": "TXN987654321",
+      "paymentDate": "2026-07-18",
+      "receiptNo": "REC-2026-789"
+    },
+    {
+      "id": "INV-2026-06-001",
+      "residentName": "Amit Patel",
+      "flat": "B-204",
+      "month": "June 2026",
+      "amount": 3500,
+      "status": "Paid",
+      "dueDate": "2026-06-30",
+      "txnId": "TXN123456789",
+      "paymentDate": "2026-06-10",
+      "receiptNo": "REC-2026-456"
+    }
+  ],
+  "visitors": [
+    {
+      "id": "VIS-101",
+      "name": "Ramesh Kumar (Courier)",
+      "phone": "9123456780",
+      "flat": "B-204",
+      "residentName": "Amit Patel",
+      "purpose": "Amazon Parcel Delivery",
+      "vehicleNo": "MH-12-AB-3456",
+      "entryTime": "2026-07-21 14:10",
+      "exitTime": "2026-07-21 14:25",
+      "status": "Approved",
+      "gatePassCode": "GP-9821"
+    },
+    {
+      "id": "VIS-102",
+      "name": "Sunita Devi (Guest)",
+      "phone": "9871234560",
+      "flat": "C-501",
+      "residentName": "Priya Verma",
+      "purpose": "Family Visit",
+      "vehicleNo": "MH-14-XY-9900",
+      "entryTime": "2026-07-21 14:35",
+      "exitTime": "Still In Society",
+      "status": "Pending",
+      "gatePassCode": "GP-5512"
+    }
+  ],
+  "notices": [
+    {
+      "id": "NOT-101",
+      "title": "Annual General Body Meeting (AGM) Notice",
+      "category": "General",
+      "postedBy": "Society Secretary",
+      "date": "2026-07-20",
+      "content": "The AGM for all society flat owners is scheduled for Sunday, July 28th at 10:00 AM in the Main Community Hall. Key agenda items: Annual Financial Audit & Security Upgrade proposal."
+    },
+    {
+      "id": "NOT-102",
+      "title": "Scheduled Overhead Tank Cleaning & Disruption",
+      "category": "Emergency",
+      "postedBy": "Maintenance Admin",
+      "date": "2026-07-21",
+      "content": "Overhead water tank sanitization will be conducted tomorrow between 09:00 AM and 01:00 PM. Water supply will be temporarily paused. Please store adequate water."
+    }
+  ],
+  "amenities": [
+    {
+      "id": "AMN-101",
+      "name": "Grand Community Hall",
+      "capacity": 200,
+      "rate": 2000,
+      "icon": "fa-building",
+      "description": "Air-conditioned hall with sound system and stage for events."
+    },
+    {
+      "id": "AMN-102",
+      "name": "Clubhouse Gym & Lounge",
+      "capacity": 50,
+      "rate": 500,
+      "icon": "fa-dumbbell",
+      "description": "Modern fitness equipment, table tennis, and indoor lounge."
+    },
+    {
+      "id": "AMN-103",
+      "name": "Party Lawn & Garden",
+      "capacity": 300,
+      "rate": 3500,
+      "icon": "fa-tree",
+      "description": "Lush green open lawn with lighting setup for outdoor gatherings."
+    }
+  ],
+  "bookings": [
+    {
+      "id": "BK-501",
+      "amenityId": "AMN-101",
+      "amenityName": "Grand Community Hall",
+      "residentName": "Priya Verma",
+      "flat": "C-501",
+      "date": "2026-07-25",
+      "timeSlot": "Morning (09:00 AM - 02:00 PM)",
+      "purpose": "Birthday Celebration",
+      "amount": 2000,
+      "status": "Confirmed"
+    }
+  ]
+}

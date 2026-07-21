@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Society Management System | Digital Residential Administration</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top py-3">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+        <i class="fa-solid fa-city fa-lg"></i>
+        <span>SmartSociety<span class="text-info">360</span></span>
+      </a>
+      <span class="navbar-text text-light opacity-75 d-none d-md-inline fs-7">
+        <i class="fa-solid fa-shield-halved me-1 text-success"></i> Digital Residential Administration Platform
+      </span>
+    </div>
+  </nav>
+
+  <!-- Hero & Login Section -->
+  <section class="hero-gradient">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7 text-white">
+          <span class="badge bg-primary bg-opacity-25 text-info border border-info border-opacity-25 px-3 py-2 rounded-pill mb-3">
+            <i class="fa-solid fa-bolt me-1"></i> Smart MIS Platform v1.0
+          </span>
+          <h1 class="display-4 fw-bold lh-sm mb-3">Modern Administration for Residential Societies</h1>
+          <p class="lead text-light opacity-75 mb-4">
+            Digitize daily society operations—eliminate manual registers, streamline maintenance billing, track complaints, approve visitors, and book amenities from a single platform.
+          </p>
+          <div class="d-flex flex-wrap gap-4 pt-2">
+            <div>
+              <h3 class="fw-bold text-info mb-0">100%</h3>
+              <small class="text-light opacity-75">Paperless Operations</small>
+            </div>
+            <div class="vr bg-light opacity-25"></div>
+            <div>
+              <h3 class="fw-bold text-success mb-0">Instant</h3>
+              <small class="text-light opacity-75">Visitor Gate Approvals</small>
+            </div>
+            <div class="vr bg-light opacity-25"></div>
+            <div>
+              <h3 class="fw-bold text-warning mb-0">4 Roles</h3>
+              <small class="text-light opacity-75">Admin, Resident, Guard, Committee</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="glass-card p-4 p-md-5">
+            <div class="text-center mb-4">
+              <div class="avatar-icon bg-primary bg-opacity-10 text-primary d-inline-flex align-items-center justify-content-center rounded-circle p-3 mb-2" style="width: 60px; height: 60px;">
+                <i class="fa-solid fa-user-lock fa-xl"></i>
+              </div>
+              <h4 class="fw-bold mb-1">Role-Based Login</h4>
+              <p class="text-muted small">Select a pre-configured demo account or enter credentials</p>
+            </div>
+
+            <form id="loginForm">
+              <div class="mb-3">
+                <label for="usernameInput" class="form-label fw-semibold small text-secondary">Username</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light text-muted"><i class="fa-solid fa-user"></i></span>
+                  <input type="text" class="form-control" id="usernameInput" placeholder="Enter username" required>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label for="passwordInput" class="form-label fw-semibold small text-secondary">Password</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light text-muted"><i class="fa-solid fa-lock"></i></span>
+                  <input type="password" class="form-control" id="passwordInput" placeholder="Enter password" required>
+                </div>
+              </div>
+
+              <div id="loginAlert" class="alert alert-danger d-none py-2 small mb-3"></div>
+
+              <button type="submit" class="btn btn-primary-custom w-100 py-2.5 mb-3">
+                <i class="fa-solid fa-right-to-bracket me-2"></i> Sign In to Portal
+              </button>
+
+              <hr class="my-4 text-muted opacity-25">
+
+              <label class="form-label fw-semibold small text-secondary mb-2 d-block text-center">
+                <i class="fa-solid fa-wand-magic-sparkles me-1 text-primary"></i> 1-Click Demo Logins
+              </label>
+
+              <div class="row g-2">
+                <div class="col-6">
+                  <button type="button" class="demo-role-btn" onclick="fillDemo('admin', 'admin123')">
+                    <div class="fw-bold text-dark fs-7"><i class="fa-solid fa-user-gear text-primary me-1"></i> Admin</div>
+                    <small class="text-muted d-block" style="font-size: 11px;">Rajesh (A-101)</small>
+                  </button>
+                </div>
+                <div class="col-6">
+                  <button type="button" class="demo-role-btn" onclick="fillDemo('resident1', 'resident123')">
+                    <div class="fw-bold text-dark fs-7"><i class="fa-solid fa-house-user text-success me-1"></i> Resident</div>
+                    <small class="text-muted d-block" style="font-size: 11px;">Amit (B-204)</small>
+                  </button>
+                </div>
+                <div class="col-6">
+                  <button type="button" class="demo-role-btn" onclick="fillDemo('guard', 'guard123')">
+                    <div class="fw-bold text-dark fs-7"><i class="fa-solid fa-user-shield text-warning me-1"></i> Guard</div>
+                    <small class="text-muted d-block" style="font-size: 11px;">Gate 1 Pass</small>
+                  </button>
+                </div>
+                <div class="col-6">
+                  <button type="button" class="demo-role-btn" onclick="fillDemo('committee', 'committee123')">
+                    <div class="fw-bold text-dark fs-7"><i class="fa-solid fa-chart-pie text-info me-1"></i> Committee</div>
+                    <small class="text-muted d-block" style="font-size: 11px;">Suresh (Treasurer)</small>
+                  </button>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Highlight -->
+  <section class="py-5 bg-white">
+    <div class="container">
+      <div class="text-center max-w-700 mx-auto mb-5">
+        <h2 class="fw-bold text-dark">Comprehensive Society Modules</h2>
+        <p class="text-muted">Designed to eliminate paperwork and streamline everyday residential tasks.</p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="p-4 border rounded-4 h-100 bg-light-subtle">
+            <div class="metric-icon bg-icon-primary mb-3"><i class="fa-solid fa-receipt"></i></div>
+            <h5 class="fw-bold">Digital Maintenance Bills</h5>
+            <p class="text-muted small">Auto-generated monthly billing, online UPI/Card payment gateway simulation, and instant PDF receipts.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="p-4 border rounded-4 h-100 bg-light-subtle">
+            <div class="metric-icon bg-icon-success mb-3"><i class="fa-solid fa-door-open"></i></div>
+            <h5 class="fw-bold">Gate Visitor Approvals</h5>
+            <p class="text-muted small">Security guards issue digital gate passes with real-time approval alerts sent to residents.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="p-4 border rounded-4 h-100 bg-light-subtle">
+            <div class="metric-icon bg-icon-warning mb-3"><i class="fa-solid fa-headset"></i></div>
+            <h5 class="fw-bold">Online Complaint System</h5>
+            <p class="text-muted small">Track resolution lifecycle from Pending to Resolved with admin updates and status history.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="p-4 border rounded-4 h-100 bg-light-subtle">
+            <div class="metric-icon bg-icon-info mb-3"><i class="fa-solid fa-calendar-check"></i></div>
+            <h5 class="fw-bold">Amenity Booking Engine</h5>
+            <p class="text-muted small">Reserve Community Hall, Clubhouse, and Lawn with automatic double-booking collision prevention.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="p-4 border rounded-4 h-100 bg-light-subtle">
+            <div class="metric-icon bg-icon-primary mb-3"><i class="fa-solid fa-bullhorn"></i></div>
+            <h5 class="fw-bold">Digital Notice Board</h5>
+            <p class="text-muted small">Post society announcements, emergency water/power alerts, and AGM meeting schedules instantly.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="p-4 border rounded-4 h-100 bg-light-subtle">
+            <div class="metric-icon bg-icon-success mb-3"><i class="fa-solid fa-chart-line"></i></div>
+            <h5 class="fw-bold">Executive Analytics</h5>
+            <p class="text-muted small">Interactive dashboards for Administrators and Committee members to monitor financial audits.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white py-4 mt-auto">
+    <div class="container text-center">
+      <p class="mb-1 text-light opacity-75 small">&copy; 2026 Smart Society Management System (MIS Platform)</p>
+      <small class="text-muted">Built with HTML5, CSS3, JavaScript, Bootstrap 5 & Express/PowerShell REST API</small>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/db.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await SystemDB.init();
+
+      // Check if user already logged in
+      const currentUser = SystemDB.getCurrentUser();
+      if (currentUser) {
+        redirectToDashboard(currentUser.role);
+      }
+
+      document.getElementById('loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const u = document.getElementById('usernameInput').value;
+        const p = document.getElementById('passwordInput').value;
+
+        const res = SystemDB.login(u, p);
+        if (res.success) {
+          redirectToDashboard(res.user.role);
+        } else {
+          const alertEl = document.getElementById('loginAlert');
+          alertEl.textContent = res.message;
+          alertEl.classList.remove('d-none');
+        }
+      });
+    });
+
+    function fillDemo(username, password) {
+      document.getElementById('usernameInput').value = username;
+      document.getElementById('passwordInput').value = password;
+      document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+    }
+
+    function redirectToDashboard(role) {
+      switch (role) {
+        case 'Admin': window.location.href = 'admin.html'; break;
+        case 'Resident': window.location.href = 'resident.html'; break;
+        case 'Security Guard': window.location.href = 'guard.html'; break;
+        case 'Committee Member': window.location.href = 'committee.html'; break;
+        default: window.location.href = 'resident.html'; break;
+      }
+    }
+  </script>
+</body>
+</html>
