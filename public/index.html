@@ -21,26 +21,42 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
 </head>
-<body>
+<body class="has-floating-nav">
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">
-        <div class="brand-icon">
-          <i class="fa-solid fa-building-user"></i>
+  <!-- Floating Glassmorphic Navbar -->
+  <div class="navbar-float-wrapper">
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom" id="mainNav">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <div class="brand-icon">
+            <i class="fa-solid fa-building-user"></i>
+          </div>
+          <span>Society<span style="color: var(--accent-blue);">Hub</span></span>
+        </a>
+
+        <!-- Center Navigation Links -->
+        <div class="nav-center-links d-none d-lg-flex">
+          <a href="#" class="nav-pill active"><i class="fa-solid fa-house"></i> Home</a>
+          <a href="#features" class="nav-pill"><i class="fa-solid fa-grid-2"></i> Features</a>
+          <a href="#" class="nav-pill"><i class="fa-solid fa-shield-halved"></i> Security</a>
+          <a href="#" class="nav-pill"><i class="fa-solid fa-circle-info"></i> About</a>
         </div>
-        <span>Society<span class="text-primary">Hub</span></span>
-      </a>
-      
-      <div class="d-flex align-items-center gap-3">
-        <span class="firebase-live-badge d-none d-sm-inline-flex"><i class="fa-solid fa-fire me-1"></i> Firebase Auth</span>
-        <button class="btn-theme-toggle" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
-          <i class="fa-solid fa-sun" id="themeIcon"></i>
-        </button>
+
+        <!-- Right Actions -->
+        <div class="navbar-actions">
+          <span class="firebase-live-badge d-none d-md-inline-flex"><i class="fa-solid fa-fire"></i> Firebase</span>
+          <div class="nav-divider d-none d-md-block"></div>
+          <div class="btn-nav-icon d-none d-sm-flex" title="Notifications">
+            <i class="fa-solid fa-bell"></i>
+            <span class="notif-dot"></span>
+          </div>
+          <button class="btn-theme-toggle" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
+            <i class="fa-solid fa-sun" id="themeIcon"></i>
+          </button>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
+  </div>
 
   <!-- Hero & Login Section -->
   <section class="hero-hub">
@@ -343,11 +359,84 @@
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="py-4 mt-auto border-top border-secondary border-opacity-25" style="background-color: var(--bg-card);">
-    <div class="container text-center">
-      <p class="mb-1 caption-text">&copy; 2026 SocietyHub - Modern Residential Administration System</p>
-      <small class="text-muted">Powered by Firebase Authentication, Node.js Express API & Bootstrap 5</small>
+  <!-- Premium Footer -->
+  <footer class="footer-premium">
+    <div class="container">
+      <div class="row g-5">
+
+        <!-- Brand Column -->
+        <div class="col-lg-4 col-md-6">
+          <div class="footer-brand-section">
+            <a href="#" class="footer-brand-logo">
+              <div class="brand-icon"><i class="fa-solid fa-building-user"></i></div>
+              <span>Society<span style="color: var(--accent-blue);">Hub</span></span>
+            </a>
+            <p class="footer-tagline">Next-generation smart residential society management. Digitize operations, automate billing, and enhance community living.</p>
+            <div class="footer-social-links">
+              <a href="#" class="footer-social-link" title="GitHub"><i class="fa-brands fa-github"></i></a>
+              <a href="#" class="footer-social-link" title="Twitter / X"><i class="fa-brands fa-x-twitter"></i></a>
+              <a href="#" class="footer-social-link" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+              <a href="#" class="footer-social-link" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Links -->
+        <div class="col-lg-2 col-md-3 col-6">
+          <div class="footer-col-title">Product</div>
+          <ul class="footer-links">
+            <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Admin Dashboard</a></li>
+            <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Resident Portal</a></li>
+            <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Gate Security</a></li>
+            <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Committee Audit</a></li>
+            <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Analytics</a></li>
+          </ul>
+        </div>
+
+        <!-- Modules Links -->
+        <div class="col-lg-2 col-md-3 col-6">
+          <div class="footer-col-title">Modules</div>
+          <ul class="footer-links">
+            <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Maintenance Billing</a></li>
+            <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Complaint Tracker</a></li>
+            <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Visitor Gate Pass</a></li>
+            <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Notice Board</a></li>
+            <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Amenity Booking</a></li>
+          </ul>
+        </div>
+
+        <!-- Resources Links -->
+        <div class="col-lg-2 col-md-6 col-6">
+          <div class="footer-col-title">Resources</div>
+          <ul class="footer-links">
+            <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Documentation</a></li>
+            <li><a href="#"><i class="fa-solid fa-chevron-right"></i> API Reference</a></li>
+            <li><a href="https://github.com/jenilbarad089-eng/SSM" target="_blank"><i class="fa-solid fa-chevron-right"></i> GitHub Repo</a></li>
+            <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Changelog</a></li>
+          </ul>
+        </div>
+
+        <!-- Legal Links -->
+        <div class="col-lg-2 col-md-6 col-6">
+          <div class="footer-col-title">Legal</div>
+          <ul class="footer-links">
+            <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Privacy Policy</a></li>
+            <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Terms of Service</a></li>
+            <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Cookie Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="footer-bottom">
+        <span class="footer-bottom-text">&copy; 2026 SocietyHub. Built by Jenil Barad. All rights reserved.</span>
+        <div class="footer-bottom-badges">
+          <span class="footer-tech-badge"><i class="fa-solid fa-fire text-warning"></i> Firebase Auth</span>
+          <span class="footer-tech-badge"><i class="fa-brands fa-node-js text-success"></i> Node.js</span>
+          <span class="footer-tech-badge"><i class="fa-brands fa-bootstrap text-info"></i> Bootstrap 5</span>
+        </div>
+      </div>
     </div>
   </footer>
 
@@ -437,6 +526,28 @@
         default: window.location.href = 'resident.html'; break;
       }
     }
+  </script>
+
+  <!-- Navbar Scroll Effect -->
+  <script>
+    (function() {
+      const nav = document.getElementById('mainNav');
+      if (!nav) return;
+      let ticking = false;
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          window.requestAnimationFrame(function() {
+            if (window.scrollY > 40) {
+              nav.classList.add('navbar-scrolled');
+            } else {
+              nav.classList.remove('navbar-scrolled');
+            }
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+    })();
   </script>
 </body>
 </html>

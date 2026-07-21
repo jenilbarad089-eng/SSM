@@ -25,17 +25,22 @@
 <body class="bg-light">
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom navbar-dashboard">
     <div class="container-fluid px-4">
       <a class="navbar-brand" href="index.html">
         <div class="brand-icon">
           <i class="fa-solid fa-chart-pie"></i>
         </div>
-        <span>Society<span class="text-primary">Hub</span></span>
+        <span>Society<span style="color: var(--accent-blue);">Hub</span></span>
         <span class="badge bg-info text-dark ms-2 fs-8"><i class="fa-solid fa-chart-line me-1"></i> Committee Governance</span>
       </a>
 
       <div class="d-flex align-items-center gap-3">
+        <div class="btn-nav-icon d-none d-sm-flex" title="Notifications">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notif-dot"></span>
+        </div>
+        <div class="nav-divider d-none d-sm-block"></div>
         <button class="btn-theme-toggle" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
           <i class="fa-solid fa-sun" id="themeIcon"></i>
         </button>
