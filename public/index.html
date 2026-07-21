@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SocietyHub | Smart Residential Administration Platform</title>
-  <!-- Google Fonts: Lora (Headings) & Plus Jakarta Sans (Body) -->
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Theme toggle pre-loader -->
   <script src="js/theme.js"></script>
   <!-- Bootstrap 5 CSS -->
@@ -24,17 +24,17 @@
 <body>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top py-3">
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
     <div class="container">
       <a class="navbar-brand" href="#">
         <div class="brand-icon">
-          <i class="fa-solid fa-building-user fa-lg"></i>
+          <i class="fa-solid fa-building-user"></i>
         </div>
         <span>Society<span class="text-primary">Hub</span></span>
       </a>
       
       <div class="d-flex align-items-center gap-3">
-        <span class="firebase-live-badge d-none d-sm-inline-flex"><i class="fa-solid fa-fire"></i> Firebase Auth</span>
+        <span class="firebase-live-badge d-none d-sm-inline-flex"><i class="fa-solid fa-fire me-1"></i> Firebase Auth</span>
         <button class="btn-theme-toggle" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
           <i class="fa-solid fa-sun" id="themeIcon"></i>
         </button>
@@ -42,48 +42,95 @@
     </div>
   </nav>
 
-  <!-- Hero Section -->
+  <!-- Hero & Login Section -->
   <section class="hero-hub">
     <div class="container">
       <div class="row align-items-center g-5">
+        
+        <!-- Left Column: Hero Content & Live Analytics Preview -->
         <div class="col-lg-7">
           <span class="badge bg-primary bg-opacity-25 text-info border border-info border-opacity-25 px-3 py-2 rounded-pill mb-3">
             <i class="fa-solid fa-bolt me-1"></i> SocietyHub MIS Platform v2.0
           </span>
-          <h1 class="display-4 fw-bold lh-sm mb-3">Next-Generation Society Administration</h1>
-          <p class="lead text-sub mb-4">
-            Digitize society operations with <strong>SocietyHub</strong>—eliminate manual paperwork, collect maintenance fees online, track complaints, approve visitor gate passes, and reserve society facilities seamlessly on any mobile or desktop device.
+          <h1 class="hero-title mb-3">Next-Generation Society Administration</h1>
+          <p class="body-text mb-4">
+            Digitize residential operations with <strong>SocietyHub</strong>—eliminate paper registers, automate maintenance billing, manage gate visitor passes, and track complaint resolutions on a unified commercial SaaS platform.
           </p>
+
+          <!-- Floating SaaS Live Stats Preview Cards -->
+          <div class="row g-3 mb-4">
+            <div class="col-sm-4">
+              <div class="metric-card p-3">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="metric-icon bg-icon-success" style="width: 44px; height: 44px; font-size: 1.2rem;">
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
+                  </div>
+                  <div>
+                    <span class="caption-text d-block">July Collection</span>
+                    <strong class="text-success fs-6">₹1,42,500</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-4">
+              <div class="metric-card p-3">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="metric-icon bg-icon-info" style="width: 44px; height: 44px; font-size: 1.2rem;">
+                    <i class="fa-solid fa-shield-halved"></i>
+                  </div>
+                  <div>
+                    <span class="caption-text d-block">Today Gate Passes</span>
+                    <strong class="text-info fs-6">24 Verified</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-4">
+              <div class="metric-card p-3">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="metric-icon bg-icon-primary" style="width: 44px; height: 44px; font-size: 1.2rem;">
+                    <i class="fa-solid fa-check-double"></i>
+                  </div>
+                  <div>
+                    <span class="caption-text d-block">Resolution Rate</span>
+                    <strong class="text-primary fs-6">98.4% SLA</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="d-flex flex-wrap gap-4 pt-2">
-            <div>
-              <h3 class="fw-bold text-info mb-0"><i class="fa-solid fa-file-shield me-1"></i> 100%</h3>
-              <small class="text-sub">Paperless Operations</small>
+            <div class="d-flex align-items-center gap-2">
+              <i class="fa-solid fa-circle-check text-success fs-5"></i>
+              <span class="caption-text">100% Paperless Operations</span>
             </div>
-            <div class="vr bg-secondary opacity-25"></div>
-            <div>
-              <h3 class="fw-bold text-success mb-0"><i class="fa-solid fa-lock me-1"></i> Firebase</h3>
-              <small class="text-sub">Real Cloud Auth</small>
+            <div class="d-flex align-items-center gap-2">
+              <i class="fa-solid fa-circle-check text-success fs-5"></i>
+              <span class="caption-text">Real Firebase Auth</span>
             </div>
-            <div class="vr bg-secondary opacity-25"></div>
-            <div>
-              <h3 class="fw-bold text-warning mb-0"><i class="fa-solid fa-users-gear me-1"></i> 4 Roles</h3>
-              <small class="text-sub">Admin, Resident, Guard, Committee</small>
+            <div class="d-flex align-items-center gap-2">
+              <i class="fa-solid fa-circle-check text-success fs-5"></i>
+              <span class="caption-text">Multi-Role Control</span>
             </div>
           </div>
         </div>
 
+        <!-- Right Column: Authentication Card -->
         <div class="col-lg-5">
           <div class="hub-card p-4 p-md-5">
 
             <!-- Auth Mode Tabs: Sign In / Register -->
             <ul class="nav nav-pills nav-fill bg-dark rounded-pill p-1 mb-4" id="authTabs" role="tablist">
               <li class="nav-item">
-                <button class="nav-link active rounded-pill fw-semibold py-2 fs-7" id="signin-tab" data-bs-toggle="tab" data-bs-target="#signin-pane">
+                <button class="nav-link active rounded-pill fw-bold py-2 fs-7" id="signin-tab" data-bs-toggle="tab" data-bs-target="#signin-pane">
                   <i class="fa-solid fa-right-to-bracket me-1"></i> Sign In
                 </button>
               </li>
               <li class="nav-item">
-                <button class="nav-link rounded-pill fw-semibold py-2 fs-7" id="register-tab" data-bs-toggle="tab" data-bs-target="#register-pane">
+                <button class="nav-link rounded-pill fw-bold py-2 fs-7" id="register-tab" data-bs-toggle="tab" data-bs-target="#register-pane">
                   <i class="fa-solid fa-user-plus me-1"></i> Register
                 </button>
               </li>
@@ -91,85 +138,121 @@
 
             <div class="tab-content" id="authTabContent">
 
-              <!-- TAB 1: Firebase Sign In -->
+              <!-- TAB 1: Sign In -->
               <div class="tab-pane fade show active" id="signin-pane">
                 <form id="loginForm">
                   <div class="mb-3">
-                    <label for="usernameInput" class="form-label fw-semibold small text-sub"><i class="fa-solid fa-at me-1"></i> Email Address / Username</label>
+                    <label for="usernameInput" class="form-label fw-semibold caption-text"><i class="fa-solid fa-envelope me-1 text-primary"></i> Email Address or Username</label>
                     <div class="input-group">
-                      <span class="input-group-text bg-dark border-secondary text-muted"><i class="fa-solid fa-envelope"></i></span>
+                      <span class="input-group-text"><i class="fa-solid fa-at"></i></span>
                       <input type="text" class="form-control" id="usernameInput" placeholder="jenilbarad089@gmail.com" required>
                     </div>
                   </div>
 
-                  <div class="mb-4">
-                    <label for="passwordInput" class="form-label fw-semibold small text-sub"><i class="fa-solid fa-key me-1"></i> Password</label>
+                  <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <label for="passwordInput" class="form-label fw-semibold caption-text"><i class="fa-solid fa-lock me-1 text-primary"></i> Password</label>
+                      <a href="#" class="caption-text text-primary text-decoration-none" onclick="alert('Demo Mode: Use password admin123 or reset via Firebase Console.')">Forgot Password?</a>
+                    </div>
                     <div class="input-group">
-                      <span class="input-group-text bg-dark border-secondary text-muted"><i class="fa-solid fa-lock"></i></span>
+                      <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
                       <input type="password" class="form-control" id="passwordInput" placeholder="Enter password" required>
+                      <button class="btn btn-outline-secondary border-start-0" type="button" onclick="togglePasswordVisibility('passwordInput', 'togglePassIcon')">
+                        <i class="fa-solid fa-eye text-muted" id="togglePassIcon"></i>
+                      </button>
                     </div>
                   </div>
 
-                  <div id="loginAlert" class="alert alert-danger d-none py-2 small mb-3"><i class="fa-solid fa-triangle-exclamation me-1"></i> <span id="loginAlertMsg"></span></div>
+                  <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="rememberMe" checked>
+                      <label class="form-check-label caption-text" for="rememberMe">Remember Session</label>
+                    </div>
+                  </div>
 
-                  <button type="submit" class="btn btn-primary-custom w-100 py-2.5 mb-3">
-                    <i class="fa-solid fa-fire me-2"></i> Sign In to Account
+                  <div id="loginAlert" class="alert alert-danger d-none py-2 caption-text mb-3">
+                    <i class="fa-solid fa-triangle-exclamation me-1"></i> <span id="loginAlertMsg"></span>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary-custom w-100 py-3 mb-3">
+                    <i class="fa-solid fa-right-to-bracket me-2"></i> Sign In to Account
                   </button>
 
-                  <button type="button" class="btn btn-google-auth mb-3" onclick="handleGoogleSignIn()">
+                  <button type="button" class="btn btn-google-auth mb-4" onclick="handleGoogleSignIn()">
                     <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-                    Continue with Google Auth
+                    Continue with Google
                   </button>
 
-                  <div class="text-center my-3 text-muted small"><i class="fa-solid fa-wand-magic-sparkles me-1"></i> 1-CLICK DEMO LOGIN PRESETS</div>
-
-                  <div class="row g-2">
-                    <div class="col-6">
-                      <button type="button" class="demo-role-btn" onclick="fillDemo('jenilbarad089@gmail.com', 'admin123')">
-                        <div class="fw-bold fs-7 text-info"><i class="fa-solid fa-user-gear me-1"></i> Admin</div>
-                        <small class="text-muted d-block" style="font-size: 11px;">Jenil (A-101)</small>
-                      </button>
-                    </div>
-                    <div class="col-6">
-                      <button type="button" class="demo-role-btn" onclick="fillDemo('amit.patel@gmail.com', 'resident123')">
-                        <div class="fw-bold fs-7 text-success"><i class="fa-solid fa-house-user me-1"></i> Resident</div>
-                        <small class="text-muted d-block" style="font-size: 11px;">Amit (B-204)</small>
-                      </button>
-                    </div>
-                    <div class="col-6">
-                      <button type="button" class="demo-role-btn" onclick="fillDemo('guard@smartsociety.com', 'guard123')">
-                        <div class="fw-bold fs-7 text-warning"><i class="fa-solid fa-user-shield me-1"></i> Guard</div>
-                        <small class="text-muted d-block" style="font-size: 11px;">Gate Pass 1</small>
-                      </button>
-                    </div>
-                    <div class="col-6">
-                      <button type="button" class="demo-role-btn" onclick="fillDemo('suresh@smartsociety.com', 'committee123')">
-                        <div class="fw-bold fs-7 text-primary"><i class="fa-solid fa-chart-pie me-1"></i> Committee</div>
-                        <small class="text-muted d-block" style="font-size: 11px;">Suresh (Treasurer)</small>
-                      </button>
+                  <!-- Collapsible Developer Demo Accounts Panel -->
+                  <div class="accordion accordion-flush" id="demoAccordion">
+                    <div class="accordion-item border-0 bg-transparent">
+                      <h2 class="accordion-header" id="headingDemo">
+                        <button class="accordion-button collapsed caption-text fw-bold py-2 bg-transparent text-secondary shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDemo">
+                          <i class="fa-solid fa-wand-magic-sparkles text-primary me-2"></i> Quick Demo Accounts Presets
+                        </button>
+                      </h2>
+                      <div id="collapseDemo" class="accordion-collapse collapse" data-bs-parent="#demoAccordion">
+                        <div class="accordion-body px-0 pt-2 pb-0">
+                          <div class="row g-2">
+                            <div class="col-6">
+                              <button type="button" class="demo-role-btn" onclick="fillDemo('jenilbarad089@gmail.com', 'admin123')">
+                                <div class="fw-bold fs-7 text-info"><i class="fa-solid fa-user-gear me-1"></i> Admin</div>
+                                <small class="caption-text d-block">Jenil (A-101)</small>
+                              </button>
+                            </div>
+                            <div class="col-6">
+                              <button type="button" class="demo-role-btn" onclick="fillDemo('amit.patel@gmail.com', 'resident123')">
+                                <div class="fw-bold fs-7 text-success"><i class="fa-solid fa-house-user me-1"></i> Resident</div>
+                                <small class="caption-text d-block">Amit (B-204)</small>
+                              </button>
+                            </div>
+                            <div class="col-6">
+                              <button type="button" class="demo-role-btn" onclick="fillDemo('guard@smartsociety.com', 'guard123')">
+                                <div class="fw-bold fs-7 text-warning"><i class="fa-solid fa-user-shield me-1"></i> Guard</div>
+                                <small class="caption-text d-block">Gate 1 Pass</small>
+                              </button>
+                            </div>
+                            <div class="col-6">
+                              <button type="button" class="demo-role-btn" onclick="fillDemo('suresh@smartsociety.com', 'committee123')">
+                                <div class="fw-bold fs-7 text-primary"><i class="fa-solid fa-chart-pie me-1"></i> Committee</div>
+                                <small class="caption-text d-block">Suresh (Treasurer)</small>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
+
                 </form>
               </div>
 
-              <!-- TAB 2: Firebase Registration -->
+              <!-- TAB 2: Registration -->
               <div class="tab-pane fade" id="register-pane">
                 <form id="registerForm">
                   <div class="mb-3">
-                    <label class="form-label fw-semibold small text-sub"><i class="fa-solid fa-id-card me-1"></i> Full Name</label>
-                    <input type="text" class="form-control" id="regName" placeholder="e.g. Vikramaditya Singh" required>
+                    <label class="form-label fw-semibold caption-text"><i class="fa-solid fa-id-card me-1 text-primary"></i> Full Name</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                      <input type="text" class="form-control" id="regName" placeholder="e.g. Vikramaditya Singh" required>
+                    </div>
                   </div>
+
                   <div class="mb-3">
-                    <label class="form-label fw-semibold small text-sub"><i class="fa-solid fa-envelope me-1"></i> Email Address</label>
-                    <input type="email" class="form-control" id="regEmail" placeholder="e.g. resident@gmail.com" required>
+                    <label class="form-label fw-semibold caption-text"><i class="fa-solid fa-envelope me-1 text-primary"></i> Email Address</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fa-solid fa-at"></i></span>
+                      <input type="email" class="form-control" id="regEmail" placeholder="e.g. resident@gmail.com" required>
+                    </div>
                   </div>
+
                   <div class="row g-2 mb-3">
                     <div class="col-6">
-                      <label class="form-label fw-semibold small text-sub"><i class="fa-solid fa-building me-1"></i> Flat No</label>
+                      <label class="form-label fw-semibold caption-text"><i class="fa-solid fa-building me-1 text-primary"></i> Flat No</label>
                       <input type="text" class="form-control" id="regFlat" placeholder="e.g. B-303" required>
                     </div>
                     <div class="col-6">
-                      <label class="form-label fw-semibold small text-sub"><i class="fa-solid fa-user-tag me-1"></i> Role</label>
+                      <label class="form-label fw-semibold caption-text"><i class="fa-solid fa-user-tag me-1 text-primary"></i> Role</label>
                       <select class="form-select" id="regRole">
                         <option value="Resident">Resident</option>
                         <option value="Admin">Admin</option>
@@ -178,15 +261,21 @@
                       </select>
                     </div>
                   </div>
+
                   <div class="mb-4">
-                    <label class="form-label fw-semibold small text-sub"><i class="fa-solid fa-lock me-1"></i> Password</label>
-                    <input type="password" class="form-control" id="regPassword" placeholder="Min 6 characters" required minlength="6">
+                    <label class="form-label fw-semibold caption-text"><i class="fa-solid fa-key me-1 text-primary"></i> Password</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                      <input type="password" class="form-control" id="regPassword" placeholder="Min 6 characters" required minlength="6">
+                    </div>
                   </div>
 
-                  <div id="regAlert" class="alert alert-danger d-none py-2 small mb-3"><i class="fa-solid fa-circle-exclamation me-1"></i> <span id="regAlertMsg"></span></div>
+                  <div id="regAlert" class="alert alert-danger d-none py-2 caption-text mb-3">
+                    <i class="fa-solid fa-circle-exclamation me-1"></i> <span id="regAlertMsg"></span>
+                  </div>
 
-                  <button type="submit" class="btn btn-success w-100 py-2.5 fw-bold rounded-pill">
-                    <i class="fa-solid fa-user-plus me-2"></i> Register Account
+                  <button type="submit" class="btn btn-primary-custom w-100 py-3">
+                    <i class="fa-solid fa-user-plus me-2"></i> Create Account
                   </button>
                 </form>
               </div>
@@ -200,54 +289,54 @@
   </section>
 
   <!-- Features Highlight Section -->
-  <section class="py-5" style="background-color: var(--hub-body-bg);">
+  <section class="py-5">
     <div class="container">
       <div class="text-center max-w-700 mx-auto mb-5">
-        <h2 class="fw-bold">Comprehensive SocietyHub Operations</h2>
-        <p class="text-sub">Designed to eliminate paperwork, improve transparency, and automate residential operations.</p>
+        <h2 class="fw-bold">Comprehensive SocietyHub Modules</h2>
+        <p class="body-text">Designed to eliminate paperwork, improve transparency, and automate residential operations.</p>
       </div>
 
       <div class="row g-4">
         <div class="col-md-4">
-          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 hub-card">
+          <div class="hub-card h-100">
             <div class="metric-icon bg-icon-primary mb-3"><i class="fa-solid fa-receipt"></i></div>
-            <h5 class="fw-bold"><i class="fa-solid fa-file-invoice-dollar text-primary me-2"></i> Digital Maintenance Bills</h5>
-            <p class="text-sub small">Auto-generated monthly billing, online payment simulation, and instant downloadable PDF receipts.</p>
+            <h5 class="fw-bold"><i class="fa-solid fa-file-invoice-dollar text-primary me-2"></i> Maintenance Billing</h5>
+            <p class="caption-text">Auto-generated monthly billing, online payment simulation, and instant downloadable PDF receipts.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 hub-card">
+          <div class="hub-card h-100">
             <div class="metric-icon bg-icon-success mb-3"><i class="fa-solid fa-door-open"></i></div>
-            <h5 class="fw-bold"><i class="fa-solid fa-shield-halved text-success me-2"></i> Gate Visitor Approvals</h5>
-            <p class="text-sub small">Security guards issue digital gate passes with real-time approval notifications sent to residents.</p>
+            <h5 class="fw-bold"><i class="fa-solid fa-shield-halved text-success me-2"></i> Visitor Approvals</h5>
+            <p class="caption-text">Security guards issue digital gate passes with real-time approval notifications sent to residents.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 hub-card">
+          <div class="hub-card h-100">
             <div class="metric-icon bg-icon-warning mb-3"><i class="fa-solid fa-headset"></i></div>
-            <h5 class="fw-bold"><i class="fa-solid fa-wrench text-warning me-2"></i> Online Complaint System</h5>
-            <p class="text-sub small">Track resolution lifecycle from Pending to Resolved with admin updates and status history.</p>
+            <h5 class="fw-bold"><i class="fa-solid fa-wrench text-warning me-2"></i> Complaint System</h5>
+            <p class="caption-text">Track resolution lifecycle from Pending to Resolved with admin updates and status history.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 hub-card">
+          <div class="hub-card h-100">
             <div class="metric-icon bg-icon-info mb-3"><i class="fa-solid fa-calendar-check"></i></div>
-            <h5 class="fw-bold"><i class="fa-solid fa-calendar-days text-info me-2"></i> Amenity Booking Engine</h5>
-            <p class="text-sub small">Reserve Community Hall, Clubhouse, and Lawn with automatic double-booking collision prevention.</p>
+            <h5 class="fw-bold"><i class="fa-solid fa-calendar-days text-info me-2"></i> Amenity Booking</h5>
+            <p class="caption-text">Reserve Community Hall, Clubhouse, and Lawn with automatic double-booking collision prevention.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 hub-card">
+          <div class="hub-card h-100">
             <div class="metric-icon bg-icon-primary mb-3"><i class="fa-solid fa-bullhorn"></i></div>
             <h5 class="fw-bold"><i class="fa-solid fa-bullhorn text-primary me-2"></i> Digital Notice Board</h5>
-            <p class="text-sub small">Post society announcements, emergency water/power alerts, and AGM meeting schedules instantly.</p>
+            <p class="caption-text">Post society announcements, emergency water/power alerts, and AGM meeting schedules instantly.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="p-4 border border-secondary border-opacity-25 rounded-4 h-100 hub-card">
+          <div class="hub-card h-100">
             <div class="metric-icon bg-icon-success mb-3"><i class="fa-solid fa-chart-line"></i></div>
             <h5 class="fw-bold"><i class="fa-solid fa-chart-pie text-success me-2"></i> Executive Analytics</h5>
-            <p class="text-sub small">Interactive dashboards for Administrators and Committee members to monitor financial audits.</p>
+            <p class="caption-text">Interactive dashboards for Administrators and Committee members to monitor financial audits.</p>
           </div>
         </div>
       </div>
@@ -255,9 +344,9 @@
   </section>
 
   <!-- Footer -->
-  <footer class="py-4 mt-auto border-top border-secondary border-opacity-25" style="background-color: var(--hub-card-bg);">
+  <footer class="py-4 mt-auto border-top border-secondary border-opacity-25" style="background-color: var(--bg-card);">
     <div class="container text-center">
-      <p class="mb-1 text-sub small">&copy; 2026 SocietyHub - Modern Residential Administration System</p>
+      <p class="mb-1 caption-text">&copy; 2026 SocietyHub - Modern Residential Administration System</p>
       <small class="text-muted">Powered by Firebase Authentication, Node.js Express API & Bootstrap 5</small>
     </div>
   </footer>
@@ -311,6 +400,18 @@
         }
       });
     });
+
+    function togglePasswordVisibility(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fa-solid fa-eye-slash text-primary';
+      } else {
+        input.type = 'password';
+        icon.className = 'fa-solid fa-eye text-muted';
+      }
+    }
 
     async function handleGoogleSignIn() {
       const res = await firebaseLoginWithGoogle();

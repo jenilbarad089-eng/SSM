@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Security Gate Control | SocietyHub</title>
-  <!-- Google Fonts: Lora (Headings) & Plus Jakarta Sans (Body) -->
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Theme toggle pre-loader -->
   <script src="js/theme.js"></script>
   <!-- Bootstrap 5 CSS -->
@@ -51,93 +51,131 @@
     </div>
   </nav>
 
-  <!-- Container -->
+  <!-- Main Container -->
   <div class="container-fluid px-4 py-4">
+    
+    <!-- Top Summary Banner -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <div class="metric-card">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <span class="caption-text fw-semibold">Active Gate Check-Ins</span>
+              <h2 class="fw-bold my-1 text-warning" id="statCheckedIn">0</h2>
+              <span class="badge bg-warning-subtle text-warning fs-8"><i class="fa-solid fa-building me-1"></i> Inside Society</span>
+            </div>
+            <div class="metric-icon bg-icon-warning"><i class="fa-solid fa-person-walking-arrow-right"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="metric-card">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <span class="caption-text fw-semibold">Checked Out Today</span>
+              <h2 class="fw-bold my-1 text-success" id="statCheckedOut">0</h2>
+              <span class="badge bg-success-subtle text-success fs-8"><i class="fa-solid fa-circle-check me-1"></i> Pass Closed</span>
+            </div>
+            <div class="metric-icon bg-icon-success"><i class="fa-solid fa-person-walking-arrow-loop-left"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="metric-card">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <span class="caption-text fw-semibold">Total Visitors Today</span>
+              <h2 class="fw-bold my-1 text-info" id="statTotalToday">0</h2>
+              <span class="badge bg-info-subtle text-info fs-8"><i class="fa-solid fa-id-badge me-1"></i> Gate Passes Issued</span>
+            </div>
+            <div class="metric-icon bg-icon-info"><i class="fa-solid fa-address-card"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
     <div class="row g-4">
 
-      <!-- Left Column: Quick Entry Form -->
-      <div class="col-lg-4">
-        <div class="card border-0 shadow-sm rounded-4 p-4 sticky-top" style="top: 90px;">
-          <div class="d-flex align-items-center gap-2 mb-3">
-            <div class="avatar-icon bg-warning bg-opacity-25 text-warning rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-              <i class="fa-solid fa-user-plus fa-lg"></i>
-            </div>
-            <div>
-              <h5 class="fw-bold mb-0">Record Gate Visitor</h5>
-              <small class="text-muted">Issue digital gate pass & notify resident</small>
-            </div>
-          </div>
+      <!-- Left Column: Entry Form Card -->
+      <div class="col-lg-5">
+        <div class="hub-card p-4">
+          <h4 class="fw-bold mb-3"><i class="fa-solid fa-id-card-clip text-warning me-2"></i> Issue Digital Gate Pass</h4>
+          <p class="caption-text mb-4">Register new guest, delivery agent, or cab driver for instant resident approval.</p>
 
           <form id="newVisitorForm">
             <div class="mb-3">
-              <label class="form-label small fw-semibold">Visitor Full Name</label>
-              <input type="text" class="form-control" id="visName" required placeholder="e.g. Ramesh Kumar">
+              <label class="form-label caption-text fw-semibold">Visitor Full Name</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                <input type="text" class="form-control" id="visName" required placeholder="e.g. Ramesh Kumar">
+              </div>
             </div>
 
             <div class="mb-3">
-              <label class="form-label small fw-semibold">Mobile Phone Number</label>
-              <input type="tel" class="form-control" id="visPhone" required placeholder="e.g. 9876543210">
+              <label class="form-label caption-text fw-semibold">Contact Phone Number</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+                <input type="tel" class="form-control" id="visPhone" required placeholder="e.g. 9876543210">
+              </div>
             </div>
 
             <div class="row g-2 mb-3">
               <div class="col-6">
-                <label class="form-label small fw-semibold">Destination Flat</label>
-                <select class="form-select" id="visFlatSelect" required>
-                  <!-- Populated dynamically -->
-                </select>
+                <label class="form-label caption-text fw-semibold">Destination Flat</label>
+                <select class="form-select" id="visFlat" required></select>
               </div>
               <div class="col-6">
-                <label class="form-label small fw-semibold">Purpose</label>
+                <label class="form-label caption-text fw-semibold">Purpose of Visit</label>
                 <select class="form-select" id="visPurpose" required>
-                  <option value="Delivery / Courier">Delivery / Courier</option>
-                  <option value="Guest / Relative">Guest / Relative</option>
-                  <option value="Cab / Taxi">Cab / Taxi</option>
-                  <option value="Domestic Staff">Domestic Staff</option>
-                  <option value="Maintenance Worker">Maintenance Worker</option>
+                  <option value="Delivery (Amazon/Swiggy)">Delivery Agent</option>
+                  <option value="Guest / Friend">Guest / Friend</option>
+                  <option value="Cab (Uber/Ola)">Cab / Taxi</option>
+                  <option value="Maintenance / Plumber">Maintenance Specialist</option>
+                  <option value="House Help / Maid">House Help / Maid</option>
                 </select>
               </div>
             </div>
 
             <div class="mb-4">
-              <label class="form-label small fw-semibold">Vehicle Number (Optional)</label>
-              <input type="text" class="form-control" id="visVehicle" placeholder="e.g. MH-12-AB-1234">
+              <label class="form-label caption-text fw-semibold">Vehicle Number (Optional)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-car"></i></span>
+                <input type="text" class="form-control" id="visVehicle" placeholder="e.g. GJ-01-AB-1234">
+              </div>
             </div>
 
-            <button type="submit" class="btn btn-warning w-100 py-2.5 fw-bold text-dark rounded-pill shadow-sm">
-              <i class="fa-solid fa-qrcode me-2"></i> Issue Gate Pass & Send Request
+            <button type="submit" class="btn btn-primary-custom w-100 py-3">
+              <i class="fa-solid fa-key me-2"></i> Issue Gate Pass & Check-In
             </button>
           </form>
         </div>
       </div>
 
       <!-- Right Column: Active Visitors Table -->
-      <div class="col-lg-8">
-        <div class="d-flex align-items-center justify-content-between mb-3">
-          <div>
-            <h4 class="fw-bold mb-1">Gate Pass Activity & Check-In Log</h4>
-            <p class="text-muted small mb-0">Monitor live visitors inside society premises and record exit times.</p>
+      <div class="col-lg-7">
+        <div class="hub-card p-4">
+          <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+            <h4 class="fw-bold mb-0"><i class="fa-solid fa-list-check text-info me-2"></i> Realtime Gate Activity Log</h4>
+            <span class="badge bg-info-subtle text-info fs-8"><i class="fa-solid fa-rotate me-1"></i> Auto-Syncing</span>
           </div>
-          <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="loadGuardDashboard()">
-            <i class="fa-solid fa-rotate me-1"></i> Refresh List
-          </button>
-        </div>
 
-        <div class="card border-0 shadow-sm rounded-4 p-3">
           <div class="table-responsive">
             <table class="table table-hover align-middle table-custom mb-0">
               <thead>
                 <tr>
                   <th>Pass Code</th>
-                  <th>Visitor Name & Phone</th>
-                  <th>Flat No</th>
-                  <th>Purpose</th>
+                  <th>Visitor & Phone</th>
+                  <th>Destination Flat</th>
                   <th>Check-In</th>
-                  <th>Resident Approval</th>
-                  <th class="text-end">Check-Out</th>
+                  <th>Approval Status</th>
+                  <th class="text-end">Action</th>
                 </tr>
               </thead>
               <tbody id="guardVisitorsTableBody">
-                <!-- Populated dynamically -->
+                <!-- Dynamic Visitor Rows -->
               </tbody>
             </table>
           </div>

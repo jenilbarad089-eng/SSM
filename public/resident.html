@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Resident Portal | SocietyHub</title>
-  <!-- Google Fonts: Lora (Headings) & Plus Jakarta Sans (Body) -->
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Theme toggle pre-loader -->
   <script src="js/theme.js"></script>
   <!-- Bootstrap 5 CSS -->
@@ -60,8 +60,8 @@
             <i class="fa-solid fa-user-clock fa-lg"></i>
           </div>
           <div>
-            <h6 class="fw-bold text-dark mb-0">Incoming Visitor Request at Gate!</h6>
-            <span class="text-dark opacity-75 small" id="bannerVisitorDetails">Ramesh (Courier) is waiting for entry approval.</span>
+            <h5 class="fw-bold text-dark mb-0">Incoming Visitor Request at Gate!</h5>
+            <span class="text-dark opacity-75 caption-text" id="bannerVisitorDetails">Ramesh (Courier) is waiting for entry approval.</span>
           </div>
         </div>
         <div class="d-flex gap-2" id="bannerActionBtns">
@@ -78,25 +78,25 @@
       <!-- Sidebar Navigation -->
       <div class="col-lg-3 col-xl-2">
         <div class="sidebar-nav">
-          <div class="text-uppercase text-muted fw-bold fs-8 px-3 mb-2">Resident Menu</div>
+          <div class="text-uppercase caption-text fw-bold px-3 mb-2"><i class="fa-solid fa-compass me-1"></i> Resident Menu</div>
           <div class="nav flex-column nav-pills" id="res-tab" role="tablist">
             <button class="nav-link active" id="tab-res-home-btn" data-bs-toggle="pill" data-bs-target="#tab-res-home" type="button">
-              <i class="fa-solid fa-house"></i> Home Dashboard
+              <i class="fa-solid fa-house text-primary"></i> Home Overview
             </button>
             <button class="nav-link" id="tab-res-bills-btn" data-bs-toggle="pill" data-bs-target="#tab-res-bills" type="button">
-              <i class="fa-solid fa-receipt"></i> Maintenance Bills
+              <i class="fa-solid fa-receipt text-success"></i> Maintenance Bills
             </button>
             <button class="nav-link" id="tab-res-complaints-btn" data-bs-toggle="pill" data-bs-target="#tab-res-complaints" type="button">
-              <i class="fa-solid fa-headset"></i> Lodge Complaints
+              <i class="fa-solid fa-headset text-warning"></i> Lodge Complaints
             </button>
             <button class="nav-link" id="tab-res-visitors-btn" data-bs-toggle="pill" data-bs-target="#tab-res-visitors" type="button">
-              <i class="fa-solid fa-user-check"></i> Visitor Approvals
+              <i class="fa-solid fa-user-check text-info"></i> Visitor Approvals
             </button>
             <button class="nav-link" id="tab-res-amenities-btn" data-bs-toggle="pill" data-bs-target="#tab-res-amenities" type="button">
-              <i class="fa-solid fa-calendar-check"></i> Book Amenities
+              <i class="fa-solid fa-calendar-check text-danger"></i> Book Amenities
             </button>
             <button class="nav-link" id="tab-res-notices-btn" data-bs-toggle="pill" data-bs-target="#tab-res-notices" type="button">
-              <i class="fa-solid fa-bullhorn"></i> Notice Board
+              <i class="fa-solid fa-bullhorn text-primary"></i> Notice Board
             </button>
           </div>
         </div>
@@ -109,20 +109,20 @@
           <!-- TAB 1: Resident Home Dashboard -->
           <div class="tab-pane fade show active" id="tab-res-home" role="tabpanel">
             <!-- Welcome Header Card -->
-            <div class="glass-card p-4 p-md-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); color: white;">
+            <div class="hub-card p-4 p-md-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, var(--bg-card) 0%, var(--surface-card) 100%);">
               <div class="row align-items-center">
                 <div class="col-md-8">
-                  <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-25 px-3 py-1.5 rounded-pill mb-2 fs-8">
-                    Welcome Back Resident
+                  <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-25 px-3 py-1.5 rounded-pill mb-2 caption-text">
+                    <i class="fa-solid fa-sparkles me-1"></i> Welcome Back Resident
                   </span>
                   <h2 class="fw-bold mb-2">Hello, <span id="homeResName">Amit Patel</span>!</h2>
-                  <p class="text-light opacity-75 mb-0 fs-7">
+                  <p class="body-text mb-0">
                     Manage your society maintenance bills, file maintenance complaints, approve gate visitors, and book society facilities easily.
                   </p>
                 </div>
                 <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                  <div class="d-inline-block bg-white bg-opacity-10 backdrop-blur rounded-4 p-3 border border-white border-opacity-20 text-center">
-                    <span class="text-light opacity-75 fs-8 text-uppercase fw-semibold d-block">Flat Number</span>
+                  <div class="d-inline-block bg-dark rounded-4 p-3 border border-secondary text-center">
+                    <span class="caption-text text-uppercase fw-semibold d-block">Flat Number</span>
                     <h3 class="fw-bold text-info mb-0" id="homeResFlat">B-204</h3>
                   </div>
                 </div>
@@ -135,7 +135,7 @@
                 <div class="metric-card">
                   <div class="d-flex align-items-center justify-content-between">
                     <div>
-                      <span class="text-muted fs-7 fw-semibold">Pending Dues</span>
+                      <span class="caption-text fw-semibold">Pending Dues</span>
                       <h3 class="fw-bold my-1 text-danger" id="homeDues">₹0</h3>
                       <span class="badge bg-danger-subtle text-danger fs-8" id="homeDuesBadge">Status</span>
                     </div>
@@ -148,7 +148,7 @@
                 <div class="metric-card">
                   <div class="d-flex align-items-center justify-content-between">
                     <div>
-                      <span class="text-muted fs-7 fw-semibold">Active Complaints</span>
+                      <span class="caption-text fw-semibold">Active Complaints</span>
                       <h3 class="fw-bold my-1 text-primary" id="homeComplaintsCount">0</h3>
                       <span class="badge bg-primary-subtle text-primary fs-8">In Process</span>
                     </div>
@@ -161,7 +161,7 @@
                 <div class="metric-card">
                   <div class="d-flex align-items-center justify-content-between">
                     <div>
-                      <span class="text-muted fs-7 fw-semibold">Amenity Bookings</span>
+                      <span class="caption-text fw-semibold">Amenity Bookings</span>
                       <h3 class="fw-bold my-1 text-success" id="homeBookingsCount">0</h3>
                       <span class="badge bg-success-subtle text-success fs-8">Confirmed</span>
                     </div>
@@ -176,12 +176,12 @@
           <div class="tab-pane fade" id="tab-res-bills" role="tabpanel">
             <div class="d-flex align-items-center justify-content-between mb-4">
               <div>
-                <h4 class="fw-bold mb-1">Maintenance Bills & Payment Receipts</h4>
-                <p class="text-muted small mb-0">View monthly society bills, pay online, and download official PDF receipts.</p>
+                <h3 class="fw-bold mb-1">Maintenance Bills & Payment Receipts</h3>
+                <p class="caption-text mb-0">View monthly society bills, pay online, and download official PDF receipts.</p>
               </div>
             </div>
 
-            <div class="card border-0 shadow-sm rounded-4 p-3">
+            <div class="hub-card p-3">
               <div class="table-responsive">
                 <table class="table table-hover align-middle table-custom mb-0">
                   <thead>
@@ -204,17 +204,17 @@
 
           <!-- TAB 3: Lodge Complaints -->
           <div class="tab-pane fade" id="tab-res-complaints" role="tabpanel">
-            <div class="d-flex align-items-center justify-content-between mb-4">
+            <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
               <div>
-                <h4 class="fw-bold mb-1">Society Complaint Lifecycle</h4>
-                <p class="text-muted small mb-0">Register complaints for plumbing, electrical, security, or maintenance issues.</p>
+                <h3 class="fw-bold mb-1">Society Complaint Lifecycle</h3>
+                <p class="caption-text mb-0">Register complaints for plumbing, electrical, security, or maintenance issues.</p>
               </div>
               <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#newComplaintModal">
                 <i class="fa-solid fa-plus me-1"></i> Lodge New Complaint
               </button>
             </div>
 
-            <div class="card border-0 shadow-sm rounded-4 p-3">
+            <div class="hub-card p-3">
               <div class="table-responsive">
                 <table class="table table-hover align-middle table-custom mb-0">
                   <thead>
@@ -239,12 +239,12 @@
           <div class="tab-pane fade" id="tab-res-visitors" role="tabpanel">
             <div class="d-flex align-items-center justify-content-between mb-4">
               <div>
-                <h4 class="fw-bold mb-1">Gate Visitor Entry Approvals</h4>
-                <p class="text-muted small mb-0">Approve or reject incoming guests, delivery agents, and maintenance visitors at the gate.</p>
+                <h3 class="fw-bold mb-1">Gate Visitor Entry Approvals</h3>
+                <p class="caption-text mb-0">Approve or reject incoming guests, delivery agents, and maintenance visitors at the gate.</p>
               </div>
             </div>
 
-            <div class="card border-0 shadow-sm rounded-4 p-3">
+            <div class="hub-card p-3">
               <div class="table-responsive">
                 <table class="table table-hover align-middle table-custom mb-0">
                   <thead>
@@ -267,13 +267,13 @@
 
           <!-- TAB 5: Book Amenities -->
           <div class="tab-pane fade" id="tab-res-amenities" role="tabpanel">
-            <div class="d-flex align-items-center justify-content-between mb-4">
+            <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
               <div>
-                <h4 class="fw-bold mb-1">Society Amenity Booking</h4>
-                <p class="text-muted small mb-0">Reserve Community Hall, Clubhouse, or Garden with conflict check.</p>
+                <h3 class="fw-bold mb-1">Society Amenity Booking</h3>
+                <p class="caption-text mb-0">Reserve Community Hall, Clubhouse, or Garden with conflict check.</p>
               </div>
               <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#bookAmenityModal">
-                <i class="fa-solid fa-calendar-plus me-1"></i> New Booking Reservation
+                <i class="fa-solid fa-calendar-plus me-1"></i> New Reservation
               </button>
             </div>
 
@@ -282,8 +282,8 @@
               <!-- Amenity Cards populated dynamically -->
             </div>
 
-            <h5 class="fw-bold text-dark mb-3">Your Booking History</h5>
-            <div class="card border-0 shadow-sm rounded-4 p-3">
+            <h4 class="fw-bold mb-3">Your Booking History</h4>
+            <div class="hub-card p-3">
               <div class="table-responsive">
                 <table class="table table-hover align-middle table-custom mb-0">
                   <thead>
@@ -310,8 +310,8 @@
           <div class="tab-pane fade" id="tab-res-notices" role="tabpanel">
             <div class="d-flex align-items-center justify-content-between mb-4">
               <div>
-                <h4 class="fw-bold mb-1">Digital Notice Board</h4>
-                <p class="text-muted small mb-0">Official announcements, emergency alerts, and meeting notifications from society administration.</p>
+                <h3 class="fw-bold mb-1">Digital Notice Board</h3>
+                <p class="caption-text mb-0">Official announcements, emergency alerts, and meeting notifications.</p>
               </div>
             </div>
 
@@ -328,27 +328,27 @@
   <!-- MODAL: Pay Maintenance Bill -->
   <div class="modal fade" id="payBillModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content rounded-4 border-0">
+      <div class="modal-content hub-card border-0">
         <div class="modal-header border-0 pb-0">
           <h5 class="fw-bold"><i class="fa-solid fa-credit-card text-primary me-2"></i> Online Maintenance Payment</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <form id="payBillForm">
           <input type="hidden" id="payBillId">
           <div class="modal-body">
-            <div class="bg-light p-3 rounded-3 mb-3">
+            <div class="bg-dark p-3 rounded-3 mb-3 border border-secondary">
               <div class="d-flex justify-content-between mb-1">
-                <span class="text-muted small">Invoice Period:</span>
-                <span class="fw-bold text-dark" id="payBillMonth">July 2026</span>
+                <span class="caption-text">Invoice Period:</span>
+                <strong class="text-white" id="payBillMonth">July 2026</strong>
               </div>
               <div class="d-flex justify-content-between">
-                <span class="text-muted small">Total Payable Amount:</span>
-                <span class="fw-bold text-success fs-5" id="payBillAmount">₹3,500</span>
+                <span class="caption-text">Total Payable Amount:</span>
+                <strong class="text-success fs-5" id="payBillAmount">₹3,500</strong>
               </div>
             </div>
 
             <div class="mb-3">
-              <label class="form-label small fw-semibold">Select Payment Mode</label>
+              <label class="form-label caption-text fw-semibold">Select Payment Mode</label>
               <select class="form-select" id="payMethod" required>
                 <option value="UPI (Google Pay / PhonePe / Paytm)">UPI (Google Pay / PhonePe / Paytm)</option>
                 <option value="Debit / Credit Card">Debit / Credit Card</option>
@@ -356,12 +356,12 @@
               </select>
             </div>
 
-            <div class="alert alert-info py-2 fs-8 mb-0">
-              <i class="fa-solid fa-lock me-1"></i> Simulated Secure SSL Gateway Payment. Instant PDF Receipt will be generated.
+            <div class="alert alert-info py-2 caption-text mb-0">
+              <i class="fa-solid fa-lock me-1"></i> Simulated Secure Gateway. Instant PDF Receipt will be generated.
             </div>
           </div>
           <div class="modal-footer border-0 pt-0">
-            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold">Confirm Payment</button>
           </div>
         </form>
@@ -372,15 +372,15 @@
   <!-- MODAL: New Complaint -->
   <div class="modal fade" id="newComplaintModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content rounded-4 border-0">
+      <div class="modal-content hub-card border-0">
         <div class="modal-header border-0 pb-0">
-          <h5 class="fw-bold">Lodge Maintenance Complaint</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <h5 class="fw-bold"><i class="fa-solid fa-headset me-2 text-warning"></i> Lodge Maintenance Complaint</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <form id="newComplaintForm">
           <div class="modal-body">
             <div class="mb-3">
-              <label class="form-label small fw-semibold">Complaint Category</label>
+              <label class="form-label caption-text fw-semibold">Complaint Category</label>
               <select class="form-select" id="cmpCategory" required>
                 <option value="Plumbing">Plumbing & Water Supply</option>
                 <option value="Electrical">Electrical & Elevator</option>
@@ -391,11 +391,11 @@
               </select>
             </div>
             <div class="mb-3">
-              <label class="form-label small fw-semibold">Subject / Short Title</label>
+              <label class="form-label caption-text fw-semibold">Subject / Short Title</label>
               <input type="text" class="form-control" id="cmpTitle" required placeholder="e.g. Water leak in balcony pipe">
             </div>
             <div class="mb-3">
-              <label class="form-label small fw-semibold">Priority Level</label>
+              <label class="form-label caption-text fw-semibold">Priority Level</label>
               <select class="form-select" id="cmpPriority" required>
                 <option value="Low">Low</option>
                 <option value="Medium" selected>Medium</option>
@@ -403,13 +403,13 @@
               </select>
             </div>
             <div class="mb-3">
-              <label class="form-label small fw-semibold">Detailed Description</label>
+              <label class="form-label caption-text fw-semibold">Detailed Description</label>
               <textarea class="form-control" id="cmpDesc" rows="3" required placeholder="Provide exact details of the issue..."></textarea>
             </div>
           </div>
           <div class="modal-footer border-0 pt-0">
-            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary-custom px-4">Submit Complaint</button>
+            <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary-custom px-4">Submit Ticket</button>
           </div>
         </form>
       </div>
@@ -419,23 +419,23 @@
   <!-- MODAL: Book Amenity -->
   <div class="modal fade" id="bookAmenityModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content rounded-4 border-0">
+      <div class="modal-content hub-card border-0">
         <div class="modal-header border-0 pb-0">
-          <h5 class="fw-bold">Reserve Society Amenity</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <h5 class="fw-bold"><i class="fa-solid fa-calendar-plus me-2 text-info"></i> Reserve Society Amenity</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <form id="bookAmenityForm">
           <div class="modal-body">
             <div class="mb-3">
-              <label class="form-label small fw-semibold">Select Amenity</label>
+              <label class="form-label caption-text fw-semibold">Select Amenity</label>
               <select class="form-select" id="bookAmenitySelect" required></select>
             </div>
             <div class="mb-3">
-              <label class="form-label small fw-semibold">Date of Event</label>
+              <label class="form-label caption-text fw-semibold">Date of Event</label>
               <input type="date" class="form-control" id="bookDate" required>
             </div>
             <div class="mb-3">
-              <label class="form-label small fw-semibold">Time Slot</label>
+              <label class="form-label caption-text fw-semibold">Time Slot</label>
               <select class="form-select" id="bookTimeSlot" required>
                 <option value="Morning (09:00 AM - 02:00 PM)">Morning (09:00 AM - 02:00 PM)</option>
                 <option value="Evening (04:00 PM - 10:00 PM)">Evening (04:00 PM - 10:00 PM)</option>
@@ -443,13 +443,13 @@
               </select>
             </div>
             <div class="mb-3">
-              <label class="form-label small fw-semibold">Event / Booking Purpose</label>
+              <label class="form-label caption-text fw-semibold">Event / Booking Purpose</label>
               <input type="text" class="form-control" id="bookPurpose" required placeholder="e.g. Birthday Gathering / Private Party">
             </div>
-            <div id="bookingConflictAlert" class="alert alert-danger d-none py-2 small"></div>
+            <div id="bookingConflictAlert" class="alert alert-danger d-none py-2 caption-text"></div>
           </div>
           <div class="modal-footer border-0 pt-0">
-            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-primary-custom px-4">Confirm Booking</button>
           </div>
         </form>

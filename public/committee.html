@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Committee Governance Audit | SocietyHub</title>
-  <!-- Google Fonts: Lora (Headings) & Plus Jakarta Sans (Body) -->
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Theme toggle pre-loader -->
   <script src="js/theme.js"></script>
   <!-- Bootstrap 5 CSS -->
@@ -53,30 +53,31 @@
     </div>
   </nav>
 
-  <!-- Container -->
+  <!-- Main Container -->
   <div class="container-fluid px-4 py-4">
     
-    <div class="d-flex align-items-center justify-content-between mb-4">
+    <!-- Page Header -->
+    <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
       <div>
-        <h4 class="fw-bold mb-1">Society Performance & Governance Audit</h4>
-        <p class="text-muted small mb-0">Financial audit metrics, complaint resolution benchmarks, and amenity revenue breakdown.</p>
+        <h3 class="fw-bold mb-1">Society Financial Audit & Governance</h3>
+        <p class="caption-text mb-0">Read-only oversight portal for committee members, treasurers, and auditors.</p>
       </div>
-      <button class="btn btn-outline-primary rounded-pill px-3" onclick="window.print()">
-        <i class="fa-solid fa-print me-1"></i> Print Governance Report
+      <button class="btn btn-outline-info rounded-pill px-4" onclick="location.reload()">
+        <i class="fa-solid fa-rotate me-1"></i> Refresh Audit Data
       </button>
     </div>
 
-    <!-- Executive KPI Row -->
+    <!-- Executive Audit Metrics -->
     <div class="row g-3 mb-4">
       <div class="col-md-3">
         <div class="metric-card">
           <div class="d-flex align-items-center justify-content-between">
             <div>
-              <span class="text-muted fs-7 fw-semibold">Total Revenue Collected</span>
-              <h2 class="fw-bold my-1 text-success" id="commTotalRev">₹0</h2>
-              <span class="badge bg-success-subtle text-success fs-8">Maintenance & Amenity</span>
+              <span class="caption-text fw-semibold">Total Collections</span>
+              <h3 class="fw-bold my-1 text-success" id="commTotalColl">₹0</h3>
+              <span class="badge bg-success-subtle text-success fs-8"><i class="fa-solid fa-check me-1"></i> Maintenance Pool</span>
             </div>
-            <div class="metric-icon bg-icon-success"><i class="fa-solid fa-wallet"></i></div>
+            <div class="metric-icon bg-icon-success"><i class="fa-solid fa-indian-rupee-sign"></i></div>
           </div>
         </div>
       </div>
@@ -85,11 +86,11 @@
         <div class="metric-card">
           <div class="d-flex align-items-center justify-content-between">
             <div>
-              <span class="text-muted fs-7 fw-semibold">Outstanding Dues</span>
-              <h2 class="fw-bold my-1 text-danger" id="commPendingDues">₹0</h2>
-              <span class="badge bg-danger-subtle text-danger fs-8">Uncollected Dues</span>
+              <span class="caption-text fw-semibold">Outstanding Dues</span>
+              <h3 class="fw-bold my-1 text-danger" id="commDues">₹0</h3>
+              <span class="badge bg-danger-subtle text-danger fs-8"><i class="fa-solid fa-triangle-exclamation me-1"></i> Unpaid Flats</span>
             </div>
-            <div class="metric-icon bg-icon-warning"><i class="fa-solid fa-circle-exclamation"></i></div>
+            <div class="metric-icon bg-icon-warning"><i class="fa-solid fa-file-invoice-dollar"></i></div>
           </div>
         </div>
       </div>
@@ -98,11 +99,11 @@
         <div class="metric-card">
           <div class="d-flex align-items-center justify-content-between">
             <div>
-              <span class="text-muted fs-7 fw-semibold">Complaint Resolution Rate</span>
-              <h2 class="fw-bold my-1 text-primary" id="commResolutionRate">0%</h2>
-              <span class="badge bg-primary-subtle text-primary fs-8">Resolved / Total</span>
+              <span class="caption-text fw-semibold">Total Society Residents</span>
+              <h3 class="fw-bold my-1 text-primary" id="commResidentsCount">0</h3>
+              <span class="badge bg-primary-subtle text-primary fs-8"><i class="fa-solid fa-users me-1"></i> Occupied Units</span>
             </div>
-            <div class="metric-icon bg-icon-primary"><i class="fa-solid fa-check-double"></i></div>
+            <div class="metric-icon bg-icon-primary"><i class="fa-solid fa-users"></i></div>
           </div>
         </div>
       </div>
@@ -111,11 +112,11 @@
         <div class="metric-card">
           <div class="d-flex align-items-center justify-content-between">
             <div>
-              <span class="text-muted fs-7 fw-semibold">Amenity Booking Income</span>
-              <h2 class="fw-bold my-1 text-info" id="commAmenityRev">₹0</h2>
-              <span class="badge bg-info-subtle text-info fs-8">Hall & Lawn Rentals</span>
+              <span class="caption-text fw-semibold">Complaint Resolution</span>
+              <h3 class="fw-bold my-1 text-info" id="commResolutionRate">0%</h3>
+              <span class="badge bg-info-subtle text-info fs-8"><i class="fa-solid fa-chart-line me-1"></i> SLA Target</span>
             </div>
-            <div class="metric-icon bg-icon-info"><i class="fa-solid fa-building"></i></div>
+            <div class="metric-icon bg-icon-info"><i class="fa-solid fa-shield-cat"></i></div>
           </div>
         </div>
       </div>
@@ -123,42 +124,42 @@
 
     <!-- Charts Row -->
     <div class="row g-4 mb-4">
-      <div class="col-lg-6">
-        <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
-          <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-chart-line text-success me-2"></i> Financial Audit Breakdown</h6>
-          <div style="height: 280px;">
-            <canvas id="commFinChart"></canvas>
+      <div class="col-lg-7">
+        <div class="hub-card h-100">
+          <h5 class="fw-bold mb-3"><i class="fa-solid fa-chart-area text-primary me-2"></i> Monthly Revenue & Expenditure Trend</h5>
+          <div style="height: 260px;">
+            <canvas id="committeeRevenueChart"></canvas>
           </div>
         </div>
       </div>
 
-      <div class="col-lg-6">
-        <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
-          <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-sliders text-primary me-2"></i> Complaints Priority Matrix</h6>
-          <div style="height: 280px;">
-            <canvas id="commPriorityChart"></canvas>
+      <div class="col-lg-5">
+        <div class="hub-card h-100">
+          <h5 class="fw-bold mb-3"><i class="fa-solid fa-chart-pie text-success me-2"></i> Payment Compliance Ratio</h5>
+          <div style="height: 260px;">
+            <canvas id="committeeRatioChart"></canvas>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Recent Audit Logs Table -->
-    <div class="card border-0 shadow-sm rounded-4 p-4">
-      <h5 class="fw-bold text-dark mb-3">Recent Society Audit Transactions</h5>
+    <!-- Executive Audit Table -->
+    <div class="hub-card p-4">
+      <h4 class="fw-bold mb-3"><i class="fa-solid fa-file-contract text-warning me-2"></i> Detailed Society Financial Audit Log</h4>
       <div class="table-responsive">
         <table class="table table-hover align-middle table-custom mb-0">
           <thead>
             <tr>
-              <th>Record ID</th>
-              <th>Resident / Source</th>
-              <th>Type</th>
-              <th>Date</th>
-              <th>Amount / Priority</th>
-              <th>Status</th>
+              <th>Invoice ID</th>
+              <th>Resident Name & Flat</th>
+              <th>Billing Month</th>
+              <th>Bill Amount</th>
+              <th>Payment Status</th>
+              <th>Receipt Reference</th>
             </tr>
           </thead>
           <tbody id="commAuditTableBody">
-            <!-- Populated dynamically -->
+            <!-- Dynamic audit rows -->
           </tbody>
         </table>
       </div>
