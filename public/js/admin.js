@@ -323,32 +323,52 @@ function renderRoleSettingsTable() {
   if (!tbody) return;
   const users = SystemDB.data.users || [];
 
-  tbody.innerHTML = users.map(u => `
-    <tr>
-      <td>
-        <div class="d-flex align-items-center gap-2">
-          <img src="${u.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + u.name}" class="rounded-circle" width="32" height="32">
-          <span class="fw-semibold">${u.name}</span>
-        </div>
-      </td>
-      <td class="fs-7 text-muted">${u.email}</td>
-      <td><span class="badge bg-light text-dark border">${u.flat}</span></td>
-      <td>
-        <span class="badge ${u.role === 'Admin' ? 'bg-danger text-white' : u.role === 'Resident' ? 'bg-primary-subtle text-primary' : u.role === 'Security Guard' ? 'bg-warning text-dark' : 'bg-info-subtle text-info'}">
-          ${u.role}
-        </span>
-      </td>
-      <td class="text-end">
-        <button class="btn btn-sm ${u.role === 'Admin' ? 'btn-outline-danger' : 'btn-outline-success'} rounded-pill px-3 me-1" onclick="toggleAdminRole('${u.id}', '${u.role}')">
-          <i class="fa-solid ${u.role === 'Admin' ? 'fa-user-minus' : 'fa-user-shield'} me-1"></i>
-          ${u.role === 'Admin' ? 'Revoke Admin' : 'Grant Admin'}
-        </button>
-        <button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="openChangeRoleModal('${u.id}', '${u.name.replace(/'/g, "\\'")}', '${u.role}')">
-          <i class="fa-solid fa-pen-to-square me-1"></i> Set Role
-        </button>
-      </td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = users.map(u => {
+    const avatarUrl = getMemberAvatar(u);
+    const roleBadge = u.role === 'Admin' ? 'bg-danger text-white' :
+                      u.role === 'Resident' ? 'bg-primary text-white' :
+                      u.role === 'Security Guard' ? 'bg-warning text-dark' : 'bg-info text-dark';
+
+    const occupancyOrShift = u.role === 'Security Guard' ? (u.shift || 'Morning Shift') :
+                             u.role === 'Resident' ? (u.residentType || 'Owner') :
+                             u.role === 'Committee Member' ? 'Managing Executive' : 'System Super Admin';
+
+    const duesOrSalary = u.role === 'Security Guard' ? (u.salary || '₹18,000/month') :
+                         u.role === 'Resident' ? (u.maintenanceDues || '₹3,500/month') : '--';
+
+    const parkingSlot = u.parkingSlot || u.flat || '--';
+
+    return `
+      <tr>
+        <td>
+          <div class="d-flex align-items-center gap-2">
+            <img src="${avatarUrl}" class="rounded-circle border" width="34" height="34" alt="${u.name}">
+            <div>
+              <div class="fw-bold text-heading">${u.name}</div>
+              <small class="text-muted" style="font-size:12px;">${u.email}</small>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge ${roleBadge} px-2.5 py-1.5 rounded-pill">${u.role}</span></td>
+        <td><span class="badge bg-secondary bg-opacity-25 text-heading border border-secondary border-opacity-25">${u.flat || u.tower || 'Gate 1'}</span></td>
+        <td class="fs-7 text-secondary fw-semibold">${occupancyOrShift}</td>
+        <td class="fs-7 fw-bold text-warning">${duesOrSalary}</td>
+        <td><span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25">${parkingSlot}</span></td>
+        <td class="text-end">
+          <button class="btn btn-sm ${u.role === 'Admin' ? 'btn-outline-danger' : 'btn-outline-success'} rounded-pill px-2.5 me-1" onclick="toggleAdminRole('${u.id}', '${u.role}')" title="${u.role === 'Admin' ? 'Revoke Admin Permissions' : 'Grant Admin Permissions'}">
+            <i class="fa-solid ${u.role === 'Admin' ? 'fa-user-minus' : 'fa-user-shield'} me-1"></i>
+            ${u.role === 'Admin' ? 'Revoke' : 'Grant Admin'}
+          </button>
+          <button class="btn btn-sm btn-outline-primary rounded-pill px-2.5 me-1" onclick="openChangeRoleModal('${u.id}', '${u.name.replace(/'/g, "\\'")}', '${u.role}')" title="Change Assigned Role">
+            <i class="fa-solid fa-pen-to-square me-1"></i> Role
+          </button>
+          <button class="btn btn-sm btn-outline-info rounded-pill px-2.5" onclick="openAllocateModal('${u.id}', '${u.name.replace(/'/g, "\\'")}', '${u.email}', '${u.role}', '${u.flat || ''}')" title="Allot Flat & Dues">
+            <i class="fa-solid fa-building-circle-check me-1"></i> Allot
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
 }
 
 function toggleAdminRole(userId, currentRole) {
