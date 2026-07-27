@@ -413,10 +413,17 @@ body.has-floating-nav {
   padding: 4px 12px 4px 4px;
   border-radius: 12px;
   transition: background 0.2s ease;
-  cursor: pointer;
+  color: var(--text-heading) !important;
 }
 
-.nav-avatar-group:hover { background: rgba(255, 255, 255, 0.06); }
+.nav-avatar-group:hover { background: var(--surface-active); }
+
+.nav-avatar-group span, 
+.nav-avatar-group div,
+.nav-avatar-name {
+  color: var(--text-heading) !important;
+  font-weight: 700 !important;
+}
 
 .nav-avatar-img {
   width: 34px;
