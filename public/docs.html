@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation & API Reference | SocietyHub</title>
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="js/theme.js"></script>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body class="has-floating-nav">
+
+  <!-- Floating Glassmorphic Navbar -->
+  <div class="navbar-float-wrapper">
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom" id="mainNav">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">
+          <div class="brand-icon">
+            <i class="fa-solid fa-building-user"></i>
+          </div>
+          <span>Society<span style="color: var(--accent-blue);">Hub</span></span>
+        </a>
+
+        <div class="nav-center-links d-none d-lg-flex">
+          <a href="index.html" class="nav-pill"><i class="fa-solid fa-house"></i> Home</a>
+          <a href="docs.html" class="nav-pill active"><i class="fa-solid fa-book"></i> Docs</a>
+          <a href="changelog.html" class="nav-pill"><i class="fa-solid fa-list-check"></i> Changelog</a>
+        </div>
+
+        <div class="navbar-actions">
+          <button class="btn-theme-toggle" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
+            <i class="fa-solid fa-sun" id="themeIcon"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Documentation Section -->
+  <div class="container py-5 my-4">
+    <div class="row g-4">
+      
+      <!-- Left Quick Index -->
+      <div class="col-lg-3">
+        <div class="hub-card p-3 sticky-top" style="top: 100px;">
+          <h6 class="fw-bold text-uppercase caption-text mb-3"><i class="fa-solid fa-bookmark text-primary me-2"></i> User Guides</h6>
+          <nav class="nav nav-pills flex-column gap-1">
+            <a class="nav-link active" href="#guide-admin"><i class="fa-solid fa-user-gear me-2"></i> Admin Control</a>
+            <a class="nav-link text-white opacity-75" href="#guide-resident"><i class="fa-solid fa-house-user me-2"></i> Resident Portal</a>
+            <a class="nav-link text-white opacity-75" href="#guide-guard"><i class="fa-solid fa-shield-halved me-2"></i> Gate Security</a>
+            <a class="nav-link text-white opacity-75" href="#guide-committee"><i class="fa-solid fa-chart-pie me-2"></i> Committee Audit</a>
+            <a class="nav-link text-white opacity-75" href="#api"><i class="fa-solid fa-code me-2"></i> API Reference</a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Right Detailed Manual -->
+      <div class="col-lg-9">
+        <div class="hub-card p-4 p-md-5 mb-4" id="guide-admin">
+          <h2 class="fw-bold mb-3"><i class="fa-solid fa-user-gear text-primary me-2"></i> Administrator Control Center</h2>
+          <p class="body-text">Administrators have full executive control over housing society operations:</p>
+          <ul class="body-text">
+            <li><strong>Resident Management:</strong> Add new residents, modify flat allocations, and review pending registrations.</li>
+            <li><strong>Role Management:</strong> Grant or revoke Admin rights dynamically under <em>Role & Access Settings</em>.</li>
+            <li><strong>Financial Overview:</strong> Track monthly maintenance billing collections and generate audit reports.</li>
+          </ul>
+        </div>
+
+        <div class="hub-card p-4 p-md-5 mb-4" id="guide-resident">
+          <h2 class="fw-bold mb-3"><i class="fa-solid fa-house-user text-success me-2"></i> Resident Portal Guide</h2>
+          <p class="body-text">Residents can manage their apartment dues and society amenities:</p>
+          <ul class="body-text">
+            <li><strong>Maintenance Bills:</strong> View monthly invoices, simulate online UPI/Card payments, and download PDF receipts.</li>
+            <li><strong>Gate Approvals:</strong> Approve or deny visitor entry requests sent by gate security guards in real time.</li>
+            <li><strong>Amenity Booking:</strong> Reserve the Clubhouse, Community Hall, or Lawn with double-booking prevention.</li>
+          </ul>
+        </div>
+
+        <div class="hub-card p-4 p-md-5 mb-4" id="guide-guard">
+          <h2 class="fw-bold mb-3"><i class="fa-solid fa-shield-halved text-warning me-2"></i> Security Gate Control Guide</h2>
+          <p class="body-text">Security Guards issue digital gate passes for guests, cabs, delivery agents, and maintenance specialists:</p>
+          <ul class="body-text">
+            <li><strong>Check-In Pass:</strong> Register visitor name, phone, destination flat, and purpose of visit.</li>
+            <li><strong>Check-Out:</strong> Click <em>Check-Out</em> when visitors exit the society gates.</li>
+          </ul>
+        </div>
+
+        <div class="hub-card p-4 p-md-5 mb-4" id="api">
+          <h2 class="fw-bold mb-3"><i class="fa-solid fa-code text-info me-2"></i> REST API Endpoints Reference</h2>
+          <p class="body-text">SocietyHub exposes standard REST endpoints for JWT authentication and data management:</p>
+
+          <div class="bg-dark p-3 rounded-3 mb-3 border border-secondary font-monospace small">
+            <span class="text-success fw-bold">POST</span> /api/auth/login <span class="text-muted">- Email/Password Login (JWT token)</span><br>
+            <span class="text-success fw-bold">POST</span> /api/auth/register <span class="text-muted">- Account Registration</span><br>
+            <span class="text-success fw-bold">POST</span> /api/auth/google <span class="text-muted">- Google OAuth Integration</span><br>
+            <span class="text-primary fw-bold">GET</span> /api/auth/me <span class="text-muted">- Get Profile Token Info</span><br>
+            <span class="text-primary fw-bold">GET</span> /api/auth/pending <span class="text-muted">- List Pending Registrations (Admin)</span><br>
+            <span class="text-warning fw-bold">POST</span> /api/auth/approve <span class="text-muted">- Approve Pending User Account (Admin)</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

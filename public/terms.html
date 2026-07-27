@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service | SocietyHub</title>
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="js/theme.js"></script>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body class="has-floating-nav">
+
+  <!-- Floating Glassmorphic Navbar -->
+  <div class="navbar-float-wrapper">
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom" id="mainNav">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">
+          <div class="brand-icon">
+            <i class="fa-solid fa-building-user"></i>
+          </div>
+          <span>Society<span style="color: var(--accent-blue);">Hub</span></span>
+        </a>
+
+        <div class="nav-center-links d-none d-lg-flex">
+          <a href="index.html" class="nav-pill"><i class="fa-solid fa-house"></i> Home</a>
+          <a href="docs.html" class="nav-pill"><i class="fa-solid fa-book"></i> Docs</a>
+          <a href="changelog.html" class="nav-pill"><i class="fa-solid fa-list-check"></i> Changelog</a>
+        </div>
+
+        <div class="navbar-actions">
+          <button class="btn-theme-toggle" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
+            <i class="fa-solid fa-sun" id="themeIcon"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Content Section -->
+  <div class="container py-5 my-4">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="hub-card p-4 p-md-5">
+          <h1 class="fw-bold mb-3"><i class="fa-solid fa-file-contract text-primary me-2"></i> Terms of Service</h1>
+          <p class="caption-text mb-4">Last Updated: July 27, 2026</p>
+
+          <hr class="border-secondary border-opacity-25 mb-4">
+
+          <h4 class="fw-bold text-white mb-3">1. Acceptance of Terms</h4>
+          <p class="body-text">By logging into and utilizing SocietyHub, residents, security guards, administrators, and committee members agree to abide by these Terms of Service and housing society bylaws.</p>
+
+          <h4 class="fw-bold text-white mb-3">2. User Responsibilities</h4>
+          <p class="body-text">Users are responsible for maintaining account confidentiality. Security guards must accurately register gate visitors. Residents must provide accurate flat and visitor approval responses.</p>
+
+          <h4 class="fw-bold text-white mb-3">3. Payments & Dues</h4>
+          <p class="body-text">Maintenance payments simulated or processed via SocietyHub generate official PDF digital receipts for audit purposes. Refunds or bill adjustments must be submitted to the Managing Committee.</p>
+
+          <div class="mt-4 pt-3 border-top border-secondary border-opacity-25">
+            <a href="index.html" class="btn btn-outline-primary rounded-pill px-4"><i class="fa-solid fa-arrow-left me-2"></i> Return to SocietyHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

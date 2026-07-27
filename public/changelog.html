@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Changelog & Release Notes | SocietyHub</title>
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="js/theme.js"></script>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body class="has-floating-nav">
+
+  <!-- Floating Glassmorphic Navbar -->
+  <div class="navbar-float-wrapper">
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom" id="mainNav">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">
+          <div class="brand-icon">
+            <i class="fa-solid fa-building-user"></i>
+          </div>
+          <span>Society<span style="color: var(--accent-blue);">Hub</span></span>
+        </a>
+
+        <div class="nav-center-links d-none d-lg-flex">
+          <a href="index.html" class="nav-pill"><i class="fa-solid fa-house"></i> Home</a>
+          <a href="docs.html" class="nav-pill"><i class="fa-solid fa-book"></i> Docs</a>
+          <a href="changelog.html" class="nav-pill active"><i class="fa-solid fa-list-check"></i> Changelog</a>
+        </div>
+
+        <div class="navbar-actions">
+          <button class="btn-theme-toggle" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
+            <i class="fa-solid fa-sun" id="themeIcon"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Changelog Section -->
+  <div class="container py-5 my-4">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        
+        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+          <div>
+            <h1 class="fw-bold mb-1"><i class="fa-solid fa-list-check text-primary me-2"></i> System Changelog</h1>
+            <p class="caption-text mb-0">Version history and feature updates for SocietyHub platform.</p>
+          </div>
+          <a href="index.html" class="btn btn-outline-primary rounded-pill px-4"><i class="fa-solid fa-arrow-left me-2"></i> Back to Platform</a>
+        </div>
+
+        <!-- Release 2.5 -->
+        <div class="hub-card p-4 p-md-5 mb-4">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+            <h3 class="fw-bold mb-0 text-white"><span class="badge bg-primary me-2">v2.5.0</span> Master SaaS UI/UX Overhaul</h3>
+            <span class="caption-text"><i class="fa-solid fa-calendar me-1"></i> July 27, 2026</span>
+          </div>
+          <ul class="body-text">
+            <li>✨ **Floating Glassmorphic Navbar**: Added floating header pill with smooth backdrop blur and scroll effects.</li>
+            <li>🎨 **Strict 60-30-10 Color Architecture**: Implemented high-contrast input controls, slate card surfaces, and vibrant accent tokens.</li>
+            <li>🔐 **Vercel Static Google Auth Integration**: Enhanced client-side Google sign-in fallback for Vercel deployment (`societyhub11.vercel.app`).</li>
+            <li>📱 **Multi-Device Responsiveness**: Full layout adaptation across smartphones, tablets, laptops, and desktop screens.</li>
+            <li>👑 **Role & Access Controls**: Dynamic Grant/Revoke Admin controls in Admin settings panel.</li>
+          </ul>
+        </div>
+
+        <!-- Release 2.0 -->
+        <div class="hub-card p-4 p-md-5 mb-4">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+            <h3 class="fw-bold mb-0 text-white"><span class="badge bg-secondary me-2">v2.0.0</span> Express Backend & JWT Authentication</h3>
+            <span class="caption-text"><i class="fa-solid fa-calendar me-1"></i> July 21, 2026</span>
+          </div>
+          <ul class="body-text">
+            <li>🛡️ Express server integration with bcrypt password hashing and JWT token authorization.</li>
+            <li>📋 Registration approval workflow for pending resident and guard accounts.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
