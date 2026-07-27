@@ -2,24 +2,73 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
 
-:root, [data-theme="dark"] {
+:root, [data-theme="light"] {
   --font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
 
-  /* 60% Neutral Backgrounds */
-  --bg-primary: #0B1220;
-  --bg-secondary: #111827;
-  --bg-card: #172033;
+  /* 60% Neutral Backgrounds (Light Mode Default) */
+  --bg-primary: #FAFAFC;
+  --bg-secondary: #F1F5F9;
+  --bg-card: #FFFFFF;
+
+  /* 30% Supporting UI Surfaces */
+  --surface-card: #FFFFFF;
+  --surface-active: #FFF7ED;
+  --surface-input: #F8FAFC;
+  --border-color: #E2E8F0;
+  --border-glow: rgba(249, 115, 22, 0.35);
+
+  /* 10% Accent Colors (Vibrant Sunset Orange Primary) */
+  --accent-orange: #F97316;
+  --accent-blue: #F97316;
+  --accent-purple: #EA580C;
+  --accent-success: #10B981;
+  --accent-warning: #F59E0B;
+  --accent-danger: #EF4444;
+
+  /* Typography Text Colors */
+  --text-heading: #0F172A;
+  --text-primary: #1E293B;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+
+  /* Input States */
+  --input-bg: #FFFFFF;
+  --input-border: #CBD5E1;
+  --input-text: #0F172A;
+  --input-placeholder: #94A3B8;
+
+  /* Radii & Shadows */
+  --radius-xl: 20px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+
+  --shadow-card: 0 10px 30px -10px rgba(15, 23, 42, 0.08);
+  --shadow-glow: 0 15px 35px -5px rgba(249, 115, 22, 0.25);
+
+  /* Navbar & Footer specific */
+  --navbar-bg: rgba(255, 255, 255, 0.85);
+  --footer-bg: #0F172A;
+  --footer-border: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] {
+  /* 60% Neutral Backgrounds (Dark Mode) */
+  --bg-primary: #090D16;
+  --bg-secondary: #0F172A;
+  --bg-card: #131C2E;
 
   /* 30% Supporting UI Colors */
   --surface-card: #1E293B;
-  --surface-active: #243145;
-  --surface-input: #2A3750;
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-glow: rgba(59, 130, 246, 0.35);
+  --surface-active: #26334D;
+  --surface-input: #1E293B;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-glow: rgba(251, 146, 60, 0.4);
 
-  /* 10% Accent Colors */
-  --accent-blue: #3B82F6;
-  --accent-purple: #8B5CF6;
+  /* 10% Accent Colors (Warm Orange Accent) */
+  --accent-orange: #FB923C;
+  --accent-blue: #FB923C;
+  --accent-purple: #F97316;
   --accent-success: #10B981;
   --accent-warning: #F59E0B;
   --accent-danger: #EF4444;
@@ -36,53 +85,11 @@
   --input-text: #FFFFFF;
   --input-placeholder: #94A3B8;
 
-  /* Radii & Shadows */
-  --radius-xl: 20px;
-  --radius-lg: 16px;
-  --radius-md: 12px;
-  --radius-sm: 8px;
-
   --shadow-card: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 30px rgba(59, 130, 246, 0.25);
+  --shadow-glow: 0 0 30px rgba(251, 146, 60, 0.3);
 
-  /* Navbar & Footer specific */
-  --navbar-bg: rgba(11, 18, 32, 0.65);
-  --footer-bg: #0A0F1A;
-  --footer-border: rgba(255, 255, 255, 0.06);
-}
-
-[data-theme="light"] {
-  --bg-primary: #F8FAFC;
-  --bg-secondary: #F1F5F9;
-  --bg-card: #FFFFFF;
-
-  --surface-card: #FFFFFF;
-  --surface-active: #E2E8F0;
-  --surface-input: #F8FAFC;
-  --border-color: #CBD5E1;
-  --border-glow: rgba(37, 99, 235, 0.25);
-
-  --accent-blue: #2563EB;
-  --accent-purple: #7C3AED;
-  --accent-success: #059669;
-  --accent-warning: #D97706;
-  --accent-danger: #DC2626;
-
-  --text-heading: #0F172A;
-  --text-primary: #1E293B;
-  --text-secondary: #475569;
-  --text-muted: #64748B;
-
-  --input-bg: #FFFFFF;
-  --input-border: #CBD5E1;
-  --input-text: #0F172A;
-  --input-placeholder: #64748B;
-
-  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
-  --shadow-glow: 0 15px 35px -5px rgba(37, 99, 235, 0.2);
-
-  --navbar-bg: rgba(255, 255, 255, 0.7);
-  --footer-bg: #0F172A;
+  --navbar-bg: rgba(9, 13, 22, 0.75);
+  --footer-bg: #05080E;
   --footer-border: rgba(255, 255, 255, 0.06);
 }
 
@@ -262,20 +269,20 @@ body.has-floating-nav {
 .brand-icon {
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+  background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-purple) 100%);
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #FFFFFF;
   font-size: 16px;
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.35);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .navbar-brand:hover .brand-icon {
   transform: rotate(-8deg) scale(1.05);
-  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.45);
+  box-shadow: 0 6px 24px rgba(249, 115, 22, 0.5);
 }
 
 /* Nav Center Links (landing page only) */
@@ -676,14 +683,14 @@ body.has-floating-nav {
 
 /* ──── Primary Button (Gradient) ──── */
 .btn-primary-custom {
-  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+  background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-purple) 100%);
   color: #FFFFFF !important;
   border: none;
   border-radius: var(--radius-md);
   font-weight: 700;
   font-size: 16px;
   padding: 14px 28px;
-  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.35);
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.35);
   transition: all 0.25s ease;
   display: inline-flex;
   align-items: center;
@@ -692,10 +699,10 @@ body.has-floating-nav {
 }
 
 .btn-primary-custom:hover {
-  background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+  background: linear-gradient(135deg, #EA580C 0%, #C2410C 100%);
   color: #FFFFFF !important;
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+  box-shadow: 0 8px 25px rgba(249, 115, 22, 0.5);
 }
 
 /* ──── Google Auth Button ──── */
