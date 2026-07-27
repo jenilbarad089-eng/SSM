@@ -165,12 +165,14 @@ function renderResidentsTable() {
   const tbody = document.getElementById('residentsTableBody');
   const residents = SystemDB.getResidents();
 
-  tbody.innerHTML = residents.map(r => `
+  tbody.innerHTML = residents.map(r => {
+    const avatarUrl = getMemberAvatar(r);
+    return `
     <tr>
       <td>
         <div class="d-flex align-items-center gap-2">
-          <img src="${r.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + r.name}" class="rounded-circle" width="32" height="32">
-          <span class="fw-semibold">${r.name}</span>
+          <img src="${avatarUrl}" class="rounded-circle border" width="32" height="32" alt="${r.name}">
+          <span class="fw-semibold text-heading">${r.name}</span>
         </div>
       </td>
       <td><span class="badge bg-light text-dark border">${r.flat}</span></td>
@@ -594,6 +596,17 @@ async function loadAllMembers() {
   }
 }
 
+function getMemberAvatar(user) {
+  if (user.avatar && (user.avatar.includes('gender=male') || user.avatar.includes('gender=female'))) {
+    return user.avatar;
+  }
+  const name = user.name || '';
+  const isFemale = /(Priya|Neha|Kavya|Ananya|Sneha|Pooja|Ritu|Anita|Sunita|Simran|Aarti|Mrs|Ms|Girl|Female)/i.test(name);
+  const gender = isFemale ? 'female' : 'male';
+  const seed = name.split(' ')[0] || 'User';
+  return `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(seed)}&gender=${gender}`;
+}
+
 function renderAllMembers(users) {
   const tbody = document.getElementById('allMembersBody');
   if (!tbody) return;
@@ -602,13 +615,14 @@ function renderAllMembers(users) {
     const statusBadge = u.status === 'Approved' ? 'bg-success' :
                         u.status === 'Pending' ? 'bg-warning text-dark' :
                         u.status === 'Rejected' ? 'bg-danger' : 'bg-secondary';
+    const avatarUrl = getMemberAvatar(u);
     return `
       <tr>
         <td>
           <div class="d-flex align-items-center gap-2">
-            <img src="${u.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + u.name}" class="rounded-circle" width="32" height="32">
+            <img src="${avatarUrl}" class="rounded-circle border" width="36" height="36" alt="${u.name}">
             <div>
-              <div class="fw-semibold">${u.name}</div>
+              <div class="fw-semibold text-heading">${u.name}</div>
               <small class="text-muted">${u.email}</small>
             </div>
           </div>
