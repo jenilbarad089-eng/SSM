@@ -155,10 +155,10 @@ h5, .h5 { font-size: 18px; font-weight: 600; }
 
 @keyframes pulseGlow {
   0%, 100% {
-    box-shadow: 0 0 15px rgba(59, 130, 246, 0.25);
+    box-shadow: 0 0 15px rgba(249, 115, 22, 0.25);
   }
   50% {
-    box-shadow: 0 0 25px rgba(59, 130, 246, 0.55);
+    box-shadow: 0 0 25px rgba(249, 115, 22, 0.55);
   }
 }
 
@@ -176,9 +176,9 @@ h5, .h5 { font-size: 18px; font-weight: 600; }
 
 /* PWA Install Button */
 .btn-pwa-install {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.12) 0%, rgba(234, 88, 12, 0.12) 100%);
   border: 1px solid var(--border-glow);
-  color: var(--accent-blue);
+  color: var(--accent-orange);
   font-size: 13px;
   font-weight: 700;
   padding: 6px 14px;
@@ -191,7 +191,7 @@ h5, .h5 { font-size: 18px; font-weight: 600; }
 }
 
 .btn-pwa-install:hover {
-  background: var(--accent-blue);
+  background: var(--accent-orange);
   color: #ffffff;
   transform: translateY(-2px);
   box-shadow: 0 4px 15px var(--border-glow);
@@ -507,10 +507,10 @@ body.has-floating-nav {
 
 .footer-social-link:hover {
   color: #FFFFFF;
-  background: var(--accent-blue);
-  border-color: var(--accent-blue);
+  background: var(--accent-orange);
+  border-color: var(--accent-orange);
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.35);
+  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.35);
 }
 
 .footer-col-title {
@@ -590,7 +590,7 @@ body.has-floating-nav {
 
 /* ──── Hero Section ──── */
 .hero-hub {
-  background: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.12) 0%, rgba(11, 18, 32, 0) 70%),
+  background: radial-gradient(circle at 50% 0%, rgba(249, 115, 22, 0.12) 0%, rgba(250, 250, 252, 0) 70%),
               linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
   padding: 64px 0 80px;
   position: relative;
