@@ -444,6 +444,52 @@ body.has-floating-nav {
   margin: 0 4px;
 }
 
+/* Universal Floating Toast Container */
+.toast-container-custom {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast-custom {
+  pointer-events: auto;
+  min-width: 300px;
+  max-width: 420px;
+  padding: 14px 18px;
+  background: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--accent-orange);
+  border-radius: var(--radius-md);
+  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.toast-custom.success { border-left-color: var(--accent-success); }
+.toast-custom.error { border-left-color: var(--accent-danger); }
+.toast-custom.warning { border-left-color: var(--accent-warning); }
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOutRight {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(100%); opacity: 0; }
+}
+
 /* Firebase Live Badge */
 .firebase-live-badge {
   background: linear-gradient(135deg, #FF8F00 0%, #FF6F00 100%);

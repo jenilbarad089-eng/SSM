@@ -48,12 +48,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (res.success) {
       bootstrap.Modal.getInstance(document.getElementById('payBillModal')).hide();
       loadResidentDashboard();
-      // Prompt download PDF receipt
+      if (typeof showToast === 'function') {
+        showToast("Payment successful! Maintenance invoice status updated to Paid.", "success");
+      }
       setTimeout(() => {
-        if (confirm("Payment successful! Would you like to view and download your official PDF receipt now?")) {
-          downloadPDFReceipt(id);
-        }
-      }, 300);
+        downloadPDFReceipt(id);
+      }, 500);
     }
   });
 
@@ -64,10 +64,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const priority = document.getElementById('cmpPriority').value;
     const description = document.getElementById('cmpDesc').value;
 
-    SystemDB.addComplaint({ category, title, priority, description });
+    const res = SystemDB.addComplaint({ category, title, priority, description });
     bootstrap.Modal.getInstance(document.getElementById('newComplaintModal')).hide();
     document.getElementById('newComplaintForm').reset();
     loadResidentDashboard();
+    if (typeof showToast === 'function') {
+      showToast(`Complaint Ticket registered successfully! Ticket ID: ${res.complaint ? res.complaint.id : 'CMP-101'}`, "success");
+    }
   });
 
   document.getElementById('bookAmenityForm').addEventListener('submit', (e) => {
@@ -85,7 +88,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       bootstrap.Modal.getInstance(document.getElementById('bookAmenityModal')).hide();
       document.getElementById('bookAmenityForm').reset();
       loadResidentDashboard();
-      alert("Amenity Booking Confirmed!");
+      if (typeof showToast === 'function') {
+        showToast("Facility Reservation Confirmed!", "success");
+      }
     } else {
       alertEl.textContent = res.message;
       alertEl.classList.remove('d-none');

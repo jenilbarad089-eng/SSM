@@ -254,3 +254,33 @@ function clearAllNotifications() {
   const dropdown = document.getElementById('globalNotifDropdown');
   if (dropdown) dropdown.classList.remove('show');
 }
+
+function showToast(message, type = 'success') {
+  let container = document.getElementById('globalToastContainer');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'globalToastContainer';
+    container.className = 'toast-container-custom';
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement('div');
+  toast.className = `toast-custom ${type}`;
+
+  const iconClass = type === 'success' ? 'fa-circle-check text-success' :
+                    type === 'error' ? 'fa-circle-xmark text-danger' :
+                    type === 'warning' ? 'fa-triangle-exclamation text-warning' : 'fa-bell text-warning';
+
+  toast.innerHTML = `
+    <i class="fa-solid ${iconClass} fs-5"></i>
+    <div class="flex-grow-1">${message}</div>
+    <button class="btn-close ms-2" style="font-size:10px;" onclick="this.parentElement.remove()"></button>
+  `;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.animation = 'fadeOutRight 0.3s ease forwards';
+    setTimeout(() => toast.remove(), 300);
+  }, 3800);
+}
