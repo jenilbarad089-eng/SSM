@@ -379,7 +379,70 @@ body.has-floating-nav {
   height: 8px;
   background: var(--accent-danger);
   border-radius: 50%;
-  box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
+  box-shadow: 0 0 6px var(--accent-danger);
+}
+
+/* Notification Panel Dropdown */
+.notif-panel-dropdown {
+  position: fixed;
+  width: 360px;
+  max-height: 480px;
+  background: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  z-index: 1100;
+  overflow: hidden;
+  display: none;
+  animation: fadeInDown 0.2s ease forwards;
+}
+
+.notif-panel-dropdown.show {
+  display: block;
+}
+
+.notif-panel-header {
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.notif-panel-body {
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+.notif-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  transition: background 0.15s ease;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.notif-item:hover {
+  background: var(--surface-active);
+}
+
+.notif-item.unread {
+  background: rgba(255, 107, 0, 0.05);
+}
+
+.notif-icon-box {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 14px;
 }
 
 /* Nav Avatar */
