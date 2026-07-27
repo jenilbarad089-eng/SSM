@@ -151,6 +151,23 @@
       </div>
     </div>
 
+    <!-- Society Polls & Voting Section -->
+    <div class="hub-card p-4 mb-4">
+      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+        <div>
+          <h4 class="fw-bold mb-1"><i class="fa-solid fa-square-poll-vertical text-warning me-2"></i> Active Society Polls & Decision Voting</h4>
+          <p class="caption-text mb-0">Publish proposals, collect resident votes, and track real-time resolution compliance.</p>
+        </div>
+        <button class="btn btn-primary-custom rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#createPollModal">
+          <i class="fa-solid fa-plus me-1"></i> Create New Poll
+        </button>
+      </div>
+
+      <div class="row g-4" id="commPollsContainer">
+        <!-- Dynamically rendered polls -->
+      </div>
+    </div>
+
     <!-- Executive Audit Table -->
     <div class="hub-card p-4">
       <h4 class="fw-bold mb-3"><i class="fa-solid fa-file-contract text-warning me-2"></i> Detailed Society Financial Audit Log</h4>
@@ -173,6 +190,53 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- MODAL: Create New Poll -->
+  <div class="modal fade" id="createPollModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content hub-card border-0">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="fw-bold"><i class="fa-solid fa-square-poll-vertical me-2 text-warning"></i> Publish New Society Voting Poll</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="createPollForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label caption-text fw-semibold">Poll Title / Proposal Topic</label>
+              <input type="text" class="form-control" id="pollTitle" required placeholder="e.g. Roof Waterproofing Budget Allocation">
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label caption-text fw-semibold">Category</label>
+                <select class="form-select" id="pollCategory">
+                  <option value="Infrastructure & Energy">Infrastructure & Energy</option>
+                  <option value="Amenities & Upgrades">Amenities & Upgrades</option>
+                  <option value="Security & Rules">Security & Rules</option>
+                  <option value="Financial Budget">Financial Budget</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label class="form-label caption-text fw-semibold">Voting Deadline</label>
+                <input type="date" class="form-control" id="pollEndDate" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label caption-text fw-semibold">Proposal Details & Rationale</label>
+              <textarea class="form-control" id="pollDesc" rows="3" required placeholder="Provide clear details regarding estimated cost, execution timeline, and necessity..."></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label caption-text fw-semibold">Voting Options (Comma Separated)</label>
+              <input type="text" class="form-control" id="pollOptionsInput" required value="Approve Proposal, Reject Proposal, Need Vendor Clarification">
+            </div>
+          </div>
+          <div class="modal-footer border-0 pt-0">
+            <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary-custom px-4">Publish Voting Poll</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 
   <!-- Scripts -->

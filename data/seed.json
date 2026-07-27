@@ -372,5 +372,38 @@
     "lateFeePercentage": 5,
     "graceDays": 10,
     "pwaEnabled": true
-  }
+  },
+  "polls": [
+    {
+      "id": "POL-101",
+      "title": "Installation of 50kW Rooftop Solar Power System",
+      "category": "Infrastructure & Energy",
+      "description": "Proposal to allocate ₹4.5 Lakhs from society reserve funds for green solar power installation across Tower A & B.",
+      "options": [
+        { "id": "opt1", "text": "Approve Solar Allocation", "votes": 42 },
+        { "id": "opt2", "text": "Reject Proposal", "votes": 8 },
+        { "id": "opt3", "text": "Request Detailed Vendor Quotes", "votes": 5 }
+      ],
+      "totalVotes": 55,
+      "status": "Active",
+      "createdDate": "2026-07-15",
+      "endDate": "2026-07-31",
+      "createdBy": "Suresh Kumar (Treasurer)"
+    },
+    {
+      "id": "POL-102",
+      "title": "Basement B1 EV Fast Charging Stations",
+      "category": "Amenities & Upgrades",
+      "description": "Setup 6 dedicated dual-port EV chargers for electric cars and 2-wheelers.",
+      "options": [
+        { "id": "opt1", "text": "Yes, Install EV Chargers", "votes": 38 },
+        { "id": "opt2", "text": "No, Not Required", "votes": 12 }
+      ],
+      "totalVotes": 50,
+      "status": "Active",
+      "createdDate": "2026-07-18",
+      "endDate": "2026-08-05",
+      "createdBy": "Rohan Mehta (Secretary)"
+    }
+  ]
 }

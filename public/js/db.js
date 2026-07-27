@@ -432,6 +432,51 @@ const SystemDB = {
     return (this.data && this.data.auditLogs) ? this.data.auditLogs : [];
   },
 
+  getPolls() {
+    return (this.data && this.data.polls) ? this.data.polls : [];
+  },
+
+  addPoll(pollData) {
+    if (!this.data) return;
+    if (!this.data.polls) this.data.polls = [];
+    const curUser = this.getCurrentUser();
+    const userName = curUser ? curUser.name : 'Committee Member';
+
+    const newPoll = {
+      id: 'POL-' + Math.floor(100 + Math.random() * 900),
+      title: pollData.title,
+      category: pollData.category || 'General',
+      description: pollData.description || '',
+      options: pollData.options.map((opt, i) => ({ id: 'opt' + (i+1), text: opt, votes: 0 })),
+      totalVotes: 0,
+      status: 'Active',
+      createdDate: new Date().toISOString().split('T')[0],
+      endDate: pollData.endDate || '2026-08-31',
+      createdBy: userName
+    };
+
+    this.data.polls.unshift(newPoll);
+    this.logAudit('Created Society Voting Poll', 'Committee Governance', `Published poll: "${newPoll.title}"`);
+    this.save();
+    return { success: true, poll: newPoll };
+  },
+
+  votePoll(pollId, optionId) {
+    if (!this.data || !this.data.polls) return { success: false };
+    const poll = this.data.polls.find(p => p.id === pollId);
+    if (!poll) return { success: false, message: 'Poll not found' };
+
+    const opt = poll.options.find(o => o.id === optionId);
+    if (opt) {
+      opt.votes += 1;
+      poll.totalVotes += 1;
+      this.logAudit('Voted in Society Poll', 'Committee Governance', `Voted on "${poll.title}" for "${opt.text}"`);
+      this.save();
+      return { success: true, poll: poll };
+    }
+    return { success: false };
+  },
+
   logAudit(action, module, details) {
     if (!this.data) return;
     if (!this.data.auditLogs) this.data.auditLogs = [];
