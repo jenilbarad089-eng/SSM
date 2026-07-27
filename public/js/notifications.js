@@ -84,7 +84,7 @@ function getActiveNotificationCount() {
   return count;
 }
 
-function toggleNotificationPanel(container) {
+function toggleNotificationPanel(btnOrEvent) {
   let dropdown = document.getElementById('globalNotifDropdown');
 
   if (!dropdown) {
@@ -94,13 +94,13 @@ function toggleNotificationPanel(container) {
     document.body.appendChild(dropdown);
   }
 
-  // Calculate position relative to container
-  const btn = container.querySelector('.btn-nav-icon') || container;
+  const btn = (btnOrEvent && btnOrEvent.nodeType) ? btnOrEvent : (document.querySelector('.btn-nav-icon') || document.body);
   const rect = btn.getBoundingClientRect();
-  
+
   dropdown.style.position = 'fixed';
-  dropdown.style.top = (rect.bottom + 8) + 'px';
+  dropdown.style.top = (rect.bottom + 10) + 'px';
   dropdown.style.right = Math.max(16, (window.innerWidth - rect.right)) + 'px';
+  dropdown.style.zIndex = '2100';
 
   if (dropdown.classList.contains('show')) {
     dropdown.classList.remove('show');
