@@ -94,6 +94,7 @@ function loadAdminDashboard() {
   renderNotices();
   renderVisitorsTable();
   renderRoleSettingsTable();
+  renderAuditLogs();
   loadPendingApprovals();
 }
 
@@ -741,4 +742,34 @@ function viewMemberDetails(id, name, email, role, flat, phone, status, registere
     </div>
   `;
   new bootstrap.Modal(document.getElementById('memberDetailsModal')).show();
+}
+
+function renderAuditLogs() {
+  const tbody = document.getElementById('auditLogsTableBody');
+  if (!tbody) return;
+  const logs = SystemDB.getAuditLogs();
+
+  tbody.innerHTML = logs.map(l => `
+    <tr>
+      <td class="fw-bold fs-7 font-monospace">${l.id}</td>
+      <td class="fs-7 text-muted">${l.timestamp}</td>
+      <td>
+        <div class="fw-semibold text-heading">${l.user}</div>
+        <small class="badge bg-secondary bg-opacity-25 text-heading border" style="font-size:10px;">${l.role}</small>
+      </td>
+      <td><span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25">${l.action}</span></td>
+      <td><span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25">${l.module}</span></td>
+      <td class="fs-7 text-secondary">${l.details}</td>
+    </tr>
+  `).join('');
+}
+
+function exportAuditLogsCSV() {
+  const logs = SystemDB.getAuditLogs();
+  if (!logs || !logs.length) {
+    if (typeof showToast === 'function') showToast("No audit logs available for export.", "warning");
+    return;
+  }
+  SystemDB.exportToCSV('SocietyHub_AuditLogs_' + new Date().toISOString().slice(0,10) + '.csv', logs);
+  if (typeof showToast === 'function') showToast("Audit logs exported to CSV successfully!", "success");
 }

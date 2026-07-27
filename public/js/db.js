@@ -420,6 +420,73 @@ const SystemDB = {
     return { success: true, user: user };
   },
 
+  getTowers() {
+    return (this.data && this.data.towers) ? this.data.towers : [];
+  },
+
+  getFlats() {
+    return (this.data && this.data.flats) ? this.data.flats : [];
+  },
+
+  getAuditLogs() {
+    return (this.data && this.data.auditLogs) ? this.data.auditLogs : [];
+  },
+
+  logAudit(action, module, details) {
+    if (!this.data) return;
+    if (!this.data.auditLogs) this.data.auditLogs = [];
+    const curUser = this.getCurrentUser();
+    const userName = curUser ? curUser.name : 'System';
+    const userRole = curUser ? curUser.role : 'System';
+
+    const now = new Date();
+    const dateStr = now.toISOString().replace('T', ' ').substring(0, 19);
+
+    const newLog = {
+      id: 'LOG-' + Math.floor(1000 + Math.random() * 9000),
+      timestamp: dateStr,
+      user: userName,
+      role: userRole,
+      action: action,
+      module: module,
+      details: details || ''
+    };
+
+    this.data.auditLogs.unshift(newLog);
+    this.save();
+  },
+
+  exportToCSV(filename, rows) {
+    if (!rows || !rows.length) return;
+    const separator = ',';
+    const keys = Object.keys(rows[0]);
+    const csvContent =
+      keys.join(separator) +
+      '\n' +
+      rows.map(row => {
+        return keys.map(k => {
+          let cell = row[k] === null || row[k] === undefined ? '' : row[k].toString();
+          cell = cell.replace(/"/g, '""');
+          if (cell.search(/("|,|\n)/g) >= 0) {
+            cell = `"${cell}"`;
+          }
+          return cell;
+        }).join(separator);
+      }).join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  },
+
   getDefaultData() {
     return {
       users: [
@@ -439,7 +506,10 @@ const SystemDB = {
       visitors: [],
       notices: [],
       amenities: [],
-      bookings: []
+      bookings: [],
+      towers: [],
+      flats: [],
+      auditLogs: []
     };
   }
 };

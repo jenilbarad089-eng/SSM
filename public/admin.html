@@ -88,6 +88,9 @@
             <button class="nav-link" id="tab-roles-btn" data-bs-toggle="pill" data-bs-target="#tab-roles" type="button">
               <i class="fa-solid fa-user-gear text-warning"></i> Role & Access Settings
             </button>
+            <button class="nav-link" id="tab-audit-btn" data-bs-toggle="pill" data-bs-target="#tab-audit" type="button">
+              <i class="fa-solid fa-clock-rotate-left text-success"></i> Audit Logs
+            </button>
           </div>
         </div>
       </div>
@@ -353,6 +356,39 @@
                     </tr>
                   </thead>
                   <tbody id="roleSettingsTableBody">
+                    <!-- Populated dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 8: Enterprise Audit Trail Logs -->
+          <div class="tab-pane fade" id="tab-audit" role="tabpanel">
+            <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+              <div>
+                <h3 class="fw-bold mb-1"><i class="fa-solid fa-clock-rotate-left text-success me-2"></i> Enterprise Audit Trail & System Logs</h3>
+                <p class="caption-text mb-0">Immutable records of system actions, role modifications, and financial transactions.</p>
+              </div>
+              <button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="exportAuditLogsCSV()">
+                <i class="fa-solid fa-file-csv me-1"></i> Export Audit Logs CSV
+              </button>
+            </div>
+
+            <div class="hub-card p-4 mb-4">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle table-custom mb-0">
+                  <thead>
+                    <tr>
+                      <th>Log ID</th>
+                      <th>Timestamp</th>
+                      <th>User & Role</th>
+                      <th>Action</th>
+                      <th>Module</th>
+                      <th>Details</th>
+                    </tr>
+                  </thead>
+                  <tbody id="auditLogsTableBody">
                     <!-- Populated dynamically -->
                   </tbody>
                 </table>

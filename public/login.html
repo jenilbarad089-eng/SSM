@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In & Registration - SocietyHub Enterprise SaaS</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+  <!-- Custom Master Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="d-flex align-items-center justify-content-center min-vh-100 py-5 position-relative" style="background-color: var(--bg-primary);">
+
+  <!-- Floating Background Glows -->
+  <div class="position-absolute top-0 start-50 translate-middle-x rounded-circle opacity-25 pointer-events-none" style="width: 500px; height: 500px; background: radial-gradient(circle, rgba(255, 107, 0, 0.3) 0%, transparent 70%); blur: 60px;"></div>
+
+  <div class="container position-relative z-1" style="max-width: 520px;">
+    
+    <!-- Top Brand Logo -->
+    <div class="text-center mb-4">
+      <a class="navbar-brand justify-content-center fs-3 mb-2 d-inline-flex" href="index.html">
+        <div class="brand-icon me-2">
+          <i class="fa-solid fa-building-user"></i>
+        </div>
+        <span>Society<span style="color: var(--accent-blue);">Hub</span></span>
+      </a>
+      <p class="text-muted caption-text mb-0">Enterprise Residential Society Management Platform</p>
+    </div>
+
+    <!-- Auth Card -->
+    <div class="hub-card p-4 p-sm-5 rounded-4 shadow-lg border">
+      
+      <!-- Nav Tabs for Login / Register -->
+      <ul class="nav nav-pills nav-justified mb-4 p-1 rounded-3 bg-secondary bg-opacity-25" id="authTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active py-2 rounded-2 fw-semibold" id="tab-login-btn" data-bs-toggle="pill" data-bs-target="#tab-login" type="button">
+            <i class="fa-solid fa-right-to-bracket me-1"></i> Sign In
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link py-2 rounded-2 fw-semibold" id="tab-register-btn" data-bs-toggle="pill" data-bs-target="#tab-register" type="button">
+            <i class="fa-solid fa-user-plus me-1"></i> Register Member
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="authTabContent">
+
+        <!-- TAB 1: Sign In -->
+        <div class="tab-pane fade show active" id="tab-login" role="tabpanel">
+          <form id="dedicatedLoginForm">
+            <div class="mb-3">
+              <label class="form-label caption-text fw-semibold">Email or Username</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fa-solid fa-envelope"></i></span>
+                <input type="text" class="form-control border-start-0" id="loginEmail" required placeholder="admin@smartsociety.com">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label caption-text fw-semibold">Password</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fa-solid fa-lock"></i></span>
+                <input type="password" class="form-control border-start-0" id="loginPassword" required placeholder="••••••••">
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between mb-4 fs-7">
+              <div class="form-check mb-0">
+                <input class="form-check-input" type="checkbox" id="rememberMe" checked>
+                <label class="form-check-label text-muted" for="rememberMe">Remember me</label>
+              </div>
+              <a href="#" class="text-warning text-decoration-none" onclick="alert('Demo Mode: Click any 1-Click Preset below to sign in instantly!')">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary-custom w-100 py-2.5 mb-3">
+              <i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Sign In to Portal
+            </button>
+          </form>
+
+          <div class="text-center position-relative my-4">
+            <hr class="border-secondary opacity-25">
+            <span class="position-absolute top-50 start-50 translate-middle bg-surface px-3 text-muted caption-text">Quick 1-Click Demo Accounts</span>
+          </div>
+
+          <div class="d-grid gap-2">
+            <button class="btn btn-outline-danger btn-sm rounded-pill py-2" onclick="presetLogin('jenilbarad089@gmail.com', 'admin123')">
+              <i class="fa-solid fa-user-shield me-1"></i> Admin (Jenil Barad)
+            </button>
+            <div class="row g-2">
+              <div class="col-6">
+                <button class="btn btn-outline-primary btn-sm rounded-pill w-100 py-1.5" onclick="presetLogin('amit.patel@gmail.com', 'resident123')">
+                  <i class="fa-solid fa-house-user me-1"></i> Resident
+                </button>
+              </div>
+              <div class="col-6">
+                <button class="btn btn-outline-warning btn-sm rounded-pill w-100 py-1.5" onclick="presetLogin('guard@smartsociety.com', 'guard123')">
+                  <i class="fa-solid fa-shield-halved me-1"></i> Security Guard
+                </button>
+              </div>
+            </div>
+            <button class="btn btn-outline-info btn-sm rounded-pill py-1.5 mt-1" onclick="presetLogin('suresh.treasurer@smartsociety.com', 'committee123')">
+              <i class="fa-solid fa-chart-pie me-1"></i> Committee Member
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 2: Register Member -->
+        <div class="tab-pane fade" id="tab-register" role="tabpanel">
+          <form id="dedicatedRegisterForm">
+            <div class="mb-3">
+              <label class="form-label caption-text fw-semibold">Full Name</label>
+              <input type="text" class="form-control" id="regName" required placeholder="e.g. Vikramaditya Singh">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label caption-text fw-semibold">Society Invitation Code</label>
+              <input type="text" class="form-control" id="regSocietyCode" value="SOC-MH-4001" required>
+            </div>
+
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label caption-text fw-semibold">Applying Role</label>
+                <select class="form-select" id="regRole">
+                  <option value="Resident">Resident</option>
+                  <option value="Security Guard">Security Guard</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label class="form-label caption-text fw-semibold">Phone Number</label>
+                <input type="tel" class="form-control" id="regPhone" required placeholder="9876543210">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label caption-text fw-semibold">Email Address</label>
+              <input type="email" class="form-control" id="regEmail" required placeholder="resident@gmail.com">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label caption-text fw-semibold">Create Password</label>
+              <input type="password" class="form-control" id="regPassword" required placeholder="••••••••">
+            </div>
+
+            <button type="submit" class="btn btn-primary-custom w-100 py-2.5">
+              <i class="fa-solid fa-paper-plane me-2"></i> Submit Application for Admin Approval
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Back to Home Link -->
+    <div class="text-center mt-4">
+      <a href="index.html" class="text-muted text-decoration-none fs-7"><i class="fa-solid fa-arrow-left me-1"></i> Back to Homepage</a>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/firebase-auth.js"></script>
+  <script src="js/notifications.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await SystemDB.init();
+    });
+
+    async function presetLogin(email, password) {
+      document.getElementById('loginEmail').value = email;
+      document.getElementById('loginPassword').value = password;
+      document.getElementById('dedicatedLoginForm').dispatchEvent(new Event('submit'));
+    }
+
+    document.getElementById('dedicatedLoginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      if (typeof firebaseLoginWithEmail === 'function') {
+        const res = await firebaseLoginWithEmail(email, password);
+        if (res.success) {
+          showToast("Signed in successfully!", "success");
+          setTimeout(() => {
+            const role = res.user.role;
+            if (role === 'Admin') window.location.href = 'admin.html';
+            else if (role === 'Resident') window.location.href = 'resident.html';
+            else if (role === 'Security Guard') window.location.href = 'guard.html';
+            else if (role === 'Committee Member') window.location.href = 'committee.html';
+            else window.location.href = 'index.html';
+          }, 400);
+        } else {
+          showToast("Invalid Credentials or User Not Approved.", "error");
+        }
+      }
+    });
+
+    document.getElementById('dedicatedRegisterForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('regName').value;
+      const email = document.getElementById('regEmail').value;
+      const password = document.getElementById('regPassword').value;
+      const role = document.getElementById('regRole').value;
+      const phone = document.getElementById('regPhone').value;
+
+      if (typeof firebaseRegisterWithEmail === 'function') {
+        const res = await firebaseRegisterWithEmail(email, password, { name, role, phone });
+        if (res.success) {
+          showToast("Registration submitted! Pending Admin approval.", "success");
+          setTimeout(() => window.location.href = 'waiting-approval.html', 800);
+        } else {
+          showToast(res.message || "Registration failed.", "error");
+        }
+      }
+    });
+  </script>
+</body>
+</html>

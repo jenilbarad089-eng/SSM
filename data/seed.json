@@ -344,5 +344,33 @@
       "amount": 2000,
       "status": "Confirmed"
     }
-  ]
+  ],
+  "towers": [
+    { "id": "TOW-A", "name": "Tower A - Emerald Block", "floors": 12, "flatsPerFloor": 4, "totalFlats": 48 },
+    { "id": "TOW-B", "name": "Tower B - Sapphire Block", "floors": 10, "flatsPerFloor": 4, "totalFlats": 40 },
+    { "id": "TOW-C", "name": "Tower C - Diamond Block", "floors": 14, "flatsPerFloor": 4, "totalFlats": 56 }
+  ],
+  "flats": [
+    { "id": "FLT-A101", "tower": "Tower A", "floor": "1st Floor", "flatNo": "A-101", "owner": "Jenil Barad", "residentType": "Owner", "occupancy": "Owner Occupied", "dues": 3500, "parking": "P-01", "electricMeter": "EM-9012", "waterMeter": "WM-441" },
+    { "id": "FLT-A302", "tower": "Tower A", "floor": "3rd Floor", "flatNo": "A-302", "owner": "Amit Patel", "residentType": "Owner", "occupancy": "Owner Occupied", "dues": 3500, "parking": "P-14", "electricMeter": "EM-9034", "waterMeter": "WM-442" },
+    { "id": "FLT-B104", "tower": "Tower B", "floor": "1st Floor", "flatNo": "B-104", "owner": "Rahul Sharma", "residentType": "Owner", "occupancy": "Owner Occupied", "dues": 3500, "parking": "P-08", "electricMeter": "EM-9055", "waterMeter": "WM-443" },
+    { "id": "FLT-B202", "tower": "Tower B", "floor": "2nd Floor", "flatNo": "B-202", "owner": "Ramesh Gupta", "residentType": "Tenant", "tenant": "Neha Gupta", "rent": 20000, "occupancy": "Rented", "dues": 3500, "parking": "P-19", "electricMeter": "EM-9078", "waterMeter": "WM-444" },
+    { "id": "FLT-C501", "tower": "Tower C", "floor": "5th Floor", "flatNo": "C-501", "owner": "Sunil Verma", "residentType": "Tenant", "tenant": "Priya Verma", "rent": 22000, "occupancy": "Rented", "dues": 4000, "parking": "P-22", "electricMeter": "EM-9099", "waterMeter": "WM-445" },
+    { "id": "FLT-A604", "tower": "Tower A", "floor": "6th Floor", "flatNo": "A-604", "owner": "Ananya Deshmukh", "residentType": "Owner", "occupancy": "Owner Occupied", "dues": 4200, "parking": "P-33", "electricMeter": "EM-9112", "waterMeter": "WM-446" }
+  ],
+  "auditLogs": [
+    { "id": "LOG-1001", "timestamp": "2026-07-27 14:00:00", "user": "Jenil Barad (Admin)", "role": "Admin", "action": "System Initialized", "module": "Core Engine", "details": "SocietyHub v3.0 Enterprise Engine started cleanly." },
+    { "id": "LOG-1002", "timestamp": "2026-07-27 14:10:00", "user": "Amit Patel", "role": "Resident", "action": "Maintenance Bill Payment", "module": "Billing", "details": "Paid ₹3,500 via UPI (TXN123456789)." },
+    { "id": "LOG-1003", "timestamp": "2026-07-27 14:20:00", "user": "Bahadur Singh", "role": "Security Guard", "action": "Gate Pass Generated", "module": "Security", "details": "Issued GP-9821 for Ramesh Kumar (Courier)." }
+  ],
+  "societySettings": {
+    "name": "SocietyHub Grand Residency",
+    "code": "SOC-MH-4001",
+    "city": "Mumbai",
+    "pincode": "400053",
+    "maintenanceRateSqFt": 3.5,
+    "lateFeePercentage": 5,
+    "graceDays": 10,
+    "pwaEnabled": true
+  }
 }
