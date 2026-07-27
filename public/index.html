@@ -33,35 +33,52 @@
 
   <!-- Floating Glassmorphic Navbar -->
   <div class="navbar-float-wrapper">
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom" id="mainNav">
+    <nav class="navbar navbar-expand-lg navbar-custom" id="mainNav" aria-label="Main navigation">
       <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">
-          <div class="brand-icon">
+
+        <!-- Brand -->
+        <a class="navbar-brand" href="index.html" aria-label="SocietyHub Home">
+          <div class="brand-icon" aria-hidden="true">
             <i class="fa-solid fa-building-user"></i>
           </div>
           <span>Society<span style="color: var(--accent-orange);">Hub</span></span>
         </a>
 
-        <!-- Center Navigation Links -->
-        <div class="nav-center-links d-none d-lg-flex">
-          <a href="index.html" class="nav-pill active"><i class="fa-solid fa-house"></i> Home</a>
-          <a href="#features" class="nav-pill"><i class="fa-solid fa-grid-2"></i> Features</a>
-          <a href="#modules" class="nav-pill"><i class="fa-solid fa-cubes"></i> Modules</a>
-          <a href="docs.html" class="nav-pill"><i class="fa-solid fa-book"></i> Documentation</a>
-          <a href="changelog.html" class="nav-pill"><i class="fa-solid fa-list-check"></i> Changelog</a>
+        <!-- Hamburger Toggler (mobile) -->
+        <button class="navbar-toggler-custom" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navMenuCollapse" aria-controls="navMenuCollapse"
+          aria-expanded="false" aria-label="Toggle navigation">
+          <span></span><span></span><span></span>
+        </button>
+
+        <!-- Collapsible Center Links -->
+        <div class="collapse navbar-collapse" id="navMenuCollapse">
+          <ul class="nav-center-links mx-auto list-unstyled mb-0 d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-1 py-3 py-lg-0">
+            <li><a href="index.html" class="nav-pill active"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li><a href="#features" class="nav-pill"><i class="fa-solid fa-grid-2"></i> Features</a></li>
+            <li><a href="#modules" class="nav-pill"><i class="fa-solid fa-cubes"></i> Modules</a></li>
+            <li><a href="docs.html" class="nav-pill"><i class="fa-solid fa-book"></i> Docs</a></li>
+            <li><a href="changelog.html" class="nav-pill"><i class="fa-solid fa-list-check"></i> Changelog</a></li>
+          </ul>
+
+          <!-- Right Actions (inside collapse so they stack on mobile) -->
+          <div class="navbar-actions" role="group" aria-label="Navbar actions">
+            <button class="btn-pwa-install" id="pwaInstallBtn" onclick="installPWA()"
+              title="Install SocietyHub as a standalone app" aria-label="Install App" style="display:none;">
+              <i class="fa-solid fa-download" aria-hidden="true"></i>
+              <span>Install App</span>
+            </button>
+            <button class="btn-theme-toggle" onclick="toggleTheme()"
+              title="Toggle Light/Dark Theme" aria-label="Toggle theme">
+              <i class="fa-solid fa-sun" id="themeIcon" aria-hidden="true"></i>
+            </button>
+            <a href="login.html" class="btn-signin" aria-label="Sign In to SocietyHub">
+              <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i>
+              <span>Sign In</span>
+            </a>
+          </div>
         </div>
 
-        <!-- Right Actions -->
-        <div class="navbar-actions">
-          <button class="btn-pwa-install d-none d-sm-inline-flex" id="pwaInstallBtn" onclick="installPWA()" title="Install SocietyHub Standalone PWA">
-            <i class="fa-solid fa-download"></i> Install App
-          </button>
-          <button class="btn-theme-toggle" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
-            <i class="fa-solid fa-sun" id="themeIcon"></i>
-          <a href="login.html" class="btn-primary-custom px-3 py-2 fs-6 ms-2 text-decoration-none d-inline-flex align-items-center">
-            <i class="fa-solid fa-right-to-bracket me-1"></i> Sign In
-          </a>
-        </div>
       </div>
     </nav>
   </div>

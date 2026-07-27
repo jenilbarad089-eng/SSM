@@ -191,7 +191,7 @@ h5, .h5 { font-family: var(--font-heading) !important; font-size: 18px; font-wei
 
 
 /* ══════════════════════════════════════════════
-   FLOATING GLASSMORPHIC NAVBAR
+   FLOATING GLASSMORPHIC NAVBAR — GROUND-UP REWRITE
    ══════════════════════════════════════════════ */
 .navbar-float-wrapper {
   position: fixed;
@@ -199,36 +199,36 @@ h5, .h5 { font-family: var(--font-heading) !important; font-size: 18px; font-wei
   left: 0;
   right: 0;
   z-index: 1050;
-  padding: 12px 24px 0;
+  padding: 10px 20px 0;
   pointer-events: none;
 }
 
 .navbar-float-wrapper .navbar-custom {
+  position: relative;
   pointer-events: all;
   background: var(--navbar-bg);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.25),
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
-  padding: 10px 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255,255,255,0.04) inset;
+  padding: 0 20px;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 60px;
+  display: flex;
+  align-items: center;
 }
 
-/* Navbar scroll state (applied via JS) */
+/* Scroll state */
 .navbar-float-wrapper .navbar-custom.navbar-scrolled {
   background: var(--navbar-bg);
   backdrop-filter: blur(28px) saturate(200%);
   -webkit-backdrop-filter: blur(28px) saturate(200%);
-  box-shadow:
-    0 12px 48px rgba(0, 0, 0, 0.35),
-    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.06) inset;
   border-color: var(--border-glow);
 }
 
-/* Dashboard pages: full-width navbar (not floating pill) */
+/* Dashboard pages: full-width sticky navbar */
 .navbar-custom.navbar-dashboard {
   position: sticky;
   top: 0;
@@ -238,89 +238,186 @@ h5, .h5 { font-family: var(--font-heading) !important; font-size: 18px; font-wei
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border-bottom: 1px solid var(--border-color);
   border-radius: 0;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
-  padding: 10px 24px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 0 24px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+}
+
+/* Bootstrap container flex fix */
+.navbar-custom .container-fluid {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 100%;
+  gap: 0;
+  padding: 0;
 }
 
 body.has-floating-nav {
   padding-top: 80px;
 }
 
+/* ── Brand ── */
 .navbar-brand {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 800;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   text-decoration: none;
   color: var(--text-heading);
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 10px 0;
 }
-
 .navbar-brand:hover { color: var(--text-heading); }
 
 .brand-icon {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
   background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-purple) 100%);
-  border-radius: 12px;
+  border-radius: 11px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #FFFFFF;
-  font-size: 16px;
-  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.35);
+  font-size: 15px;
+  box-shadow: 0 4px 14px rgba(255,107,0,0.35);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .navbar-brand:hover .brand-icon {
   transform: rotate(-8deg) scale(1.05);
-  box-shadow: 0 6px 24px rgba(249, 115, 22, 0.5);
+  box-shadow: 0 6px 20px rgba(255,107,0,0.5);
 }
 
-/* Nav Center Links (landing page only) */
+/* ── Hamburger Toggler ── */
+.navbar-toggler-custom {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.navbar-toggler-custom:hover {
+  background: var(--surface-active);
+  border-color: var(--accent-orange);
+}
+.navbar-toggler-custom:focus-visible {
+  outline: 2px solid var(--accent-orange);
+  outline-offset: 2px;
+}
+.navbar-toggler-custom span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--text-heading);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* ── Collapsible wrapper ── */
+.navbar-collapse {
+  display: flex !important;
+  align-items: center;
+  flex: 1;
+  gap: 0;
+}
+
+/* ── Center Nav Links ── */
 .nav-center-links {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
+  margin: 0 auto;
 }
 
 .nav-center-links .nav-pill {
   color: var(--text-secondary);
   font-size: 14px;
   font-weight: 600;
-  padding: 8px 16px;
+  padding: 8px 14px;
   border-radius: 10px;
   text-decoration: none;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
 }
-
 .nav-center-links .nav-pill:hover {
   color: var(--text-heading);
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(0,0,0,0.05);
 }
-
 .nav-center-links .nav-pill.active {
-  color: var(--accent-blue);
-  background: rgba(59, 130, 246, 0.1);
+  color: var(--accent-orange);
+  background: rgba(255,107,0,0.08);
+}
+.nav-center-links .nav-pill:focus-visible {
+  outline: 2px solid var(--accent-orange);
+  outline-offset: 2px;
 }
 
-/* Navbar Right Actions */
+/* ── Navbar Right Actions ── */
 .navbar-actions {
   display: flex;
   align-items: center;
-  gap: 16px !important;
+  gap: 10px;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
 }
 
-/* Theme Toggle Button */
+/* ── PWA Install Button ── */
+.btn-pwa-install {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0 16px;
+  height: 38px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  font-family: var(--font-body);
+  text-decoration: none;
+}
+.btn-pwa-install:hover {
+  background: var(--surface-active);
+  color: var(--accent-orange);
+  border-color: var(--accent-orange);
+  box-shadow: 0 4px 14px rgba(255,107,0,0.15);
+  transform: translateY(-1px);
+}
+.btn-pwa-install:focus-visible {
+  outline: 2px solid var(--accent-orange);
+  outline-offset: 2px;
+}
+
+/* ── Theme Toggle ── */
 .btn-theme-toggle {
-  background: rgba(255, 255, 255, 0.06);
+  background: transparent;
   border: 1px solid var(--border-color);
   color: var(--text-secondary);
   width: 38px;
   height: 38px;
+  min-width: 38px;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -328,23 +425,60 @@ body.has-floating-nav {
   transition: all 0.25s ease;
   cursor: pointer;
   font-size: 14px;
+  flex-shrink: 0;
 }
-
 .btn-theme-toggle:hover {
-  background: var(--accent-blue);
-  color: #FFFFFF;
-  border-color: var(--accent-blue);
-  transform: rotate(15deg) scale(1.05);
-  box-shadow: 0 0 16px rgba(59, 130, 246, 0.4);
+  background: var(--surface-active);
+  color: var(--accent-orange);
+  border-color: var(--accent-orange);
+  transform: rotate(20deg) scale(1.08);
+  box-shadow: 0 4px 14px rgba(255,107,0,0.2);
+}
+.btn-theme-toggle:focus-visible {
+  outline: 2px solid var(--accent-orange);
+  outline-offset: 2px;
 }
 
-/* Notification Bell */
+/* ── Sign In Button ── */
+.btn-signin {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+  background: var(--accent-orange);
+  border: none;
+  color: #FFFFFF !important;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 0 20px;
+  height: 38px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  font-family: var(--font-body);
+  text-decoration: none !important;
+  box-shadow: 0 4px 14px rgba(255,107,0,0.3);
+  flex-shrink: 0;
+}
+.btn-signin:hover {
+  background: #e05d00;
+  color: #FFFFFF !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255,107,0,0.4);
+}
+.btn-signin:focus-visible {
+  outline: 2px solid var(--accent-orange);
+  outline-offset: 3px;
+}
+
+/* ── Notification Bell & Icon Buttons ── */
 .btn-nav-icon {
-  background: rgba(255, 255, 255, 0.06);
+  background: transparent;
   border: 1px solid var(--border-color);
   color: var(--text-secondary);
   width: 38px;
   height: 38px;
+  min-width: 38px;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -353,13 +487,19 @@ body.has-floating-nav {
   font-size: 14px;
   position: relative;
   transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.btn-nav-icon:hover {
+  background: var(--surface-active);
+  color: var(--text-heading);
+  border-color: var(--accent-orange);
+}
+.btn-nav-icon:focus-visible {
+  outline: 2px solid var(--accent-orange);
+  outline-offset: 2px;
 }
 
-.btn-nav-icon:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text-heading);
-  border-color: rgba(255, 255, 255, 0.15);
-}
+
 
 .btn-nav-icon .notif-dot {
   position: absolute;
@@ -1014,8 +1154,74 @@ button, a, input, select, textarea {
     padding: 8px 12px 0;
   }
 
-  .nav-center-links {
+  /* On tablet/mobile, show hamburger, hide inline center links */
+  .navbar-toggler-custom {
+    display: flex;
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  /* When collapsed, fill full width as a panel */
+  .navbar-collapse {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--navbar-bg);
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.15);
+    padding: 12px 20px 16px;
     display: none !important;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    z-index: 999;
+  }
+
+  .navbar-collapse.show {
+    display: flex !important;
+  }
+
+  .nav-center-links {
+    flex-direction: column;
+    align-items: stretch;
+    margin: 0;
+    gap: 2px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .nav-center-links li { width: 100%; }
+
+  .nav-center-links .nav-pill {
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    width: 100%;
+  }
+
+  /* Actions row stacks inline on tablet but wraps gracefully */
+  .navbar-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 8px;
+    justify-content: flex-start;
+  }
+
+  .btn-signin {
+    flex: 1;
+    justify-content: center;
+    min-width: 120px;
+  }
+
+  .btn-pwa-install {
+    flex: 1;
+    justify-content: center;
+    min-width: 120px;
   }
 
   /* Horizontal Scrollable Sidebar Pills for Mobile/Tablet */
@@ -1127,7 +1333,7 @@ button, a, input, select, textarea {
   }
 
   .navbar-float-wrapper .navbar-custom {
-    padding: 8px 14px;
+    padding: 0 14px;
     border-radius: var(--radius-md);
   }
 
@@ -1139,12 +1345,26 @@ button, a, input, select, textarea {
   .brand-icon {
     width: 32px;
     height: 32px;
+    min-width: 32px;
     font-size: 13px;
     border-radius: 8px;
   }
 
-  .btn-theme-toggle, .btn-nav-icon {
+  .btn-theme-toggle {
     width: 34px;
+    height: 34px;
+    min-width: 34px;
+    font-size: 13px;
+  }
+
+  .btn-nav-icon {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    font-size: 13px;
+  }
+
+  .btn-signin, .btn-pwa-install {
     height: 34px;
     font-size: 13px;
   }
@@ -1174,6 +1394,9 @@ button, a, input, select, textarea {
   .footer-social-links {
     justify-content: center;
   }
+
+  /* Prevent horizontal scrolling at all costs */
+  body { overflow-x: hidden; }
 }
 
 /* ══════════════════════════════════════════════
