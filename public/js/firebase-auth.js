@@ -92,66 +92,82 @@ async function firebaseRegisterWithEmail(name, email, password, role, extra) {
 }
 
 // ────────────────────────────────────────────────
-// Google Sign-In  —  Firebase popup → server JWT
+// ────────────────────────────────────────────────
+// Google Sign-In  —  Firebase popup → Server JWT / Client Fallback
 // ────────────────────────────────────────────────
 async function firebaseLoginWithGoogle() {
   initFirebaseAuth();
 
-  let googleEmail = '';
-  let googleName = '';
-  let googlePhoto = '';
-  let googleUid = '';
-
-  if (isFirebaseInitialized && firebaseAuth && googleProvider) {
-    try {
-      const result = await firebaseAuth.signInWithPopup(googleProvider);
-      const fbUser = result.user;
-      googleEmail = fbUser.email;
-      googleName = fbUser.displayName;
-      googlePhoto = fbUser.photoURL;
-      googleUid = fbUser.uid;
-    } catch (error) {
-      console.warn('Firebase popup warning:', error);
-      if (error.code === 'auth/popup-closed-by-user') {
-        return { success: false, message: 'Google Sign-in popup was closed.' };
-      }
-    }
-  }
-
-  // Fallback prompt if Firebase popup is blocked or unconfigured on domain
-  if (!googleEmail) {
-    const promptedEmail = prompt("Enter your Google Account email to continue with Google Sign-In:", "jenilbarad089@gmail.com");
-    if (!promptedEmail || !promptedEmail.trim()) {
-      return { success: false, message: 'Google Sign-In cancelled.' };
-    }
-    googleEmail = promptedEmail.trim();
-    googleName = googleEmail.split('@')[0];
+  if (!isFirebaseInitialized || !firebaseAuth || !googleProvider) {
+    return { success: false, message: 'Google Sign-In is not initialized. Check Firebase SDK.' };
   }
 
   try {
-    const res = await fetch('/api/auth/google', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: googleEmail,
-        displayName: googleName,
-        photoURL: googlePhoto,
-        uid: googleUid || 'google-' + Date.now(),
-      }),
-    });
+    const result = await firebaseAuth.signInWithPopup(googleProvider);
+    const fbUser = result.user;
 
-    const data = await res.json();
+    // 1. Try Express Backend API (/api/auth/google)
+    try {
+      const res = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: fbUser.email,
+          displayName: fbUser.displayName,
+          photoURL: fbUser.photoURL,
+          uid: fbUser.uid,
+        }),
+      });
 
-    if (data.success && data.token && data.user) {
-      SystemDB.setToken(data.token);
-      sessionStorage.setItem('ssm_current_user', JSON.stringify(data.user));
-      return { success: true, user: data.user };
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.token && data.user) {
+          SystemDB.setToken(data.token);
+          sessionStorage.setItem('ssm_current_user', JSON.stringify(data.user));
+          return { success: true, user: data.user };
+        }
+      }
+    } catch (apiErr) {
+      console.warn("Backend API unavailable, executing client-side auth fallback for Vercel:", apiErr);
     }
 
-    return { success: false, message: data.message || 'Google sign-in failed on server.' };
-  } catch (err) {
-    console.error('Google Sign-In server error:', err);
-    return { success: false, message: 'Server error during Google auth.' };
+    // 2. Client-side fallback for static Vercel hosting
+    let users = SystemDB.getUsers();
+    let existing = users.find(u => u.email && u.email.toLowerCase() === fbUser.email.toLowerCase());
+
+    if (!existing) {
+      const isUserAdmin = fbUser.email.toLowerCase() === 'jenilbarad089@gmail.com';
+      existing = {
+        id: 'USR-' + (users.length + 101),
+        username: fbUser.email.split('@')[0],
+        name: fbUser.displayName || fbUser.email.split('@')[0],
+        role: isUserAdmin ? 'Admin' : 'Resident',
+        flat: isUserAdmin ? 'A-101' : 'B-101',
+        email: fbUser.email,
+        phone: fbUser.phoneNumber || '',
+        avatar: fbUser.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(fbUser.displayName || fbUser.email)}`,
+        status: 'Approved',
+        registeredAt: new Date().toISOString().split('T')[0]
+      };
+      users.push(existing);
+      SystemDB.saveUsers(users);
+    }
+
+    sessionStorage.setItem('ssm_current_user', JSON.stringify(existing));
+    return { success: true, user: existing };
+
+  } catch (error) {
+    console.error('Google Sign-In error:', error);
+    if (error.code === 'auth/unauthorized-domain') {
+      return {
+        success: false,
+        message: 'Domain unauthorized! Please add "societyhub11.vercel.app" to Authorized Domains in Firebase Console > Authentication > Settings.'
+      };
+    }
+    if (error.code === 'auth/popup-closed-by-user') {
+      return { success: false, message: 'Google sign-in window was closed.' };
+    }
+    return { success: false, message: error.message || 'Google sign-in failed.' };
   }
 }
 
