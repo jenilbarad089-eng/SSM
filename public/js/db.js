@@ -24,18 +24,24 @@ const SystemDB = {
         const res = await fetch('../data/seed.json');
         if (res.ok) {
           this.data = await res.json();
-          this.save();
         } else {
-          console.warn("Could not fetch seed.json, falling back to default memory");
           this.data = this.getDefaultData();
-          this.save();
         }
       } catch (err) {
-        console.warn("Fetch failed, using default data", err);
         this.data = this.getDefaultData();
-        this.save();
       }
     }
+
+    // Ensure all default seed members are merged into users array
+    const defaults = this.getDefaultData().users;
+    if (this.data && this.data.users) {
+      defaults.forEach(defUser => {
+        if (!this.data.users.some(u => u.id === defUser.id || u.email === defUser.email)) {
+          this.data.users.push(defUser);
+        }
+      });
+    }
+    this.save();
   },
 
   save() {
@@ -417,11 +423,16 @@ const SystemDB = {
   getDefaultData() {
     return {
       users: [
-        { id: "USR-101", username: "admin", name: "Jenil Barad (Admin)", role: "Admin", status: "Approved", flat: "A-101", email: "jenilbarad089@gmail.com", phone: "9876543210", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&gender=male" },
-        { id: "USR-102", username: "resident1", name: "Amit Patel", role: "Resident", status: "Approved", tower: "Tower A", flat: "A-302", flatNo: "A-302", residentType: "Owner", rentAmount: "₹18,000/month", maintenanceDues: "₹3,500/month", parkingSlot: "P-14", block: "Phase 1", moveInDate: "2024-01-15", familyCount: "3 Members", email: "amit.patel@gmail.com", phone: "9812345678", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Amit&gender=male", vehicles: ["MH 02 EQ 8829 (SUV)", "MH 02 CB 1029 (Bike)"], familyMembers: ["Priya Barad (Spouse)", "Kavya Barad (Child)"] },
-        { id: "USR-103", username: "resident2", name: "Priya Verma", role: "Resident", status: "Approved", tower: "Tower C", flat: "C-501", flatNo: "C-501", residentType: "Tenant", rentAmount: "₹22,000/month", maintenanceDues: "₹4,000/month", parkingSlot: "P-22", block: "Phase 2", moveInDate: "2024-03-01", familyCount: "2 Members", email: "priya.v@gmail.com", phone: "9823456789", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Priya&gender=female", vehicles: ["MH 04 AX 4410 (Sedan)"], familyMembers: ["Rohan Verma (Spouse)"] },
-        { id: "USR-104", username: "guard", name: "Bahadur Singh", role: "Security Guard", status: "Approved", empId: "EMP-104", shift: "Morning (06:00 - 14:00)", gateAssigned: "Gate 1", salary: "₹18,000/month", flat: "Gate 1", email: "guard@smartsociety.com", phone: "9988776655", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Bahadur&gender=male" },
-        { id: "USR-105", username: "committee", name: "Suresh Kumar", role: "Committee Member", status: "Approved", flat: "A-402", email: "suresh@smartsociety.com", phone: "9765432109", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Suresh&gender=male" }
+        { id: "USR-101", username: "admin", name: "Jenil Barad (Admin)", role: "Admin", status: "Approved", flat: "A-101", email: "jenilbarad089@gmail.com", phone: "9876543210", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&gender=male", registeredAt: "2026-01-15", approvedAt: "2026-01-15" },
+        { id: "USR-102", username: "resident1", name: "Amit Patel", role: "Resident", status: "Approved", tower: "Tower A", flat: "A-302", flatNo: "A-302", residentType: "Owner", rentAmount: "₹18,000/month", maintenanceDues: "₹3,500/month", parkingSlot: "P-14", block: "Phase 1", moveInDate: "2024-01-15", familyCount: "3 Members", email: "amit.patel@gmail.com", phone: "9812345678", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Amit&gender=male", vehicles: ["MH 02 EQ 8829 (SUV)", "MH 02 CB 1029 (Bike)"], familyMembers: ["Priya Barad (Spouse)", "Kavya Barad (Child)"], registeredAt: "2026-01-15", approvedAt: "2026-01-15" },
+        { id: "USR-103", username: "resident2", name: "Priya Verma", role: "Resident", status: "Approved", tower: "Tower C", flat: "C-501", flatNo: "C-501", residentType: "Tenant", rentAmount: "₹22,000/month", maintenanceDues: "₹4,000/month", parkingSlot: "P-22", block: "Phase 2", moveInDate: "2024-03-01", familyCount: "2 Members", email: "priya.v@gmail.com", phone: "9823456789", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Priya&gender=female", vehicles: ["MH 04 AX 4410 (Sedan)"], familyMembers: ["Rohan Verma (Spouse)"], registeredAt: "2026-01-15", approvedAt: "2026-01-15" },
+        { id: "USR-104", username: "guard", name: "Bahadur Singh", role: "Security Guard", status: "Approved", empId: "EMP-104", shift: "Morning (06:00 - 14:00)", gateAssigned: "Gate 1", salary: "₹18,000/month", flat: "Gate 1", email: "guard@smartsociety.com", phone: "9988776655", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Bahadur&gender=male", registeredAt: "2026-01-15", approvedAt: "2026-01-15" },
+        { id: "USR-105", username: "committee", name: "Suresh Kumar", role: "Committee Member", status: "Approved", flat: "A-402", email: "suresh@smartsociety.com", phone: "9765432109", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Suresh&gender=male", registeredAt: "2026-01-15", approvedAt: "2026-01-15" },
+        { id: "USR-106", username: "rahul.sharma", name: "Rahul Sharma", role: "Resident", status: "Approved", tower: "Tower B", flat: "B-104", flatNo: "B-104", residentType: "Owner", rentAmount: "₹19,000/month", maintenanceDues: "₹3,500/month", parkingSlot: "P-08", block: "Phase 1", moveInDate: "2024-02-10", familyCount: "3 Members", email: "rahul.sharma@gmail.com", phone: "9811223344", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rahul&gender=male", registeredAt: "2026-02-01", approvedAt: "2026-02-01" },
+        { id: "USR-107", username: "neha.gupta", name: "Neha Gupta", role: "Resident", status: "Approved", tower: "Tower B", flat: "B-202", flatNo: "B-202", residentType: "Tenant", rentAmount: "₹20,000/month", maintenanceDues: "₹3,500/month", parkingSlot: "P-19", block: "Phase 1", moveInDate: "2024-04-15", familyCount: "2 Members", email: "neha.gupta@gmail.com", phone: "9822334455", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Neha&gender=female", registeredAt: "2026-04-10", approvedAt: "2026-04-10" },
+        { id: "USR-108", username: "vikram.yadav", name: "Vikram Yadav", role: "Security Guard", status: "Approved", empId: "EMP-108", shift: "Evening (14:00 - 22:00)", gateAssigned: "Gate 2", salary: "₹18,000/month", flat: "Gate 2", email: "vikram.yadav@gmail.com", phone: "9833445566", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Vikram&gender=male", registeredAt: "2026-05-01", approvedAt: "2026-05-01" },
+        { id: "USR-109", username: "ananya.d", name: "Ananya Deshmukh", role: "Resident", status: "Approved", tower: "Tower A", flat: "A-604", flatNo: "A-604", residentType: "Owner", rentAmount: "₹25,000/month", maintenanceDues: "₹4,200/month", parkingSlot: "P-33", block: "Phase 2", moveInDate: "2024-05-01", familyCount: "4 Members", email: "ananya.d@gmail.com", phone: "9844556677", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ananya&gender=female", registeredAt: "2026-05-15", approvedAt: "2026-05-15" },
+        { id: "USR-110", username: "rohan.m", name: "Rohan Mehta", role: "Committee Member", status: "Approved", flat: "B-301", email: "rohan.secretary@smartsociety.com", phone: "9855667788", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rohan&gender=male", registeredAt: "2026-01-15", approvedAt: "2026-01-15" }
       ],
       complaints: [],
       maintenance: [],
