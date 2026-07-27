@@ -310,7 +310,7 @@ body.has-floating-nav {
 .navbar-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 16px !important;
 }
 
 /* Theme Toggle Button */
