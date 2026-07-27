@@ -175,34 +175,99 @@ function renderCharts() {
 
 function renderResidentsTable() {
   const tbody = document.getElementById('residentsTableBody');
-  const residents = SystemDB.getResidents();
+  if (!tbody) return;
 
-  tbody.innerHTML = residents.map(r => {
+  // Show ALL members, sorted: Admin → Committee → Resident → Security Guard
+  const roleOrder = { 'Admin': 0, 'Committee Member': 1, 'Resident': 2, 'Security Guard': 3 };
+  const allUsers = (SystemDB.data && SystemDB.data.users) ? [...SystemDB.data.users] : [];
+  allUsers.sort((a, b) => (roleOrder[a.role] ?? 9) - (roleOrder[b.role] ?? 9));
+
+  const roleBadgeClass = {
+    'Admin': 'bg-danger text-white',
+    'Committee Member': 'bg-info text-dark',
+    'Resident': 'bg-primary text-white',
+    'Security Guard': 'bg-warning text-dark'
+  };
+
+  tbody.innerHTML = allUsers.map(r => {
     const avatarUrl = getMemberAvatar(r);
+    const badgeCls = roleBadgeClass[r.role] || 'bg-secondary text-white';
+
+    // Role-specific detail line
+    let detailLine = '';
+    if (r.role === 'Resident') {
+      detailLine = `
+        <small class="text-muted d-block">
+          ${r.residentType || 'Owner'} · ${r.tower || ''}
+          ${r.parkingSlot ? `· <i class="fa-solid fa-square-parking text-primary"></i> ${r.parkingSlot}` : ''}
+          ${r.familyCount ? `· <i class="fa-solid fa-users text-success"></i> ${r.familyCount}` : ''}
+        </small>`;
+    } else if (r.role === 'Security Guard') {
+      detailLine = `<small class="text-muted d-block"><i class="fa-solid fa-clock me-1"></i>${r.shift || 'Morning Shift'} · ${r.gateAssigned || 'Gate 1'}</small>`;
+    } else if (r.role === 'Committee Member') {
+      detailLine = `<small class="text-muted d-block"><i class="fa-solid fa-star me-1 text-warning"></i>${r.designation || 'Managing Executive'}</small>`;
+    } else if (r.role === 'Admin') {
+      detailLine = `<small class="text-muted d-block"><i class="fa-solid fa-shield-halved me-1 text-danger"></i>${r.designation || 'Super Administrator'}</small>`;
+    }
+
     return `
     <tr>
       <td>
-        <div class="d-flex align-items-center gap-2">
-          <img src="${avatarUrl}" class="rounded-circle border" width="32" height="32" alt="${r.name}">
-          <span class="fw-semibold text-heading">${r.name}</span>
+        <div class="d-flex align-items-center gap-3">
+          <img src="${avatarUrl}" class="rounded-circle border border-2" width="40" height="40" alt="${r.name}" 
+               style="object-fit:cover; flex-shrink:0;">
+          <div>
+            <div class="fw-bold text-heading">${r.name}</div>
+            ${detailLine}
+          </div>
         </div>
       </td>
-      <td><span class="badge bg-light text-dark border">${r.flat}</span></td>
-      <td class="text-muted fs-7">${r.email}</td>
-      <td class="fs-7">${r.phone}</td>
-      <td><span class="badge ${r.role === 'Admin' ? 'bg-danger-subtle text-danger' : 'bg-primary-subtle text-primary'}">${r.role}</span></td>
-      <td class="text-end">
-        ${r.role !== 'Admin' ? `
-          <button class="btn btn-sm btn-outline-danger border-0" onclick="deleteRes('${r.id}')" title="Delete Resident">
-            <i class="fa-solid fa-trash-can"></i>
-          </button>
-        ` : '<span class="text-muted small">System Admin</span>'}
+      <td>
+        <span class="badge bg-secondary bg-opacity-15 text-heading border" style="font-size:12px; padding:5px 10px;">
+          <i class="fa-solid fa-building me-1"></i>${r.flat || r.gateAssigned || '—'}
+        </span>
       </td>
-    </tr>
-  `).join('');
+      <td class="text-muted" style="font-size:13px; max-width:200px;">
+        <a href="mailto:${r.email}" class="text-muted text-decoration-none">${r.email}</a>
+      </td>
+      <td style="font-size:13px;">
+        ${r.phone ? `<a href="tel:${r.phone}" class="text-decoration-none text-heading">${r.phone}</a>` : '<span class="text-muted">—</span>'}
+      </td>
+      <td>
+        <span class="badge ${badgeCls} px-3 py-1 rounded-pill">${r.role}</span>
+      </td>
+      <td>
+        <span class="badge ${r.status === 'Approved' ? 'bg-success' : r.status === 'Pending' ? 'bg-warning text-dark' : 'bg-danger'} bg-opacity-15 
+              text-${r.status === 'Approved' ? 'success' : r.status === 'Pending' ? 'warning' : 'danger'} border 
+              border-${r.status === 'Approved' ? 'success' : r.status === 'Pending' ? 'warning' : 'danger'} border-opacity-25">
+          ${r.status || 'Approved'}
+        </span>
+      </td>
+      <td class="text-end">
+        <div class="d-flex gap-1 justify-content-end">
+          <button class="btn btn-sm btn-outline-info rounded-pill px-2" 
+            onclick="openAllocateModal('${r.id}','${r.name.replace(/'/g,"\\'")}','${r.email}','${r.role}','${r.flat||''}')" 
+            title="Allot Flat / Update Details">
+            <i class="fa-solid fa-building-circle-check"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-primary rounded-pill px-2"
+            onclick="openChangeRoleModal('${r.id}','${r.name.replace(/'/g,"\\'")}','${r.role}')"
+            title="Change Role">
+            <i class="fa-solid fa-user-gear"></i>
+          </button>
+          ${r.role !== 'Admin' ? `
+          <button class="btn btn-sm btn-outline-danger rounded-pill px-2" 
+            onclick="deleteRes('${r.id}')" title="Remove Member">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>` : '<span class="text-muted small px-2">System&nbsp;Admin</span>'}
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
 }
 
 function deleteRes(id) {
+
   if (confirm("Are you sure you want to remove this resident?")) {
     SystemDB.deleteResident(id);
     loadAdminDashboard();
@@ -332,51 +397,91 @@ function renderVisitorsTable() {
 
 function renderRoleSettingsTable() {
   const tbody = document.getElementById('roleSettingsTableBody');
+
   if (!tbody) return;
-  const users = SystemDB.data.users || [];
+
+  const roleOrder = { 'Admin': 0, 'Committee Member': 1, 'Resident': 2, 'Security Guard': 3 };
+  const users = [...(SystemDB.data.users || [])];
+  users.sort((a, b) => (roleOrder[a.role] ?? 9) - (roleOrder[b.role] ?? 9));
+
+  const roleBadge = {
+    'Admin': 'bg-danger text-white',
+    'Resident': 'bg-primary text-white',
+    'Security Guard': 'bg-warning text-dark',
+    'Committee Member': 'bg-info text-dark'
+  };
 
   tbody.innerHTML = users.map(u => {
     const avatarUrl = getMemberAvatar(u);
-    const roleBadge = u.role === 'Admin' ? 'bg-danger text-white' :
-                      u.role === 'Resident' ? 'bg-primary text-white' :
-                      u.role === 'Security Guard' ? 'bg-warning text-dark' : 'bg-info text-dark';
+    const badge = roleBadge[u.role] || 'bg-secondary text-white';
 
-    const occupancyOrShift = u.role === 'Security Guard' ? (u.shift || 'Morning Shift') :
-                             u.role === 'Resident' ? (u.residentType || 'Owner') :
-                             u.role === 'Committee Member' ? 'Managing Executive' : 'System Super Admin';
+    const detailInfo = u.role === 'Security Guard'
+      ? `<small class="d-block text-muted"><i class="fa-solid fa-clock me-1"></i>${u.shift || 'Morning Shift'}</small>
+         <small class="d-block text-muted"><i class="fa-solid fa-door-open me-1"></i>${u.gateAssigned || 'Gate 1'} · ${u.empId || '—'}</small>`
+      : u.role === 'Resident'
+      ? `<small class="d-block text-muted">${u.residentType || 'Owner'} · ${u.tower || 'Tower A'}
+         ${u.familyCount ? `· <i class="fa-solid fa-users"></i> ${u.familyCount}` : ''}</small>
+         <small class="d-block text-muted">Move-in: ${u.moveInDate || '—'}</small>`
+      : u.role === 'Committee Member'
+      ? `<small class="d-block text-muted"><i class="fa-solid fa-star me-1 text-warning"></i>${u.designation || 'Managing Executive'}</small>`
+      : `<small class="d-block text-muted"><i class="fa-solid fa-shield-halved me-1 text-danger"></i>${u.designation || 'Super Administrator'}</small>`;
 
-    const duesOrSalary = u.role === 'Security Guard' ? (u.salary || '₹18,000/month') :
-                         u.role === 'Resident' ? (u.maintenanceDues || '₹3,500/month') : '--';
+    const duesOrSalary = u.role === 'Security Guard'
+      ? `<span class="fw-bold text-success">${u.salary || '₹18,000/month'}</span><small class="d-block text-muted">Monthly Salary</small>`
+      : u.role === 'Resident'
+      ? `<span class="fw-bold text-warning">${u.maintenanceDues || '₹3,500/month'}</span><small class="d-block text-muted">Maintenance</small>`
+      : u.role === 'Committee Member'
+      ? `<span class="badge bg-success bg-opacity-15 text-success border border-success border-opacity-25">Society Service</span>`
+      : `<span class="badge bg-danger bg-opacity-15 text-danger border border-danger border-opacity-25">Full Access</span>`;
 
-    const parkingSlot = u.parkingSlot || u.flat || '--';
+    const flatOrGate = u.flat || u.gateAssigned || '—';
+    const parking = u.parkingSlot || (u.role === 'Security Guard' ? u.gateAssigned : '—');
 
     return `
       <tr>
         <td>
-          <div class="d-flex align-items-center gap-2">
-            <img src="${avatarUrl}" class="rounded-circle border" width="34" height="34" alt="${u.name}">
+          <div class="d-flex align-items-center gap-3">
+            <img src="${avatarUrl}" class="rounded-circle border border-2" width="42" height="42" alt="${u.name}" style="object-fit:cover;flex-shrink:0;">
             <div>
               <div class="fw-bold text-heading">${u.name}</div>
-              <small class="text-muted" style="font-size:12px;">${u.email}</small>
+              <small class="text-muted d-block" style="font-size:12px;">${u.email}</small>
+              ${u.phone ? `<small class="text-muted" style="font-size:11px;"><i class="fa-solid fa-phone me-1"></i>${u.phone}</small>` : ''}
             </div>
           </div>
         </td>
-        <td><span class="badge ${roleBadge} px-2.5 py-1.5 rounded-pill">${u.role}</span></td>
-        <td><span class="badge bg-secondary bg-opacity-25 text-heading border border-secondary border-opacity-25">${u.flat || u.tower || 'Gate 1'}</span></td>
-        <td class="fs-7 text-secondary fw-semibold">${occupancyOrShift}</td>
-        <td class="fs-7 fw-bold text-warning">${duesOrSalary}</td>
-        <td><span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25">${parkingSlot}</span></td>
+        <td><span class="badge ${badge} px-3 py-1 rounded-pill" style="font-size:12px;">${u.role}</span></td>
+        <td>
+          <span class="badge bg-secondary bg-opacity-15 text-heading border" style="font-size:12px; padding:5px 10px;">
+            <i class="fa-solid fa-building me-1"></i>${flatOrGate}
+          </span>
+          ${u.tower ? `<small class="d-block text-muted mt-1">${u.tower}</small>` : ''}
+        </td>
+        <td>${detailInfo}</td>
+        <td>${duesOrSalary}</td>
+        <td>
+          <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25">
+            ${parking}
+          </span>
+        </td>
         <td class="text-end">
-          <button class="btn btn-sm ${u.role === 'Admin' ? 'btn-outline-danger' : 'btn-outline-success'} rounded-pill px-2.5 me-1" onclick="toggleAdminRole('${u.id}', '${u.role}')" title="${u.role === 'Admin' ? 'Revoke Admin Permissions' : 'Grant Admin Permissions'}">
-            <i class="fa-solid ${u.role === 'Admin' ? 'fa-user-minus' : 'fa-user-shield'} me-1"></i>
-            ${u.role === 'Admin' ? 'Revoke' : 'Grant Admin'}
-          </button>
-          <button class="btn btn-sm btn-outline-primary rounded-pill px-2.5 me-1" onclick="openChangeRoleModal('${u.id}', '${u.name.replace(/'/g, "\\'")}', '${u.role}')" title="Change Assigned Role">
-            <i class="fa-solid fa-pen-to-square me-1"></i> Role
-          </button>
-          <button class="btn btn-sm btn-outline-info rounded-pill px-2.5" onclick="openAllocateModal('${u.id}', '${u.name.replace(/'/g, "\\'")}', '${u.email}', '${u.role}', '${u.flat || ''}')" title="Allot Flat & Dues">
-            <i class="fa-solid fa-building-circle-check me-1"></i> Allot
-          </button>
+          <div class="d-flex gap-1 justify-content-end flex-wrap">
+            <button class="btn btn-sm ${u.role === 'Admin' ? 'btn-outline-danger' : 'btn-outline-success'} rounded-pill"
+              onclick="toggleAdminRole('${u.id}', '${u.role}')"
+              title="${u.role === 'Admin' ? 'Revoke Admin' : 'Grant Admin'}">
+              <i class="fa-solid ${u.role === 'Admin' ? 'fa-user-minus' : 'fa-user-shield'} me-1"></i>
+              ${u.role === 'Admin' ? 'Revoke' : 'Grant Admin'}
+            </button>
+            <button class="btn btn-sm btn-outline-primary rounded-pill"
+              onclick="openChangeRoleModal('${u.id}', '${u.name.replace(/'/g,"\\'")}', '${u.role}')"
+              title="Change Role">
+              <i class="fa-solid fa-pen-to-square me-1"></i> Role
+            </button>
+            <button class="btn btn-sm btn-outline-info rounded-pill"
+              onclick="openAllocateModal('${u.id}', '${u.name.replace(/'/g,"\\'")}', '${u.email}', '${u.role}', '${u.flat || ''}')"
+              title="Allot Flat & Dues">
+              <i class="fa-solid fa-building-circle-check me-1"></i> Allot
+            </button>
+          </div>
         </td>
       </tr>
     `;
