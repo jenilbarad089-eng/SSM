@@ -70,30 +70,47 @@ async function firebaseLoginWithEmail(email, password) {
   const lookup = (email || '').toLowerCase().trim();
   let users = (SystemDB.data && SystemDB.data.users) ? SystemDB.data.users : [];
 
+  // Direct email/username match first
   let user = users.find(u =>
     (u.email && u.email.toLowerCase() === lookup) ||
     (u.username && u.username.toLowerCase() === lookup)
   );
 
-  // Demo presets fallback matching
+  // Demo presets / shorthand fallback matching
   if (!user) {
-    if (lookup === 'admin' || lookup === 'admin@smartsociety.com' || lookup === 'jenilbarad089@gmail.com') {
+    if (['admin', 'admin@smartsociety.com', 'jenilbarad089@gmail.com', 'jenilbarad089'].includes(lookup)) {
       user = users.find(u => u.role === 'Admin');
-    } else if (lookup === 'resident' || lookup === 'resident1' || lookup === 'amit.patel@gmail.com') {
-      user = users.find(u => u.role === 'Resident');
-    } else if (lookup === 'guard' || lookup === 'guard@smartsociety.com') {
-      user = users.find(u => u.role === 'Security Guard');
-    } else if (lookup === 'committee' || lookup === 'suresh@smartsociety.com') {
-      user = users.find(u => u.role === 'Committee Member');
+    } else if (['resident', 'resident1', 'amit.patel@gmail.com', 'amit'].includes(lookup)) {
+      user = users.find(u => u.email === 'amit.patel@gmail.com');
+    } else if (['guard', 'guard@smartsociety.com', 'bahadur'].includes(lookup)) {
+      user = users.find(u => u.role === 'Security Guard' && u.gateAssigned === 'Gate 1');
+    } else if (['committee', 'suresh@smartsociety.com', 'suresh.treasurer@smartsociety.com', 'suresh'].includes(lookup)) {
+      user = users.find(u => u.email === 'suresh.treasurer@smartsociety.com');
+    } else if (['rohan', 'rohan.secretary@smartsociety.com'].includes(lookup)) {
+      user = users.find(u => u.email === 'rohan.secretary@smartsociety.com');
+    } else if (['vikram', 'vikram.yadav@gmail.com'].includes(lookup)) {
+      user = users.find(u => u.email === 'vikram.yadav@gmail.com');
+    } else if (['priya', 'priya.v@gmail.com'].includes(lookup)) {
+      user = users.find(u => u.email === 'priya.v@gmail.com');
+    } else if (['rahul', 'rahul.sharma@gmail.com'].includes(lookup)) {
+      user = users.find(u => u.email === 'rahul.sharma@gmail.com');
+    } else if (['neha', 'neha.gupta@gmail.com'].includes(lookup)) {
+      user = users.find(u => u.email === 'neha.gupta@gmail.com');
+    } else if (['ananya', 'ananya.d@gmail.com'].includes(lookup)) {
+      user = users.find(u => u.email === 'ananya.d@gmail.com');
     }
   }
 
   if (user) {
+    // Skip status check for Approved users — allow all preset member logins
+    if (user.status && user.status !== 'Approved') {
+      return { success: false, message: `Your account is ${user.status}. Please wait for Admin approval.`, status: user.status };
+    }
     sessionStorage.setItem('ssm_current_user', JSON.stringify(user));
     return { success: true, user: user };
   }
 
-  return { success: false, message: 'Invalid email or password. Please check your credentials or use Google Sign-In.' };
+  return { success: false, message: 'Invalid email or password. Please check your credentials or use a 1-Click Demo preset.' };
 }
 
 // ────────────────────────────────────────────────

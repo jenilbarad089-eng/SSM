@@ -177,53 +177,95 @@
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       await SystemDB.init();
+
+      // If already logged in, redirect to correct portal
+      const existingUser = SystemDB.getCurrentUser();
+      if (existingUser && existingUser.status === 'Approved') {
+        redirectByRole(existingUser.role);
+      }
     });
+
+    function redirectByRole(role) {
+      if (role === 'Admin') window.location.href = 'admin.html';
+      else if (role === 'Resident') window.location.href = 'resident.html';
+      else if (role === 'Security Guard') window.location.href = 'guard.html';
+      else if (role === 'Committee Member') window.location.href = 'committee.html';
+      else window.location.href = 'index.html';
+    }
 
     async function presetLogin(email, password) {
       document.getElementById('loginEmail').value = email;
       document.getElementById('loginPassword').value = password;
-      document.getElementById('dedicatedLoginForm').dispatchEvent(new Event('submit'));
+      document.getElementById('dedicatedLoginForm').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
     }
 
     document.getElementById('dedicatedLoginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = document.getElementById('loginEmail').value;
+      const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
+      const btn = e.target.querySelector('[type=submit]');
 
-      if (typeof firebaseLoginWithEmail === 'function') {
+      // Loading state
+      const origText = btn.innerHTML;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i> Signing In...';
+      btn.disabled = true;
+
+      try {
         const res = await firebaseLoginWithEmail(email, password);
+
         if (res.success) {
-          showToast("Signed in successfully!", "success");
-          setTimeout(() => {
-            const role = res.user.role;
-            if (role === 'Admin') window.location.href = 'admin.html';
-            else if (role === 'Resident') window.location.href = 'resident.html';
-            else if (role === 'Security Guard') window.location.href = 'guard.html';
-            else if (role === 'Committee Member') window.location.href = 'committee.html';
-            else window.location.href = 'index.html';
-          }, 400);
+          if (typeof showToast === 'function') {
+            showToast(`Welcome back, ${res.user.name}! Redirecting to your portal…`, 'success');
+          }
+          setTimeout(() => redirectByRole(res.user.role), 600);
+        } else if (res.status === 'Pending') {
+          if (typeof showToast === 'function') showToast('Your account is pending admin approval.', 'warning');
+          setTimeout(() => window.location.href = 'waiting-approval.html', 800);
         } else {
-          showToast("Invalid Credentials or User Not Approved.", "error");
+          if (typeof showToast === 'function') showToast(res.message || 'Invalid credentials. Try a demo preset below.', 'error');
+          btn.innerHTML = origText;
+          btn.disabled = false;
         }
+      } catch (err) {
+        if (typeof showToast === 'function') showToast('Login error. Please try again.', 'error');
+        btn.innerHTML = origText;
+        btn.disabled = false;
       }
     });
 
     document.getElementById('dedicatedRegisterForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const name = document.getElementById('regName').value;
-      const email = document.getElementById('regEmail').value;
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
       const password = document.getElementById('regPassword').value;
       const role = document.getElementById('regRole').value;
-      const phone = document.getElementById('regPhone').value;
+      const phone = document.getElementById('regPhone').value.trim();
+      const societyCode = document.getElementById('regSocietyCode').value.trim();
 
-      if (typeof firebaseRegisterWithEmail === 'function') {
-        const res = await firebaseRegisterWithEmail(email, password, { name, role, phone });
+      if (societyCode !== 'SOC-MH-4001') {
+        if (typeof showToast === 'function') showToast('Invalid Society Invitation Code. Please check and try again.', 'error');
+        return;
+      }
+
+      const btn = e.target.querySelector('[type=submit]');
+      const origText = btn.innerHTML;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i> Submitting Application...';
+      btn.disabled = true;
+
+      try {
+        const res = await firebaseRegisterWithEmail(name, email, password, role, { phone, societyCode });
         if (res.success) {
-          showToast("Registration submitted! Pending Admin approval.", "success");
-          setTimeout(() => window.location.href = 'waiting-approval.html', 800);
+          if (typeof showToast === 'function') showToast('Application submitted! Pending Admin approval. You will be notified.', 'success');
+          setTimeout(() => window.location.href = 'waiting-approval.html', 900);
         } else {
-          showToast(res.message || "Registration failed.", "error");
+          if (typeof showToast === 'function') showToast(res.message || 'Registration failed. Try again.', 'error');
+          btn.innerHTML = origText;
+          btn.disabled = false;
         }
+      } catch (err) {
+        if (typeof showToast === 'function') showToast('Registration error. Please try again.', 'error');
+        btn.innerHTML = origText;
+        btn.disabled = false;
       }
     });
   </script>

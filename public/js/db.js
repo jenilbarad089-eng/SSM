@@ -3,6 +3,8 @@
  */
 
 const STORAGE_KEY = 'ssm_database_v1';
+const SEED_VERSION_KEY = 'ssm_seed_version';
+const SEED_VERSION = '3.1'; // bump this to force fresh seed load
 const SESSION_KEY = 'ssm_current_user';
 const TOKEN_KEY = 'ssm_auth_token';
 
@@ -10,12 +12,20 @@ const SystemDB = {
   data: null,
 
   async init() {
+    // If seed version changed, clear the cache to reload fresh data
+    const storedVersion = localStorage.getItem(SEED_VERSION_KEY);
+    if (storedVersion !== SEED_VERSION) {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.setItem(SEED_VERSION_KEY, SEED_VERSION);
+    }
+
     const cached = localStorage.getItem(STORAGE_KEY);
     if (cached) {
       try {
         this.data = JSON.parse(cached);
       } catch (e) {
         console.error("Failed to parse local DB cache, re-initializing", e);
+        localStorage.removeItem(STORAGE_KEY);
       }
     }
 
