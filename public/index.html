@@ -244,6 +244,7 @@
   <footer class="footer-premium">
     <div class="container">
       <div class="row g-4 pb-5">
+        <!-- Brand Info -->
         <div class="col-lg-4">
           <div class="footer-brand-section">
             <a class="footer-brand-logo" href="#">
@@ -254,113 +255,310 @@
             </a>
             <p class="footer-tagline">The complete commercial SaaS platform for modern housing society administration, billing, security, and resident governance.</p>
             <div class="footer-social-links">
+              <a href="#" class="footer-social-link"><i class="fa-brands fa-github"></i></a>
+              <a href="#" class="footer-social-link"><i class="fa-brands fa-twitter"></i></a>
+              <a href="#" class="footer-social-link"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="col-lg-2 col-6">
+          <h6 class="footer-col-title">Navigation</h6>
+          <ul class="footer-links">
+            <li><a href="index.html"><i class="fa-solid fa-angle-right"></i> Home</a></li>
+            <li><a href="#features"><i class="fa-solid fa-angle-right"></i> Features</a></li>
+            <li><a href="#modules"><i class="fa-solid fa-angle-right"></i> Modules</a></li>
+            <li><a href="docs.html"><i class="fa-solid fa-angle-right"></i> User Guides</a></li>
+          </ul>
         </div>
 
         <!-- Resources Links -->
-        <div class="col-lg-2 col-md-6 col-6">
-          <div class="footer-col-title">Resources</div>
+        <div class="col-lg-2 col-6">
+          <h6 class="footer-col-title">Resources</h6>
           <ul class="footer-links">
-            <li><a href="docs.html"><i class="fa-solid fa-chevron-right"></i> Documentation</a></li>
-            <li><a href="docs.html#api"><i class="fa-solid fa-chevron-right"></i> API Reference</a></li>
-            <li><a href="https://github.com/jenilbarad089-eng/SSM" target="_blank"><i class="fa-solid fa-chevron-right"></i> GitHub Repo</a></li>
-            <li><a href="changelog.html"><i class="fa-solid fa-chevron-right"></i> Changelog</a></li>
+            <li><a href="docs.html#api"><i class="fa-solid fa-angle-right"></i> REST API</a></li>
+            <li><a href="changelog.html"><i class="fa-solid fa-angle-right"></i> Changelog</a></li>
+            <li><a href="manifest.json"><i class="fa-solid fa-angle-right"></i> PWA App</a></li>
           </ul>
         </div>
 
-        <!-- Legal Links -->
-        <div class="col-lg-2 col-md-6 col-6">
-          <div class="footer-col-title">Legal</div>
+        <!-- Legal & Security Links -->
+        <div class="col-lg-4">
+          <h6 class="footer-col-title">Legal & Security</h6>
           <ul class="footer-links">
-            <li><a href="privacy.html"><i class="fa-solid fa-chevron-right"></i> Privacy Policy</a></li>
-            <li><a href="terms.html"><i class="fa-solid fa-chevron-right"></i> Terms of Service</a></li>
-            <li><a href="cookies.html"><i class="fa-solid fa-chevron-right"></i> Cookie Policy</a></li>
+            <li><a href="privacy.html"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a></li>
+            <li><a href="terms.html"><i class="fa-solid fa-file-contract"></i> Terms of Service</a></li>
+            <li><a href="cookies.html"><i class="fa-solid fa-cookie"></i> Cookie Preferences</a></li>
           </ul>
         </div>
-
       </div>
 
       <!-- Bottom Bar -->
-      <div class="footer-bottom text-center justify-content-center">
-        <span class="footer-bottom-text">&copy; 2026 SocietyHub. Built by Jenil Barad. All rights reserved.</span>
+      <div class="footer-bottom">
+        <span class="footer-bottom-text">© 2026 SocietyHub Systems Inc. Built by Jenil Barad. All rights reserved.</span>
+        <div class="footer-bottom-badges">
+          <span class="footer-tech-badge"><i class="fa-solid fa-lock text-warning"></i> Firebase Auth</span>
+          <span class="footer-tech-badge"><i class="fa-solid fa-mobile-screen-button text-warning"></i> PWA Standalone</span>
+        </div>
       </div>
     </div>
   </footer>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <div class="mobile-bottom-nav">
+    <a href="index.html" class="mobile-nav-item active">
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
+    </a>
+    <a href="#features" class="mobile-nav-item">
+      <i class="fa-solid fa-grid-2"></i>
+      <span>Features</span>
+    </a>
+    <a href="javascript:void(0)" onclick="openAuthModal('signin')" class="mobile-nav-item">
+      <i class="fa-solid fa-right-to-bracket"></i>
+      <span>Sign In</span>
+    </a>
+    <a href="docs.html" class="mobile-nav-item">
+      <i class="fa-solid fa-book"></i>
+      <span>Docs</span>
+    </a>
+  </div>
+
+  <!-- Mobile Floating Action Button -->
+  <button class="fab-btn" onclick="openAuthModal('signin')" title="Quick Sign In">
+    <i class="fa-solid fa-key"></i>
+  </button>
+
+  <!-- ══════════════════════════════════════════════
+       CLERK-STYLE AUTHENTICATION MODAL (#authModal)
+       ══════════════════════════════════════════════ -->
+  <div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 440px;">
+      <div class="modal-content glass-auth-modal p-2">
+        <div class="auth-modal-header d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-2">
+            <div class="brand-icon" style="width: 32px; height: 32px; font-size: 13px;">
+              <i class="fa-solid fa-building-user"></i>
+            </div>
+            <span class="fw-bold fs-5">Society<span style="color: var(--accent-orange);">Hub</span></span>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="p-4 pt-2">
+          <!-- Auth Tab Switcher -->
+          <div class="auth-tab-nav">
+            <button class="auth-tab-btn active" id="tabBtnSignin" onclick="switchAuthTab('signin')">Sign In</button>
+            <button class="auth-tab-btn" id="tabBtnRegister" onclick="switchAuthTab('register')">Register Account</button>
+          </div>
+
+          <!-- Alert Container -->
+          <div id="authAlert" class="alert d-none py-2 px-3 small rounded-3 mb-3"></div>
+
+          <!-- 1. SIGN IN FORM -->
+          <form id="authSigninForm">
+            <div class="mb-3">
+              <label class="form-label small fw-semibold text-muted mb-1">Email or Username</label>
+              <input type="text" class="form-control" id="loginUsername" placeholder="e.g. admin or jenilbarad089@gmail.com" required>
+            </div>
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <label class="form-label small fw-semibold text-muted mb-0">Password</label>
+                <a href="#" class="small text-warning text-decoration-none" onclick="alert('Password reset link has been dispatched to your email address!')">Forgot Password?</a>
+              </div>
+              <input type="password" class="form-control" id="loginPassword" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn-primary-custom w-100 py-3 mb-3" id="btnLoginSubmit">
+              <i class="fa-solid fa-right-to-bracket me-2"></i> Sign In to Account
+            </button>
+
+            <button type="button" class="btn-google-auth w-100 py-2.5 mb-3" onclick="handleGoogleSignIn()">
+              <i class="fa-brands fa-google text-danger me-2"></i> Continue with Google
+            </button>
+
+            <!-- Quick Demo Accounts Presets -->
+            <div class="border-top border-secondary border-opacity-25 pt-3 mt-3">
+              <span class="caption-text text-muted d-block mb-2 text-center"><i class="fa-solid fa-wand-magic-sparkles me-1"></i> Quick 1-Click Demo Login Presets</span>
+              <div class="row g-2">
+                <div class="col-6"><button type="button" class="demo-role-btn btn-sm w-100 text-center py-2" onclick="quickFillDemo('admin')">👑 Admin</button></div>
+                <div class="col-6"><button type="button" class="demo-role-btn btn-sm w-100 text-center py-2" onclick="quickFillDemo('resident1')">🏠 Resident</button></div>
+                <div class="col-6"><button type="button" class="demo-role-btn btn-sm w-100 text-center py-2" onclick="quickFillDemo('guard')">🛡️ Guard</button></div>
+                <div class="col-6"><button type="button" class="demo-role-btn btn-sm w-100 text-center py-2" onclick="quickFillDemo('committee')">📊 Committee</button></div>
+              </div>
+            </div>
+          </form>
+
+          <!-- 2. REGISTER FORM -->
+          <form id="authRegisterForm" class="d-none">
+            <div class="mb-3">
+              <label class="form-label small fw-semibold text-muted mb-1">Full Name</label>
+              <input type="text" class="form-control" id="regName" placeholder="e.g. Jenil Barad" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-semibold text-muted mb-1">Email Address</label>
+              <input type="email" class="form-control" id="regEmail" placeholder="name@example.com" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-semibold text-muted mb-1">Account Role Request</label>
+              <select class="form-select" id="regRole" required>
+                <option value="Resident">Resident (Apartment Owner / Tenant)</option>
+                <option value="Security Guard">Gate Security Staff</option>
+              </select>
+              <small class="text-muted opacity-75 d-block mt-1">Note: Committee and Admin accounts are assigned exclusively by Society Administration.</small>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-semibold text-muted mb-1">Password</label>
+              <input type="password" class="form-control" id="regPassword" placeholder="••••••••" oninput="updatePasswordStrength(this.value)" required>
+              <div class="strength-meter-bar mt-2">
+                <div class="strength-meter-fill" id="strengthBar"></div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary-custom w-100 py-3 mb-3" id="btnRegisterSubmit">
+              <i class="fa-solid fa-user-plus me-2"></i> Register Account
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/db.js"></script>
   <script src="js/firebase-auth.js"></script>
+  <script src="js/auth.js"></script>
+
+  <!-- PWA & Auth Modal Logic -->
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       await SystemDB.init();
       initFirebaseAuth();
 
       const currentUser = SystemDB.getCurrentUser();
-      if (currentUser && currentUser.role) {
+      if (currentUser && currentUser.role && currentUser.status === 'Approved') {
         redirectToDashboard(currentUser.role);
+      } else if (currentUser && currentUser.status === 'Pending') {
+        window.location.href = 'waiting-approval.html';
       }
 
-      // Login Form Listener
-      document.getElementById('loginForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const emailOrUser = document.getElementById('usernameInput').value;
-        const password = document.getElementById('passwordInput').value;
+      // Auth Sign In Form Submit
+      const signinForm = document.getElementById('authSigninForm');
+      if (signinForm) {
+        signinForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const emailOrUser = document.getElementById('loginUsername').value;
+          const password = document.getElementById('loginPassword').value;
 
-        const res = await firebaseLoginWithEmail(emailOrUser, password);
-        if (res.success) {
-          redirectToDashboard(res.user.role);
-        } else {
-          const alertEl = document.getElementById('loginAlert');
-          document.getElementById('loginAlertMsg').textContent = res.message || 'Invalid credentials';
-          alertEl.classList.remove('d-none');
-        }
-      });
+          const res = await firebaseLoginWithEmail(emailOrUser, password);
+          if (res.success) {
+            if (res.user.status === 'Pending') {
+              window.location.href = 'waiting-approval.html';
+            } else {
+              redirectToDashboard(res.user.role);
+            }
+          } else {
+            const alertEl = document.getElementById('authAlert');
+            alertEl.textContent = res.message || 'Invalid credentials';
+            alertEl.className = 'alert alert-danger py-2 px-3 small rounded-3 mb-3';
+          }
+        });
+      }
 
-      // Register Form Listener
-      document.getElementById('registerForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const name = document.getElementById('regName').value;
-        const email = document.getElementById('regEmail').value;
-        const flat = document.getElementById('regFlat').value;
-        const role = document.getElementById('regRole').value;
-        const password = document.getElementById('regPassword').value;
+      // Auth Register Form Submit
+      const regForm = document.getElementById('authRegisterForm');
+      if (regForm) {
+        regForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const name = document.getElementById('regName').value;
+          const email = document.getElementById('regEmail').value;
+          const role = document.getElementById('regRole').value;
+          const password = document.getElementById('regPassword').value;
 
-        const res = await firebaseRegisterWithEmail(name, email, password, role, flat);
-        if (res.success) {
-          redirectToDashboard(res.user.role);
-        } else {
-          const alertEl = document.getElementById('regAlert');
-          document.getElementById('regAlertMsg').textContent = res.message || 'Registration failed';
-          alertEl.classList.remove('d-none');
-        }
-      });
+          const res = await firebaseRegisterWithEmail(name, email, password, role, 'A-302');
+          if (res.success) {
+            window.location.href = 'waiting-approval.html';
+          } else {
+            const alertEl = document.getElementById('authAlert');
+            alertEl.textContent = res.message || 'Registration failed';
+            alertEl.className = 'alert alert-danger py-2 px-3 small rounded-3 mb-3';
+          }
+        });
+      }
     });
 
-    function togglePasswordVisibility(inputId, iconId) {
-      const input = document.getElementById(inputId);
-      const icon = document.getElementById(iconId);
-      if (input.type === 'password') {
-        input.type = 'text';
-        icon.className = 'fa-solid fa-eye-slash text-primary';
-      } else {
-        input.type = 'password';
-        icon.className = 'fa-solid fa-eye text-muted';
+    function openAuthModal(mode = 'signin', role = '') {
+      const modalEl = document.getElementById('authModal');
+      if (!modalEl) return;
+      const modal = new bootstrap.Modal(modalEl);
+      
+      switchAuthTab(mode === 'register' ? 'register' : 'signin');
+      if (role) {
+        const roleSelect = document.getElementById('regRole');
+        if (roleSelect) roleSelect.value = role;
       }
+      modal.show();
+    }
+
+    function switchAuthTab(tab) {
+      const signinBtn = document.getElementById('tabBtnSignin');
+      const regBtn = document.getElementById('tabBtnRegister');
+      const signinForm = document.getElementById('authSigninForm');
+      const regForm = document.getElementById('authRegisterForm');
+      
+      if (tab === 'register') {
+        if (signinBtn) signinBtn.classList.remove('active');
+        if (regBtn) regBtn.classList.add('active');
+        if (signinForm) signinForm.classList.add('d-none');
+        if (regForm) regForm.classList.remove('d-none');
+      } else {
+        if (regBtn) regBtn.classList.remove('active');
+        if (signinBtn) signinBtn.classList.add('active');
+        if (regForm) regForm.classList.add('d-none');
+        if (signinForm) signinForm.classList.remove('d-none');
+      }
+    }
+
+    function quickFillDemo(roleKey) {
+      const demoMap = {
+        'admin': { email: 'admin@smartsociety.com', pass: 'admin123' },
+        'resident1': { email: 'jenilbarad089@gmail.com', pass: 'resident123' },
+        'guard': { email: 'guard@smartsociety.com', pass: 'guard123' },
+        'committee': { email: 'suresh@smartsociety.com', pass: 'committee123' }
+      };
+      const credentials = demoMap[roleKey] || demoMap['admin'];
+      document.getElementById('loginUsername').value = credentials.email;
+      document.getElementById('loginPassword').value = credentials.pass;
+      document.getElementById('authSigninForm').dispatchEvent(new Event('submit'));
+    }
+
+    function updatePasswordStrength(val) {
+      const bar = document.getElementById('strengthBar');
+      if (!bar) return;
+      let score = 0;
+      if (val.length >= 6) score += 33;
+      if (/[A-Z]/.test(val)) score += 33;
+      if (/[0-9]/.test(val)) score += 34;
+
+      bar.style.width = score + '%';
+      if (score < 34) bar.style.backgroundColor = '#EF4444';
+      else if (score < 67) bar.style.backgroundColor = '#F59E0B';
+      else bar.style.backgroundColor = '#10B981';
     }
 
     async function handleGoogleSignIn() {
       const res = await firebaseLoginWithGoogle();
       if (res.success) {
-        redirectToDashboard(res.user.role);
+        if (res.user.status === 'Pending') {
+          window.location.href = 'waiting-approval.html';
+        } else {
+          redirectToDashboard(res.user.role);
+        }
       } else {
-        alert("Google Sign-In: " + (res.message || "Please complete setup in Firebase console."));
+        alert("Google Sign-In: " + (res.message || "Authentication error."));
       }
-    }
-
-    function fillDemo(username, password) {
-      document.getElementById('usernameInput').value = username;
-      document.getElementById('passwordInput').value = password;
-      document.getElementById('loginForm').dispatchEvent(new Event('submit'));
     }
 
     function redirectToDashboard(role) {
@@ -372,37 +570,24 @@
         default: window.location.href = 'resident.html'; break;
       }
     }
-  </script>
 
-  <!-- Navbar Scroll Effect -->
-  <script>
-    (function() {
-      const nav = document.getElementById('mainNav');
-      if (!nav) return;
-      let ticking = false;
-      window.addEventListener('scroll', function() {
-        if (!ticking) {
-          window.requestAnimationFrame(function() {
-            if (window.scrollY > 40) {
-              nav.classList.add('navbar-scrolled');
-            } else {
-              nav.classList.remove('navbar-scrolled');
-            }
-            ticking = false;
-          });
-          ticking = true;
-        }
-      });
-  <!-- PWA Service Worker & Install Handler -->
-  <script>
+    // PWA Service Worker & Network Monitor
     let deferredPrompt = null;
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then((reg) => {
-          console.log('[PWA] Service Worker active:', reg.scope);
-        }).catch((err) => console.warn('[PWA] SW reg failed:', err));
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
       });
     }
+
+    window.addEventListener('online', () => {
+      const banner = document.getElementById('offlineBanner');
+      if (banner) banner.style.display = 'none';
+    });
+
+    window.addEventListener('offline', () => {
+      const banner = document.getElementById('offlineBanner');
+      if (banner) banner.style.display = 'block';
+    });
 
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
@@ -412,14 +597,9 @@
     function installPWA() {
       if (deferredPrompt) {
         deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('PWA installed successfully');
-          }
-          deferredPrompt = null;
-        });
+        deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
       } else {
-        alert('SocietyHub PWA Standalone Mode is ready! On mobile, select "Add to Home Screen" from your browser options.');
+        alert('SocietyHub PWA Standalone Mode is ready! Select "Add to Home Screen" from your browser options.');
       }
     }
   </script>
