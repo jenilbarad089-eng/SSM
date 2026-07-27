@@ -29,13 +29,23 @@
           <span>Society<span style="color: var(--accent-blue);">Hub</span></span>
         </a>
 
+        <!-- Center Navigation Links -->
         <div class="nav-center-links d-none d-lg-flex">
           <a href="index.html" class="nav-pill"><i class="fa-solid fa-house"></i> Home</a>
-          <a href="docs.html" class="nav-pill"><i class="fa-solid fa-book"></i> Docs</a>
+          <a href="index.html#features" class="nav-pill"><i class="fa-solid fa-grid-2"></i> Features</a>
+          <a href="docs.html" class="nav-pill"><i class="fa-solid fa-book"></i> Documentation</a>
           <a href="changelog.html" class="nav-pill active"><i class="fa-solid fa-list-check"></i> Changelog</a>
         </div>
 
+        <!-- Right Actions -->
         <div class="navbar-actions">
+          <button class="btn-pwa-install" id="pwaInstallBtn" onclick="installPWA()" title="Install SocietyHub Standalone PWA">
+            <i class="fa-solid fa-download"></i> Install App
+          </button>
+          <div class="btn-nav-icon d-none d-sm-flex" title="Notifications">
+            <i class="fa-solid fa-bell"></i>
+            <span class="notif-dot"></span>
+          </div>
           <button class="btn-theme-toggle" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
             <i class="fa-solid fa-sun" id="themeIcon"></i>
           </button>

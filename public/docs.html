@@ -29,13 +29,23 @@
           <span>Society<span style="color: var(--accent-blue);">Hub</span></span>
         </a>
 
+        <!-- Center Navigation Links -->
         <div class="nav-center-links d-none d-lg-flex">
           <a href="index.html" class="nav-pill"><i class="fa-solid fa-house"></i> Home</a>
-          <a href="docs.html" class="nav-pill active"><i class="fa-solid fa-book"></i> Docs</a>
+          <a href="index.html#features" class="nav-pill"><i class="fa-solid fa-grid-2"></i> Features</a>
+          <a href="docs.html" class="nav-pill active"><i class="fa-solid fa-book"></i> Documentation</a>
           <a href="changelog.html" class="nav-pill"><i class="fa-solid fa-list-check"></i> Changelog</a>
         </div>
 
+        <!-- Right Actions -->
         <div class="navbar-actions">
+          <button class="btn-pwa-install" id="pwaInstallBtn" onclick="installPWA()" title="Install SocietyHub Standalone PWA">
+            <i class="fa-solid fa-download"></i> Install App
+          </button>
+          <div class="btn-nav-icon d-none d-sm-flex" title="Notifications">
+            <i class="fa-solid fa-bell"></i>
+            <span class="notif-dot"></span>
+          </div>
           <button class="btn-theme-toggle" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
             <i class="fa-solid fa-sun" id="themeIcon"></i>
           </button>
@@ -114,5 +124,41 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Navbar Scroll & PWA Handler -->
+  <script>
+    (function() {
+      const nav = document.getElementById('mainNav');
+      if (!nav) return;
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 40) {
+          nav.classList.add('navbar-scrolled');
+        } else {
+          nav.classList.remove('navbar-scrolled');
+        }
+      });
+    })();
+
+    let deferredPrompt = null;
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+
+    function installPWA() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
+      } else {
+        alert('SocietyHub PWA Standalone Mode is ready! On mobile devices, select "Add to Home Screen" from browser menu.');
+      }
+    }
+  </script>
 </body>
 </html>
