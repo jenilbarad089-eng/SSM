@@ -27,12 +27,12 @@
   /* Typography Text Colors */
   --text-heading: #FFFFFF;
   --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
+  --text-secondary: #CBD5E1;
+  --text-muted: #94A3B8;
 
   /* Input States */
-  --input-bg: #2A3750;
-  --input-border: rgba(255, 255, 255, 0.15);
+  --input-bg: #1E293B;
+  --input-border: rgba(255, 255, 255, 0.22);
   --input-text: #FFFFFF;
   --input-placeholder: #94A3B8;
 
@@ -539,6 +539,17 @@ body.has-floating-nav {
 }
 
 /* ──── Form Controls - High Contrast ──── */
+.form-label {
+  color: var(--text-primary) !important;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.form-check-label {
+  color: var(--text-secondary) !important;
+  font-weight: 500;
+}
+
 .form-control, .form-select {
   background-color: var(--input-bg) !important;
   border: 1px solid var(--input-border) !important;
@@ -562,12 +573,13 @@ body.has-floating-nav {
 }
 
 .input-group-text {
-  background-color: var(--surface-card) !important;
+  background-color: var(--surface-active) !important;
   border: 1px solid var(--input-border) !important;
   border-right: none !important;
-  color: var(--text-secondary) !important;
+  color: var(--accent-blue) !important;
   border-top-left-radius: var(--radius-md) !important;
   border-bottom-left-radius: var(--radius-md) !important;
+  font-size: 15px;
 }
 
 .input-group .form-control {
@@ -577,7 +589,7 @@ body.has-floating-nav {
 
 /* ──── Demo Preset Buttons ──── */
 .demo-role-btn {
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--input-border);
   background: var(--surface-card);
   border-radius: var(--radius-md);
   padding: 12px 16px;
