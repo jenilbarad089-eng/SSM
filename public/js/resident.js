@@ -136,6 +136,22 @@ function respondVisitor(id, status) {
 }
 
 function renderHomeKPIs() {
+  const profEl = document.getElementById('resProfileDetails');
+  if (profEl && currentUser) {
+    profEl.innerHTML = `
+      <div class="row g-3 small">
+        <div class="col-6 col-md-3"><span class="text-muted d-block">Tower / Block</span><strong class="text-white">${currentUser.tower || 'Tower A'} (${currentUser.block || 'Phase 1'})</strong></div>
+        <div class="col-6 col-md-3"><span class="text-muted d-block">Flat Number</span><strong class="text-warning">${currentUser.flat || 'A-302'}</strong></div>
+        <div class="col-6 col-md-3"><span class="text-muted d-block">Occupancy Status</span><strong class="text-white">${currentUser.residentType || 'Owner'}</strong></div>
+        <div class="col-6 col-md-3"><span class="text-muted d-block">Move-In Date</span><strong class="text-white">${currentUser.moveInDate || '2024-01-15'}</strong></div>
+        <div class="col-6 col-md-3"><span class="text-muted d-block">Monthly Rent</span><strong class="text-white">${currentUser.rentAmount || '₹15,000/month'}</strong></div>
+        <div class="col-6 col-md-3"><span class="text-muted d-block">Maintenance Dues</span><strong class="text-white">${currentUser.maintenanceDues || '₹3,500/month'}</strong></div>
+        <div class="col-6 col-md-3"><span class="text-muted d-block">Parking Slot</span><strong class="text-info">${currentUser.parkingSlot || 'P-14'}</strong></div>
+        <div class="col-6 col-md-3"><span class="text-muted d-block">Household Count</span><strong class="text-white">${currentUser.familyCount || '3 Members'}</strong></div>
+      </div>
+    `;
+  }
+
   const bills = SystemDB.getMaintenance().filter(m => m.flat === currentUser.flat);
   const unpaid = bills.filter(m => m.status === 'Unpaid');
   const unpaidTotal = unpaid.reduce((a, b) => a + b.amount, 0);

@@ -118,22 +118,27 @@
           <div class="tab-pane fade show active" id="tab-res-home" role="tabpanel">
             <!-- Welcome Header Card -->
             <div class="hub-card p-4 p-md-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, var(--bg-card) 0%, var(--surface-card) 100%);">
-              <div class="row align-items-center">
+              <div class="row align-items-center mb-4">
                 <div class="col-md-8">
-                  <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-25 px-3 py-1.5 rounded-pill mb-2 caption-text">
-                    <i class="fa-solid fa-sparkles me-1"></i> Welcome Back Resident
+                  <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 px-3 py-1.5 rounded-pill mb-2 caption-text">
+                    <i class="fa-solid fa-sparkles me-1"></i> Resident Portal Active
                   </span>
-                  <h2 class="fw-bold mb-2">Hello, <span id="homeResName">Amit Patel</span>!</h2>
+                  <h2 class="fw-bold mb-2">Welcome, <span id="homeResName">Jenil Barad</span>!</h2>
                   <p class="body-text mb-0">
-                    Manage your society maintenance bills, file maintenance complaints, approve gate visitors, and book society facilities easily.
+                    Official Residential Administration Hub for your housing society.
                   </p>
                 </div>
                 <div class="col-md-4 text-md-end mt-3 mt-md-0">
                   <div class="d-inline-block bg-dark rounded-4 p-3 border border-secondary text-center">
                     <span class="caption-text text-uppercase fw-semibold d-block">Flat Number</span>
-                    <h3 class="fw-bold text-info mb-0" id="homeResFlat">B-204</h3>
+                    <h3 class="fw-bold text-warning mb-0" id="homeResFlat">A-302</h3>
                   </div>
                 </div>
+              </div>
+
+              <!-- Real Society Profile Card -->
+              <div class="p-3 bg-dark bg-opacity-50 rounded-3 border border-secondary border-opacity-25" id="resProfileDetails">
+                <!-- Dynamically filled by resident.js -->
               </div>
             </div>
 

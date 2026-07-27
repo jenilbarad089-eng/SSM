@@ -365,24 +365,63 @@ const SystemDB = {
     return { success: true, booking: newBooking };
   },
 
-  cancelBooking(id) {
-    const bk = this.data.bookings.find(b => b.id === id);
-    if (bk) {
-      bk.status = 'Cancelled';
-      this.save();
-      return { success: true };
+  updateUserAllocation(userId, allocData) {
+    const user = this.data.users.find(u => u.id === userId);
+    if (!user) return { success: false, message: 'User not found' };
+
+    user.status = 'Approved';
+
+    if (allocData.role === 'Security Guard') {
+      user.role = 'Security Guard';
+      user.empId = allocData.empId || 'EMP-' + Math.floor(100 + Math.random() * 900);
+      user.shift = allocData.shift || 'Morning (06:00 - 14:00)';
+      user.gateAssigned = allocData.gateAssigned || 'Gate 1';
+      user.salary = allocData.salary || '₹18,000/month';
+      user.permissions = allocData.permissions || 'Gate Pass Logging & Visitor Verification';
+      user.flat = user.gateAssigned;
+    } else {
+      user.role = 'Resident';
+      user.tower = allocData.tower || 'Tower A';
+      user.flat = allocData.flatNo || user.flat || 'A-302';
+      user.flatNo = user.flat;
+      user.residentType = allocData.residentType || 'Owner';
+      user.rentAmount = allocData.rentAmount || '₹15,000/month';
+      user.maintenanceDues = allocData.maintenanceDues || '₹3,500/month';
+      user.parkingSlot = allocData.parkingSlot || 'P-14';
+      user.block = allocData.block || 'Phase 1';
+      user.moveInDate = allocData.moveInDate || '2024-01-15';
+      user.familyCount = allocData.familyCount || '4 Members';
+      user.vehicles = allocData.vehicles || ['MH 02 EQ 8829 (Car)', 'MH 02 CB 1029 (Bike)'];
+      user.familyMembers = allocData.familyMembers || ['Priya Barad (Spouse)', 'Kavya Barad (Child)'];
+
+      // Generate invoice
+      const newBill = {
+        id: 'INV-2026-' + Math.floor(1000 + Math.random() * 9000),
+        flat: user.flat,
+        residentName: user.name,
+        month: 'July 2026',
+        amount: parseInt(user.maintenanceDues.replace(/[^0-9]/g, '')) || 3500,
+        dueDate: '2026-07-31',
+        status: 'Unpaid',
+        paidDate: null
+      };
+
+      if (!this.data.maintenance) this.data.maintenance = [];
+      this.data.maintenance.unshift(newBill);
     }
-    return { success: false };
+
+    this.save();
+    return { success: true, user: user };
   },
 
   getDefaultData() {
     return {
       users: [
-        { id: "USR-101", username: "admin", name: "Rajesh Sharma", role: "Admin", flat: "A-101", email: "admin@smartsociety.com", phone: "9876543210" },
-        { id: "USR-102", username: "resident1", name: "Amit Patel", role: "Resident", flat: "B-204", email: "amit.patel@gmail.com", phone: "9812345678" },
-        { id: "USR-103", username: "resident2", name: "Priya Verma", role: "Resident", flat: "C-501", email: "priya.v@gmail.com", phone: "9823456789" },
-        { id: "USR-104", username: "guard", name: "Bahadur Singh", role: "Security Guard", flat: "Main Gate 1", email: "guard@smartsociety.com", phone: "9988776655" },
-        { id: "USR-105", username: "committee", name: "Suresh Kumar", role: "Committee Member", flat: "A-402", email: "suresh@smartsociety.com", phone: "9765432109" }
+        { id: "USR-101", username: "admin", name: "Rajesh Sharma", role: "Admin", status: "Approved", flat: "A-101", email: "admin@smartsociety.com", phone: "9876543210" },
+        { id: "USR-102", username: "resident1", name: "Jenil Barad", role: "Resident", status: "Approved", tower: "Tower A", flat: "A-302", flatNo: "A-302", residentType: "Owner", rentAmount: "₹18,000/month", maintenanceDues: "₹3,500/month", parkingSlot: "P-14", block: "Phase 1", moveInDate: "2024-01-15", familyCount: "3 Members", email: "jenilbarad089@gmail.com", phone: "9812345678", vehicles: ["MH 02 EQ 8829 (SUV)", "MH 02 CB 1029 (Bike)"], familyMembers: ["Priya Barad (Spouse)", "Kavya Barad (Child)"] },
+        { id: "USR-103", username: "resident2", name: "Priya Verma", role: "Resident", status: "Approved", tower: "Tower C", flat: "C-501", flatNo: "C-501", residentType: "Tenant", rentAmount: "₹22,000/month", maintenanceDues: "₹4,000/month", parkingSlot: "P-22", block: "Phase 2", moveInDate: "2024-03-01", familyCount: "2 Members", email: "priya.v@gmail.com", phone: "9823456789", vehicles: ["MH 04 AX 4410 (Sedan)"], familyMembers: ["Rohan Verma (Spouse)"] },
+        { id: "USR-104", username: "guard", name: "Bahadur Singh", role: "Security Guard", status: "Approved", empId: "EMP-104", shift: "Morning (06:00 - 14:00)", gateAssigned: "Gate 1", salary: "₹18,000/month", flat: "Gate 1", email: "guard@smartsociety.com", phone: "9988776655" },
+        { id: "USR-105", username: "committee", name: "Suresh Kumar", role: "Committee Member", status: "Approved", flat: "A-402", email: "suresh@smartsociety.com", phone: "9765432109" }
       ],
       complaints: [],
       maintenance: [],
