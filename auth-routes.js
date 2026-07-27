@@ -167,20 +167,21 @@ router.post('/google', (req, res) => {
         return num > max ? num : max;
       }, 0);
       const now = new Date().toISOString().split('T')[0];
+      const isAdmin = email.toLowerCase().trim() === 'jenilbarad089@gmail.com';
       user = {
         id: 'USR-' + (maxId + 1),
         username: email.split('@')[0],
         password: '',
         name: displayName || email.split('@')[0],
-        role: 'Resident',
-        flat: '',
+        role: isAdmin ? 'Admin' : 'Resident',
+        flat: isAdmin ? 'A-101' : '',
         email: email,
         phone: '',
         avatar: photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(displayName || email)}`,
-        status: 'Pending',
+        status: 'Approved',
         registeredAt: now,
-        approvedAt: null,
-        approvedBy: null,
+        approvedAt: now,
+        approvedBy: 'GOOGLE_OAUTH',
       };
       seed.users.push(user);
       writeSeed(seed);

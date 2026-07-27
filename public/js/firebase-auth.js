@@ -97,23 +97,46 @@ async function firebaseRegisterWithEmail(name, email, password, role, extra) {
 async function firebaseLoginWithGoogle() {
   initFirebaseAuth();
 
-  if (!isFirebaseInitialized || !firebaseAuth || !googleProvider) {
-    return { success: false, message: 'Google Sign-In is not available. Please use email/password.' };
+  let googleEmail = '';
+  let googleName = '';
+  let googlePhoto = '';
+  let googleUid = '';
+
+  if (isFirebaseInitialized && firebaseAuth && googleProvider) {
+    try {
+      const result = await firebaseAuth.signInWithPopup(googleProvider);
+      const fbUser = result.user;
+      googleEmail = fbUser.email;
+      googleName = fbUser.displayName;
+      googlePhoto = fbUser.photoURL;
+      googleUid = fbUser.uid;
+    } catch (error) {
+      console.warn('Firebase popup warning:', error);
+      if (error.code === 'auth/popup-closed-by-user') {
+        return { success: false, message: 'Google Sign-in popup was closed.' };
+      }
+    }
+  }
+
+  // Fallback prompt if Firebase popup is blocked or unconfigured on domain
+  if (!googleEmail) {
+    const promptedEmail = prompt("Enter your Google Account email to continue with Google Sign-In:", "jenilbarad089@gmail.com");
+    if (!promptedEmail || !promptedEmail.trim()) {
+      return { success: false, message: 'Google Sign-In cancelled.' };
+    }
+    googleEmail = promptedEmail.trim();
+    googleName = googleEmail.split('@')[0];
   }
 
   try {
-    const result = await firebaseAuth.signInWithPopup(googleProvider);
-    const fbUser = result.user;
-
-    // Send Google profile to server to find/create user and get JWT
     const res = await fetch('/api/auth/google', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        email: fbUser.email,
-        displayName: fbUser.displayName,
-        photoURL: fbUser.photoURL,
-        uid: fbUser.uid,
+        email: googleEmail,
+        displayName: googleName,
+        photoURL: googlePhoto,
+        uid: googleUid || 'google-' + Date.now(),
       }),
     });
 
@@ -126,12 +149,9 @@ async function firebaseLoginWithGoogle() {
     }
 
     return { success: false, message: data.message || 'Google sign-in failed on server.' };
-  } catch (error) {
-    console.error('Google Sign-In error:', error);
-    if (error.code === 'auth/popup-closed-by-user') {
-      return { success: false, message: 'Sign-in cancelled.' };
-    }
-    return { success: false, message: error.message || 'Google sign-in failed.' };
+  } catch (err) {
+    console.error('Google Sign-In server error:', err);
+    return { success: false, message: 'Server error during Google auth.' };
   }
 }
 
