@@ -5,14 +5,14 @@
 
 (function () {
   const STORAGE_KEY = 'ssm_theme_preference';
-  const saved = localStorage.getItem(STORAGE_KEY) || 'dark';
+  const saved = localStorage.getItem(STORAGE_KEY) || 'light';
   document.documentElement.setAttribute('data-theme', saved);
 })();
 
 function toggleTheme() {
   const html = document.documentElement;
-  const current = html.getAttribute('data-theme') || 'dark';
-  const next = current === 'dark' ? 'light' : 'dark';
+  const current = html.getAttribute('data-theme') || 'light';
+  const next = current === 'light' ? 'dark' : 'light';
   html.setAttribute('data-theme', next);
   localStorage.setItem('ssm_theme_preference', next);
   updateThemeIcon(next);

@@ -2,22 +2,23 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@400;500;600;700;800&display=swap');
 
-:root, [data-theme="dark"] {
+:root, [data-theme="light"] {
   --font-heading: 'Lora', 'Plus Jakarta Sans', Georgia, serif;
   --font-body: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
   --font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
 
-  /* 60% Neutral Backgrounds (Vanta Obsidian Black #080705) */
-  --bg-primary: #080705;
-  --bg-secondary: #100F0D;
-  --bg-card: #141311;
+  /* 60% Neutral Backgrounds (Crisp Light Slate) */
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #F1F5F9;
+  --bg-card: #FFFFFF;
 
-  /* 30% Supporting UI Surfaces & Borders (#3A3A3A) */
-  --surface-card: #181715;
-  --surface-active: #242320;
-  --surface-input: #181715;
-  --border-color: #3A3A3A;
-  --border-glow: rgba(255, 107, 0, 0.4);
+  /* 30% Supporting UI Surfaces & Borders */
+  --surface-card: #FFFFFF;
+  --surface-active: #FFF7ED;
+  --surface-input: #F8FAFC;
+  --border-color: #E2E8F0;
+  --border-dark: #CBD5E1;
+  --border-glow: rgba(255, 107, 0, 0.25);
 
   /* 10% Accent Colors (Vivid Sunset Orange) */
   --accent-orange: #FF6B00;
@@ -27,17 +28,17 @@
   --accent-warning: #F59E0B;
   --accent-danger: #EF4444;
 
-  /* Typography Text Colors */
-  --text-heading: #FFFFFF;
-  --text-primary: #F8FAFC;
-  --text-secondary: #E5E7EB;
-  --text-muted: #9CA3AF;
+  /* Typography Text Colors (High-Contrast Obsidian & Dark Slate) */
+  --text-heading: #0F172A;
+  --text-primary: #1E293B;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
 
   /* Input States */
-  --input-bg: #161512;
-  --input-border: #3A3A3A;
-  --input-text: #FFFFFF;
-  --input-placeholder: #9CA3AF;
+  --input-bg: #FFFFFF;
+  --input-border: #CBD5E1;
+  --input-text: #0F172A;
+  --input-placeholder: #94A3B8;
 
   /* Radii & Shadows */
   --radius-xl: 20px;
@@ -45,41 +46,41 @@
   --radius-md: 12px;
   --radius-sm: 8px;
 
-  --shadow-card: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px #3A3A3A;
-  --shadow-glow: 0 0 30px rgba(255, 107, 0, 0.35);
+  --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 0 0 1px #E2E8F0;
+  --shadow-glow: 0 10px 25px -5px rgba(255, 107, 0, 0.2);
 
   /* Navbar & Footer specific */
-  --navbar-bg: rgba(8, 7, 5, 0.85);
-  --footer-bg: #080705;
-  --footer-border: #3A3A3A;
+  --navbar-bg: rgba(255, 255, 255, 0.95);
+  --footer-bg: #0F172A;
+  --footer-border: #1E293B;
 }
 
-[data-theme="light"] {
-  --bg-primary: #F8FAFC;
-  --bg-secondary: #F1F5F9;
-  --bg-card: #FFFFFF;
-  --surface-card: #FFFFFF;
-  --surface-active: #FFF7ED;
-  --surface-input: #F8FAFC;
-  --border-color: #E2E8F0;
-  --border-glow: rgba(255, 107, 0, 0.25);
+[data-theme="dark"] {
+  --bg-primary: #080705;
+  --bg-secondary: #100F0D;
+  --bg-card: #141311;
+  --surface-card: #181715;
+  --surface-active: #242320;
+  --surface-input: #181715;
+  --border-color: #3A3A3A;
+  --border-glow: rgba(255, 107, 0, 0.4);
   --accent-orange: #FF6B00;
   --accent-blue: #FF6B00;
   --accent-purple: #EA580C;
   --accent-success: #10B981;
   --accent-warning: #F59E0B;
   --accent-danger: #EF4444;
-  --text-heading: #0F172A;
-  --text-primary: #1E293B;
-  --text-secondary: #334155;
-  --text-muted: #64748B;
-  --input-bg: #FFFFFF;
-  --input-border: #CBD5E1;
-  --input-text: #0F172A;
-  --input-placeholder: #94A3B8;
-  --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 0 0 1px #E2E8F0;
-  --shadow-glow: 0 10px 25px -5px rgba(255, 107, 0, 0.2);
-  --navbar-bg: rgba(255, 255, 255, 0.95);
+  --text-heading: #FFFFFF;
+  --text-primary: #F8FAFC;
+  --text-secondary: #E5E7EB;
+  --text-muted: #9CA3AF;
+  --input-bg: #161512;
+  --input-border: #3A3A3A;
+  --input-text: #FFFFFF;
+  --input-placeholder: #9CA3AF;
+  --shadow-card: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px #3A3A3A;
+  --shadow-glow: 0 0 30px rgba(255, 107, 0, 0.35);
+  --navbar-bg: rgba(8, 7, 5, 0.85);
   --footer-bg: #080705;
   --footer-border: #3A3A3A;
 }
