@@ -138,6 +138,9 @@ function checkVisitorApprovalsBanner() {
 function respondVisitor(id, status) {
   SystemDB.updateVisitorStatus(id, status);
   loadResidentDashboard();
+  if (typeof showToast === 'function') {
+    showToast(`Visitor gate pass request ${status.toLowerCase()}!`, status === 'Approved' ? 'success' : 'error');
+  }
 }
 
 function renderHomeKPIs() {
