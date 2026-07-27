@@ -16,6 +16,9 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
   <!-- Custom CSS -->
   <link href="css/style.css" rel="stylesheet">
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#090D16">
   <!-- Firebase SDK Compat -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
@@ -44,6 +47,9 @@
 
         <!-- Right Actions -->
         <div class="navbar-actions">
+          <button class="btn-pwa-install" id="pwaInstallBtn" onclick="installPWA()" title="Install SocietyHub Standalone PWA">
+            <i class="fa-solid fa-download"></i> Install App
+          </button>
           <div class="btn-nav-icon d-none d-sm-flex" title="Notifications">
             <i class="fa-solid fa-bell"></i>
             <span class="notif-dot"></span>
@@ -540,7 +546,35 @@
           ticking = true;
         }
       });
-    })();
+  <!-- PWA Service Worker & Install Handler -->
+  <script>
+    let deferredPrompt = null;
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').then((reg) => {
+          console.log('[PWA] Service Worker active:', reg.scope);
+        }).catch((err) => console.warn('[PWA] SW reg failed:', err));
+      });
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+
+    function installPWA() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('PWA installed successfully');
+          }
+          deferredPrompt = null;
+        });
+      } else {
+        alert('SocietyHub PWA Standalone Mode is ready! On mobile, select "Add to Home Screen" from your browser options.');
+      }
+    }
   </script>
 </body>
 </html>

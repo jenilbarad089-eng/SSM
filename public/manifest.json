@@ -1,0 +1,24 @@
+{
+  "name": "SocietyHub - Smart Residential Platform",
+  "short_name": "SocietyHub",
+  "description": "Next-Generation Smart Residential Society Management Platform",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#090D16",
+  "theme_color": "#3B82F6",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "https://api.dicebear.com/7.x/identicon/svg?seed=SocietyHubApp&backgroundColor=3b82f6",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://api.dicebear.com/7.x/identicon/svg?seed=SocietyHubApp&backgroundColor=3b82f6",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

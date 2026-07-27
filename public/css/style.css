@@ -123,6 +123,73 @@ h5, .h5 { font-size: 18px; font-weight: 600; }
 .body-text { font-size: 16px; color: var(--text-secondary); }
 .caption-text { font-size: 14px; color: var(--text-muted); }
 
+/* ══════════════════════════════════════════════
+   ADVANCED CSS MICRO-ANIMATIONS & KEYFRAMES
+   ══════════════════════════════════════════════ */
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatAnimation {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.55);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-float {
+  animation: floatAnimation 4s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2.5s infinite;
+}
+
+/* PWA Install Button */
+.btn-pwa-install {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+  border: 1px solid var(--border-glow);
+  color: var(--accent-blue);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.btn-pwa-install:hover {
+  background: var(--accent-blue);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--border-glow);
+}
+
 
 /* ══════════════════════════════════════════════
    FLOATING GLASSMORPHIC NAVBAR

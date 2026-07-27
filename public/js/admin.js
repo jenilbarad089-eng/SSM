@@ -618,6 +618,9 @@ function renderAllMembers(users) {
         <td><span class="badge ${statusBadge}">${u.status || 'Approved'}</span></td>
         <td class="fs-7 text-muted">${u.registeredAt || '--'}</td>
         <td class="text-end">
+          <button class="btn btn-sm btn-outline-info border-0 rounded-pill px-2" onclick="openAllocateModal('${u.id}', '${u.name.replace(/'/g, "\\'")}', '${u.email}', '${u.role}', '${u.flat || ''}')" title="Allot Flat Details">
+            <i class="fa-solid fa-building-circle-check"></i>
+          </button>
           <button class="btn btn-sm btn-outline-primary border-0 rounded-pill px-2" onclick="viewMemberDetails('${u.id}', '${u.name.replace(/'/g, "\\'")}', '${u.email}', '${u.role}', '${u.flat || ''}', '${u.phone || ''}', '${u.status || 'Approved'}', '${u.registeredAt || ''}', '${u.approvedAt || ''}')" title="View Details">
             <i class="fa-solid fa-eye"></i>
           </button>
@@ -633,6 +636,49 @@ function renderAllMembers(users) {
       </tr>
     `;
   }).join('');
+}
+
+function openAllocateModal(userId, name, email, role, flat) {
+  document.getElementById('allocUserId').value = userId;
+  document.getElementById('allocUserName').value = `${name} (${email})`;
+  document.getElementById('allocRole').value = role || 'Resident';
+  document.getElementById('allocFlat').value = flat || '';
+  document.getElementById('allocTower').value = 'Tower A';
+  document.getElementById('allocFloor').value = '3rd Floor';
+  document.getElementById('allocMaintenance').value = 3500;
+  document.getElementById('allocParking').value = 'P-' + Math.floor(10 + Math.random() * 80);
+
+  const modalEl = document.getElementById('allocateFlatModal');
+  if (modalEl) {
+    new bootstrap.Modal(modalEl).show();
+  }
+}
+
+// Allocate Flat Form Submit
+const allocForm = document.getElementById('allocateFlatForm');
+if (allocForm) {
+  allocForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const userId = document.getElementById('allocUserId').value;
+    const allocData = {
+      role: document.getElementById('allocRole').value,
+      tower: document.getElementById('allocTower').value,
+      floor: document.getElementById('allocFloor').value,
+      flat: document.getElementById('allocFlat').value,
+      type: document.getElementById('allocType').value,
+      maintenance: document.getElementById('allocMaintenance').value,
+      parking: document.getElementById('allocParking').value
+    };
+
+    SystemDB.updateUserAllocation(userId, allocData);
+    const modalEl = document.getElementById('allocateFlatModal');
+    if (modalEl && bootstrap.Modal.getInstance(modalEl)) {
+      bootstrap.Modal.getInstance(modalEl).hide();
+    }
+    alert(`Flat ${allocData.flat} allotted to user and account approved successfully!`);
+    loadAdminDashboard();
+    loadAllMembers();
+  });
 }
 
 function viewMemberDetails(id, name, email, role, flat, phone, status, registeredAt, approvedAt) {

@@ -21,6 +21,9 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <!-- Custom CSS -->
   <link href="css/style.css" rel="stylesheet">
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#090D16">
 </head>
 <body class="bg-light">
 
@@ -502,6 +505,77 @@
           <div class="modal-footer border-0 pt-0">
             <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-primary-custom px-4">Save Role Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  <!-- MODAL: Approve & Allot Flat -->
+  <div class="modal fade" id="allocateFlatModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content hub-card border-0">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="fw-bold"><i class="fa-solid fa-building-circle-check text-success me-2"></i> Approve User & Allot Flat Details</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="allocateFlatForm">
+          <input type="hidden" id="allocUserId">
+          <div class="modal-body">
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label caption-text fw-semibold">User Name & Email</label>
+                <input type="text" class="form-control" id="allocUserName" readonly>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label caption-text fw-semibold">Assign System Role</label>
+                <select class="form-select" id="allocRole" required>
+                  <option value="Resident">Resident</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Security Guard">Security Guard</option>
+                  <option value="Committee Member">Committee Member</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-4">
+                <label class="form-label caption-text fw-semibold">Tower Name / Block</label>
+                <input type="text" class="form-control" id="allocTower" required placeholder="e.g. Tower A">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label caption-text fw-semibold">Floor Level</label>
+                <input type="text" class="form-control" id="allocFloor" required placeholder="e.g. 3rd Floor">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label caption-text fw-semibold">Allotted Flat No</label>
+                <input type="text" class="form-control" id="allocFlat" required placeholder="e.g. A-302">
+              </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-4">
+                <label class="form-label caption-text fw-semibold">Resident Occupancy</label>
+                <select class="form-select" id="allocType" required>
+                  <option value="Owner">Flat Owner</option>
+                  <option value="Tenant">Tenant / Renter</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label caption-text fw-semibold">Monthly Maintenance / Rent (₹)</label>
+                <input type="number" class="form-control" id="allocMaintenance" required placeholder="e.g. 3500">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label caption-text fw-semibold">Allotted Parking Slot</label>
+                <input type="text" class="form-control" id="allocParking" placeholder="e.g. P-14">
+              </div>
+            </div>
+
+            <div class="alert alert-success py-2 caption-text mb-0">
+              <i class="fa-solid fa-circle-check me-1"></i> Approving this account enables user access to SocietyHub and generates their inaugural maintenance invoice.
+            </div>
+          </div>
+          <div class="modal-footer border-0 pt-0">
+            <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold"><i class="fa-solid fa-check me-1"></i> Approve & Allot Flat</button>
           </div>
         </form>
       </div>

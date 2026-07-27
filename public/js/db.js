@@ -145,6 +145,49 @@ const SystemDB = {
     return { success: false, message: 'User not found' };
   },
 
+  updateUserAllocation(userId, allocData) {
+    const user = this.data.users.find(u => u.id === userId || u.email === userId);
+    if (user) {
+      user.status = 'Approved';
+      user.role = allocData.role || user.role;
+      user.tower = allocData.tower || user.tower;
+      user.floor = allocData.floor || user.floor;
+      user.flat = allocData.flat || user.flat;
+      user.residentType = allocData.type || user.residentType;
+      user.maintenanceAmount = allocData.maintenance || user.maintenanceAmount || 3500;
+      user.parkingSlot = allocData.parking || user.parkingSlot;
+
+      // Auto-generate July 2026 Maintenance Bill for allotted flat if not existing
+      if (user.flat) {
+        let bill = this.data.maintenance.find(b => b.flat === user.flat && b.month === 'July 2026');
+        if (!bill) {
+          this.data.maintenance.push({
+            id: 'INV-2026-07-' + Math.floor(100 + Math.random() * 900),
+            residentName: user.name,
+            flat: user.flat,
+            month: 'July 2026',
+            amount: Number(user.maintenanceAmount) || 3500,
+            status: 'Unpaid',
+            dueDate: '2026-07-31',
+            txnId: null,
+            paymentDate: null,
+            receiptNo: null
+          });
+        }
+      }
+      this.save();
+
+      // If current logged in user, sync session
+      const curr = this.getCurrentUser();
+      if (curr && (curr.id === userId || curr.email === userId)) {
+        Object.assign(curr, user);
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify(curr));
+      }
+      return { success: true, user };
+    }
+    return { success: false, message: 'User not found' };
+  },
+
   deleteResident(userId) {
     this.data.users = this.data.users.filter(u => u.id !== userId);
     this.save();
