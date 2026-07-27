@@ -30,7 +30,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const modalEl = document.getElementById('changeRoleModal');
     bootstrap.Modal.getInstance(modalEl).hide();
     loadAdminDashboard();
-    alert(`Role updated to ${newRole}!`);
+    if (typeof showToast === 'function') {
+      showToast(`User role successfully updated to ${newRole}!`, "success");
+    }
   });
 
   // Modal forms
@@ -46,6 +48,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     bootstrap.Modal.getInstance(modalEl).hide();
     document.getElementById('addResidentForm').reset();
     loadAdminDashboard();
+    if (typeof showToast === 'function') {
+      showToast(`Resident ${name} registered successfully!`, "success");
+    }
   });
 
   document.getElementById('updateComplaintForm').addEventListener('submit', (e) => {
@@ -58,6 +63,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const modalEl = document.getElementById('updateComplaintModal');
     bootstrap.Modal.getInstance(modalEl).hide();
     loadAdminDashboard();
+    if (typeof showToast === 'function') {
+      showToast(`Complaint ${id} status updated to ${status}.`, "success");
+    }
   });
 
   document.getElementById('addNoticeForm').addEventListener('submit', (e) => {
@@ -71,6 +79,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     bootstrap.Modal.getInstance(modalEl).hide();
     document.getElementById('addNoticeForm').reset();
     loadAdminDashboard();
+    if (typeof showToast === 'function') {
+      showToast("Society Announcement Notice published!", "success");
+    }
   });
 });
 
