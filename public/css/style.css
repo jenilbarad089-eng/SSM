@@ -28,11 +28,11 @@
   --accent-warning: #F59E0B;
   --accent-danger: #EF4444;
 
-  /* Typography Text Colors (High-Contrast Obsidian & Dark Slate) */
-  --text-heading: #0F172A;
-  --text-primary: #1E293B;
-  --text-secondary: #334155;
-  --text-muted: #64748B;
+  /* Typography Text Colors (High-Contrast Black) */
+  --text-heading: #000000;
+  --text-primary: #000000;
+  --text-secondary: #000000;
+  --text-muted: #000000;
 
   /* Input States */
   --input-bg: #FFFFFF;

@@ -234,8 +234,3 @@ function renderAuditTable(maintenance, bookings) {
     </tr>
   `).join('');
 }
-
-function logout() {
-  SystemDB.logout();
-  window.location.href = 'index.html';
-}

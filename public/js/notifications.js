@@ -18,9 +18,12 @@ function initNotificationCenter() {
     const wrapper = btn.parentElement;
     if (wrapper) wrapper.style.position = 'relative';
 
+    // Remove inline onclick to prevent double toggling
+    btn.removeAttribute('onclick');
+
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      toggleNotificationPanel(wrapper || btn.parentElement);
+      toggleNotificationPanel(btn);
     });
   });
 
@@ -56,16 +59,16 @@ function getActiveNotificationCount() {
   let count = 0;
 
   if (user) {
-    // Visitor approvals for residents
-    if (user.role === 'Resident') {
+    // Visitor approvals for any user with an assigned flat
+    if (user.flat) {
       const pendingVisitors = SystemDB.getVisitors().filter(
-        v => (v.flat === user.flat || v.residentName === user.name) && v.status === 'Pending'
+        v => v.flat === user.flat && v.status === 'Pending'
       );
       count += pendingVisitors.length;
 
-      // Unpaid maintenance
+      // Unpaid maintenance for any user with an assigned flat
       const unpaidBills = SystemDB.getMaintenance().filter(
-        m => (m.flat === user.flat || m.residentName === user.name) && m.status === 'Unpaid'
+        m => m.flat === user.flat && m.status === 'Unpaid'
       );
       count += unpaidBills.length;
     }
@@ -122,9 +125,9 @@ function renderNotificationList(dropdown) {
   let itemsHTML = '';
   let notifCount = 0;
 
-  // 1. Pending Gate Entry Requests (Resident)
-  if (user && user.role === 'Resident') {
-    const pendingVisitors = visitors.filter(v => (v.flat === user.flat || v.residentName === user.name) && v.status === 'Pending');
+  // 1. Pending Gate Entry Requests (Any user with an assigned flat)
+  if (user && user.flat) {
+    const pendingVisitors = visitors.filter(v => v.flat === user.flat && v.status === 'Pending');
     pendingVisitors.forEach(v => {
       notifCount++;
       itemsHTML += `
@@ -151,8 +154,8 @@ function renderNotificationList(dropdown) {
       `;
     });
 
-    // 2. Unpaid Maintenance Bills (Resident)
-    const unpaidBills = bills.filter(m => (m.flat === user.flat || m.residentName === user.name) && m.status === 'Unpaid');
+    // 2. Unpaid Maintenance Bills (Any user with an assigned flat)
+    const unpaidBills = bills.filter(m => m.flat === user.flat && m.status === 'Unpaid');
     unpaidBills.forEach(m => {
       notifCount++;
       itemsHTML += `

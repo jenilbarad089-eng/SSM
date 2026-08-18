@@ -4,7 +4,7 @@
 
 const STORAGE_KEY = 'ssm_database_v1';
 const SEED_VERSION_KEY = 'ssm_seed_version';
-const SEED_VERSION = '3.1'; // bump this to force fresh seed load
+const SEED_VERSION = '3.2'; // bump this to force fresh seed load
 const SESSION_KEY = 'ssm_current_user';
 const TOKEN_KEY = 'ssm_auth_token';
 
@@ -104,6 +104,10 @@ const SystemDB = {
   logout() {
     this.clearToken();
     sessionStorage.removeItem(SESSION_KEY);
+  },
+
+  getUsers() {
+    return this.data.users || [];
   },
 
   // Residents Operations
@@ -398,12 +402,11 @@ const SystemDB = {
     } else {
       user.role = 'Resident';
       user.tower = allocData.tower || 'Tower A';
-      user.flat = allocData.flatNo || user.flat || 'A-302';
-      user.flatNo = user.flat;
-      user.residentType = allocData.residentType || 'Owner';
+      user.flat = allocData.flat || user.flat || 'A-302';
+      user.residentType = allocData.type || allocData.residentType || 'Owner';
       user.rentAmount = allocData.rentAmount || '₹15,000/month';
-      user.maintenanceDues = allocData.maintenanceDues || '₹3,500/month';
-      user.parkingSlot = allocData.parkingSlot || 'P-14';
+      user.maintenanceDues = '₹' + (allocData.maintenance || allocData.maintenanceDues || '3,500') + '/month';
+      user.parkingSlot = allocData.parking || allocData.parkingSlot || 'P-14';
       user.block = allocData.block || 'Phase 1';
       user.moveInDate = allocData.moveInDate || '2024-01-15';
       user.familyCount = allocData.familyCount || '4 Members';
@@ -416,7 +419,7 @@ const SystemDB = {
         flat: user.flat,
         residentName: user.name,
         month: 'July 2026',
-        amount: parseInt(user.maintenanceDues.replace(/[^0-9]/g, '')) || 3500,
+        amount: parseInt(String(allocData.maintenance || allocData.maintenanceDues || '3500').replace(/[^0-9]/g, '')) || 3500,
         dueDate: '2026-07-31',
         status: 'Unpaid',
         paidDate: null

@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     e.preventDefault();
     const name = document.getElementById('visName').value;
     const phone = document.getElementById('visPhone').value;
-    const flatSelect = document.getElementById('visFlatSelect');
+    const flatSelect = document.getElementById('visFlat');
     const flat = flatSelect.value;
     const residentName = flatSelect.options[flatSelect.selectedIndex].dataset.resident || ('Resident of ' + flat);
     const purpose = document.getElementById('visPurpose').value;
@@ -41,17 +41,52 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function populateFlatDropdown() {
-  const select = document.getElementById('visFlatSelect');
-  const residents = SystemDB.getResidents();
+  const select = document.getElementById('visFlat');
+  if (!select) return;
 
-  select.innerHTML = residents.map(r => `
-    <option value="${r.flat}" data-resident="${r.name}">${r.flat} (${r.name})</option>
+  const flatMap = new Map();
+
+  // 1. Add from physical flats list
+  const flats = SystemDB.getFlats ? SystemDB.getFlats() : [];
+  flats.forEach(f => {
+    if (f.flatNo) {
+      flatMap.set(f.flatNo, f.owner || f.tenant || 'Resident');
+    }
+  });
+
+  // 2. Add from users list to ensure all active/committee members are covered
+  const users = SystemDB.getUsers ? SystemDB.getUsers() : [];
+  users.forEach(u => {
+    if (u.flat && u.role !== 'Security Guard') {
+      flatMap.set(u.flat, u.name);
+    }
+  });
+
+  // Sort flats alphabetically
+  const sortedFlats = Array.from(flatMap.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+
+  select.innerHTML = sortedFlats.map(([flatNo, resident]) => `
+    <option value="${flatNo}" data-resident="${resident}">${flatNo}</option>
   `).join('');
 }
 
 function loadGuardDashboard() {
   const tbody = document.getElementById('guardVisitorsTableBody');
   const visitors = SystemDB.getVisitors();
+
+  // Calculate gate stats
+  const checkedIn = visitors.filter(v => v.exitTime === 'Still In Society' && v.status === 'Approved').length;
+  const checkedOut = visitors.filter(v => v.exitTime !== 'Still In Society' && v.exitTime !== '').length;
+  const totalToday = visitors.length;
+
+  const statCheckedIn = document.getElementById('statCheckedIn');
+  if (statCheckedIn) statCheckedIn.textContent = checkedIn;
+
+  const statCheckedOut = document.getElementById('statCheckedOut');
+  if (statCheckedOut) statCheckedOut.textContent = checkedOut;
+
+  const statTotalToday = document.getElementById('statTotalToday');
+  if (statTotalToday) statTotalToday.textContent = totalToday;
 
   tbody.innerHTML = visitors.map(v => `
     <tr>

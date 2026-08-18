@@ -105,6 +105,14 @@
       "email": "rohan.secretary@smartsociety.com", "phone": "9855667788",
       "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Rohan&gender=male",
       "registeredAt": "2026-01-15", "approvedAt": "2026-01-15", "approvedBy": "USR-101"
+    },
+    {
+      "id": "USR-111", "username": "sanjay.sharma", "password": "",
+      "name": "Sanjay Sharma", "role": "Resident", "status": "Pending",
+      "tower": "Tower B", "flat": "B-304", "flatNo": "B-304",
+      "residentType": "Owner", "email": "sanjay.sharma@gmail.com", "phone": "9811223399",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sanjay&gender=male",
+      "registeredAt": "2026-07-27"
     }
   ],
   "complaints": [
@@ -129,7 +137,8 @@
     { "id": "VIS-102", "name": "Sunita Devi", "phone": "9871234560", "flat": "C-501", "residentName": "Priya Verma", "purpose": "Family Visit", "vehicleNo": "MH-14-XY-9900", "entryTime": "2026-07-27 11:35", "exitTime": "Still In Society", "status": "Pending", "gatePassCode": "GP-5512" },
     { "id": "VIS-103", "name": "Arjun Plumber (Mistry)", "phone": "9000112233", "flat": "A-302", "residentName": "Amit Patel", "purpose": "Plumbing Repair", "vehicleNo": "N/A", "entryTime": "2026-07-27 09:30", "exitTime": "2026-07-27 11:45", "status": "Approved", "gatePassCode": "GP-3344" },
     { "id": "VIS-104", "name": "Delivery Boy - Swiggy", "phone": "9977886655", "flat": "B-202", "residentName": "Neha Gupta", "purpose": "Food Delivery", "vehicleNo": "MH-04-SW-0012", "entryTime": "2026-07-27 13:05", "exitTime": "2026-07-27 13:15", "status": "Approved", "gatePassCode": "GP-7788" },
-    { "id": "VIS-105", "name": "Mahesh Electrician", "phone": "9811567890", "flat": "A-604", "residentName": "Ananya Deshmukh", "purpose": "Electrical Repair Work", "vehicleNo": "N/A", "entryTime": "2026-07-27 14:00", "exitTime": "Still In Society", "status": "Pending", "gatePassCode": "GP-4422" }
+    { "id": "VIS-105", "name": "Mahesh Electrician", "phone": "9811567890", "flat": "A-604", "residentName": "Ananya Deshmukh", "purpose": "Electrical Repair Work", "vehicleNo": "N/A", "entryTime": "2026-07-27 14:00", "exitTime": "Still In Society", "status": "Pending", "gatePassCode": "GP-4422" },
+    { "id": "VIS-106", "name": "Courier Partner (BlueDart)", "phone": "9876543201", "flat": "A-302", "residentName": "Amit Patel", "purpose": "Courier Delivery", "vehicleNo": "MH-02-BD-8811", "entryTime": "2026-07-27 15:30", "exitTime": "Still In Society", "status": "Pending", "gatePassCode": "GP-1066" }
   ],
   "notices": [
     { "id": "NOT-101", "title": "Annual General Body Meeting (AGM) Notice — July 28th", "category": "Meeting", "postedBy": "Rohan Mehta (Secretary)", "date": "2026-07-20", "content": "The AGM for all society flat owners is scheduled for Sunday, July 28th at 10:00 AM in the Main Community Hall. Key agenda: Annual Financial Audit, Security Upgrade Proposal & Rooftop Solar Installation vote." },
