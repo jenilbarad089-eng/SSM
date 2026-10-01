@@ -260,7 +260,7 @@
       "email": "sanjay.sharma@gmail.com",
       "phone": "9811223399",
       "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sanjay&gender=male",
-      "registeredAt": "2026-07-27"
+      "registeredAt": "2026-10-01"
     }
   ],
   "complaints": [
@@ -273,7 +273,7 @@
       "description": "Pipe joint broken under washbasin, water overflowing into hallway.",
       "status": "Pending",
       "priority": "High",
-      "date": "2026-07-22",
+      "date": "2026-10-22",
       "notes": "Admin notified plumbing maintenance team. On-site visit scheduled."
     },
     {
@@ -285,7 +285,7 @@
       "description": "Two LED tubelights are malfunctioning near elevator lobby C.",
       "status": "In Progress",
       "priority": "Medium",
-      "date": "2026-07-20",
+      "date": "2026-10-20",
       "notes": "Electrician assigned; LED spares ordered from vendor."
     },
     {
@@ -297,7 +297,7 @@
       "description": "Gate sensor delay observed during peak evening rush hours.",
       "status": "Resolved",
       "priority": "Low",
-      "date": "2026-07-15",
+      "date": "2026-10-01",
       "notes": "Sensor recalibrated and battery replaced by maintenance team."
     },
     {
@@ -309,7 +309,7 @@
       "description": "Dry waste bags lying outside B-Wing entry since 3 days.",
       "status": "Pending",
       "priority": "Medium",
-      "date": "2026-07-23",
+      "date": "2026-10-23",
       "notes": "Housekeeping team notified. Pickup scheduled tomorrow."
     },
     {
@@ -321,106 +321,106 @@
       "description": "Grinding noise audible above 4th floor, particularly during morning rush.",
       "status": "In Progress",
       "priority": "High",
-      "date": "2026-07-21",
+      "date": "2026-10-21",
       "notes": "Elevator AMC team contacted for urgent inspection."
     }
   ],
   "maintenance": [
     {
-      "id": "INV-2026-07-101",
+      "id": "INV-2026-10-101",
       "residentName": "Amit Patel",
       "flat": "A-302",
-      "month": "July 2026",
+      "month": "October 2026",
       "amount": 3500,
       "status": "Unpaid",
-      "dueDate": "2026-07-31",
+      "dueDate": "2026-10-31",
       "txnId": null,
       "paymentDate": null,
       "receiptNo": null
     },
     {
-      "id": "INV-2026-07-102",
+      "id": "INV-2026-10-102",
       "residentName": "Priya Verma",
       "flat": "C-501",
-      "month": "July 2026",
+      "month": "October 2026",
       "amount": 4000,
       "status": "Paid",
-      "dueDate": "2026-07-31",
+      "dueDate": "2026-10-31",
       "txnId": "TXN987654321",
-      "paymentDate": "2026-07-18",
-      "receiptNo": "REC-2026-789"
+      "paymentDate": "2026-10-03",
+      "receiptNo": "REC-2026-1001"
     },
     {
-      "id": "INV-2026-07-103",
+      "id": "INV-2026-10-103",
       "residentName": "Rahul Sharma",
       "flat": "B-104",
-      "month": "July 2026",
+      "month": "October 2026",
       "amount": 3500,
       "status": "Unpaid",
-      "dueDate": "2026-07-31",
+      "dueDate": "2026-10-31",
       "txnId": null,
       "paymentDate": null,
       "receiptNo": null
     },
     {
-      "id": "INV-2026-07-104",
+      "id": "INV-2026-10-104",
       "residentName": "Neha Gupta",
       "flat": "B-202",
-      "month": "July 2026",
+      "month": "October 2026",
       "amount": 3500,
       "status": "Paid",
-      "dueDate": "2026-07-31",
+      "dueDate": "2026-10-31",
       "txnId": "TXN112233445",
-      "paymentDate": "2026-07-10",
-      "receiptNo": "REC-2026-812"
+      "paymentDate": "2026-10-10",
+      "receiptNo": "REC-2026-1004"
     },
     {
-      "id": "INV-2026-07-105",
+      "id": "INV-2026-10-105",
       "residentName": "Ananya Deshmukh",
       "flat": "A-604",
-      "month": "July 2026",
+      "month": "October 2026",
       "amount": 4200,
       "status": "Unpaid",
-      "dueDate": "2026-07-31",
+      "dueDate": "2026-10-31",
       "txnId": null,
       "paymentDate": null,
       "receiptNo": null
     },
     {
-      "id": "INV-2026-06-101",
+      "id": "INV-2026-09-101",
       "residentName": "Amit Patel",
       "flat": "A-302",
-      "month": "June 2026",
+      "month": "September 2026",
       "amount": 3500,
       "status": "Paid",
-      "dueDate": "2026-06-30",
+      "dueDate": "2026-09-30",
       "txnId": "TXN123456789",
-      "paymentDate": "2026-06-10",
-      "receiptNo": "REC-2026-456"
+      "paymentDate": "2026-09-10",
+      "receiptNo": "REC-2026-901"
     },
     {
-      "id": "INV-2026-06-102",
+      "id": "INV-2026-09-102",
       "residentName": "Priya Verma",
       "flat": "C-501",
-      "month": "June 2026",
+      "month": "September 2026",
       "amount": 4000,
       "status": "Paid",
-      "dueDate": "2026-06-30",
+      "dueDate": "2026-09-30",
       "txnId": "TXN223456789",
-      "paymentDate": "2026-06-08",
-      "receiptNo": "REC-2026-457"
+      "paymentDate": "2026-09-08",
+      "receiptNo": "REC-2026-902"
     },
     {
-      "id": "INV-2026-06-103",
+      "id": "INV-2026-09-103",
       "residentName": "Rahul Sharma",
       "flat": "B-104",
-      "month": "June 2026",
+      "month": "September 2026",
       "amount": 3500,
       "status": "Paid",
-      "dueDate": "2026-06-30",
+      "dueDate": "2026-09-30",
       "txnId": "TXN323456789",
-      "paymentDate": "2026-06-12",
-      "receiptNo": "REC-2026-458"
+      "paymentDate": "2026-09-12",
+      "receiptNo": "REC-2026-903"
     }
   ],
   "visitors": [
@@ -432,8 +432,8 @@
       "residentName": "Amit Patel",
       "purpose": "Amazon Parcel Delivery",
       "vehicleNo": "MH-12-AB-3456",
-      "entryTime": "2026-07-27 10:10",
-      "exitTime": "2026-07-27 10:25",
+      "entryTime": "2026-10-01 10:10",
+      "exitTime": "2026-10-01 10:25",
       "status": "Approved",
       "gatePassCode": "GP-9821"
     },
@@ -445,7 +445,7 @@
       "residentName": "Priya Verma",
       "purpose": "Family Visit",
       "vehicleNo": "MH-14-XY-9900",
-      "entryTime": "2026-07-27 11:35",
+      "entryTime": "2026-10-01 11:35",
       "exitTime": "Still In Society",
       "status": "Pending",
       "gatePassCode": "GP-5512"
@@ -458,8 +458,8 @@
       "residentName": "Amit Patel",
       "purpose": "Plumbing Repair",
       "vehicleNo": "N/A",
-      "entryTime": "2026-07-27 09:30",
-      "exitTime": "2026-07-27 11:45",
+      "entryTime": "2026-10-01 09:30",
+      "exitTime": "2026-10-01 11:45",
       "status": "Approved",
       "gatePassCode": "GP-3344"
     },
@@ -471,8 +471,8 @@
       "residentName": "Neha Gupta",
       "purpose": "Food Delivery",
       "vehicleNo": "MH-04-SW-0012",
-      "entryTime": "2026-07-27 13:05",
-      "exitTime": "2026-07-27 13:15",
+      "entryTime": "2026-10-01 13:05",
+      "exitTime": "2026-10-01 13:15",
       "status": "Approved",
       "gatePassCode": "GP-7788"
     },
@@ -484,7 +484,7 @@
       "residentName": "Ananya Deshmukh",
       "purpose": "Electrical Repair Work",
       "vehicleNo": "N/A",
-      "entryTime": "2026-07-27 14:00",
+      "entryTime": "2026-10-01 14:00",
       "exitTime": "Still In Society",
       "status": "Pending",
       "gatePassCode": "GP-4422"
@@ -497,7 +497,7 @@
       "residentName": "Amit Patel",
       "purpose": "Courier Delivery",
       "vehicleNo": "MH-02-BD-8811",
-      "entryTime": "2026-07-27 15:30",
+      "entryTime": "2026-10-01 15:30",
       "exitTime": "Still In Society",
       "status": "Pending",
       "gatePassCode": "GP-1066"
@@ -506,34 +506,34 @@
   "notices": [
     {
       "id": "NOT-101",
-      "title": "Annual General Body Meeting (AGM) Notice — July 28th",
+      "title": "Annual General Body Meeting (AGM) Notice — October 5th",
       "category": "Meeting",
       "postedBy": "Rohan Mehta (Secretary)",
-      "date": "2026-07-20",
-      "content": "The AGM for all society flat owners is scheduled for Sunday, July 28th at 10:00 AM in the Main Community Hall. Key agenda: Annual Financial Audit, Security Upgrade Proposal & Rooftop Solar Installation vote."
+      "date": "2026-10-20",
+      "content": "The AGM for all society flat owners is scheduled for Sunday, October 5th at 10:00 AM in the Main Community Hall. Key agenda: Annual Financial Audit, Security Upgrade Proposal & Rooftop Solar Installation vote."
     },
     {
       "id": "NOT-102",
       "title": "Overhead Tank Cleaning — Water Disruption 09:00–13:00",
       "category": "Emergency",
       "postedBy": "Jenil Barad (Admin)",
-      "date": "2026-07-21",
+      "date": "2026-10-21",
       "content": "Overhead water tank sanitization conducted tomorrow between 09:00 AM and 01:00 PM. Water supply will be temporarily paused on all floors. Please store adequate water in advance."
     },
     {
       "id": "NOT-103",
-      "title": "Society Foundation Day Celebration — August 1st",
+      "title": "Society Foundation Day Celebration — November 1st",
       "category": "General",
       "postedBy": "Suresh Kumar (Treasurer)",
-      "date": "2026-07-22",
-      "content": "SocietyHub Grand Residency completes 5 years! Celebrations planned on August 1st: Cultural Program, Lucky Draw, Kids Competitions, and Grand Dinner. All residents are cordially invited."
+      "date": "2026-10-22",
+      "content": "SocietyHub Grand Residency completes 5 years! Celebrations planned on November 1st: Cultural Program, Lucky Draw, Kids Competitions, and Grand Dinner. All residents are cordially invited."
     },
     {
       "id": "NOT-104",
       "title": "Parking Lot Rules Update — Visitor Parking Enforcement",
       "category": "Rules",
       "postedBy": "Rohan Mehta (Secretary)",
-      "date": "2026-07-23",
+      "date": "2026-10-23",
       "content": "Visitor parking is now strictly limited to 2 hours. Resident-designated slots P-01 through P-40 must remain clear at all times. Violating vehicles will be towed at owner's expense."
     }
   ],
@@ -586,7 +586,7 @@
       "amenityName": "Grand Community Hall",
       "residentName": "Priya Verma",
       "flat": "C-501",
-      "date": "2026-07-28",
+      "date": "2026-10-05",
       "timeSlot": "Morning (09:00 AM - 02:00 PM)",
       "purpose": "Birthday Celebration",
       "amount": 2000,
@@ -598,7 +598,7 @@
       "amenityName": "Party Lawn & Garden",
       "residentName": "Ananya Deshmukh",
       "flat": "A-604",
-      "date": "2026-08-01",
+      "date": "2026-11-01",
       "timeSlot": "Evening (04:00 PM - 10:00 PM)",
       "purpose": "Foundation Day Celebration",
       "amount": 3500,
@@ -610,7 +610,7 @@
       "amenityName": "Clubhouse Gym & Lounge",
       "residentName": "Rahul Sharma",
       "flat": "B-104",
-      "date": "2026-07-27",
+      "date": "2026-10-01",
       "timeSlot": "Morning (06:00 AM - 08:00 AM)",
       "purpose": "Personal Workout Session",
       "amount": 500,
@@ -727,7 +727,7 @@
   "auditLogs": [
     {
       "id": "LOG-1001",
-      "timestamp": "2026-07-27 08:00:00",
+      "timestamp": "2026-10-01 08:00:00",
       "user": "System",
       "role": "System",
       "action": "System Initialized",
@@ -736,7 +736,7 @@
     },
     {
       "id": "LOG-1002",
-      "timestamp": "2026-07-27 09:15:00",
+      "timestamp": "2026-10-01 09:15:00",
       "user": "Jenil Barad (Admin)",
       "role": "Admin",
       "action": "User Login",
@@ -745,7 +745,7 @@
     },
     {
       "id": "LOG-1003",
-      "timestamp": "2026-07-27 09:20:00",
+      "timestamp": "2026-10-01 09:20:00",
       "user": "Bahadur Singh",
       "role": "Security Guard",
       "action": "Gate Pass Generated",
@@ -754,16 +754,16 @@
     },
     {
       "id": "LOG-1004",
-      "timestamp": "2026-07-27 10:18:00",
+      "timestamp": "2026-10-01 10:18:00",
       "user": "Priya Verma",
       "role": "Resident",
       "action": "Maintenance Bill Payment",
       "module": "Billing",
-      "details": "Paid INV-2026-07-102 ₹4,000 via UPI (TXN987654321)."
+      "details": "Paid INV-2026-10-102 ₹4,000 via UPI (TXN987654321)."
     },
     {
       "id": "LOG-1005",
-      "timestamp": "2026-07-27 11:30:00",
+      "timestamp": "2026-10-01 11:30:00",
       "user": "Amit Patel",
       "role": "Resident",
       "action": "Complaint Submitted",
@@ -772,7 +772,7 @@
     },
     {
       "id": "LOG-1006",
-      "timestamp": "2026-07-27 12:00:00",
+      "timestamp": "2026-10-01 12:00:00",
       "user": "Jenil Barad (Admin)",
       "role": "Admin",
       "action": "Notice Published",
@@ -815,8 +815,8 @@
       ],
       "totalVotes": 55,
       "status": "Active",
-      "createdDate": "2026-07-15",
-      "endDate": "2026-07-31",
+      "createdDate": "2026-10-01",
+      "endDate": "2026-10-15",
       "createdBy": "Suresh Kumar (Treasurer)"
     },
     {
@@ -838,8 +838,8 @@
       ],
       "totalVotes": 50,
       "status": "Active",
-      "createdDate": "2026-07-18",
-      "endDate": "2026-08-05",
+      "createdDate": "2026-10-03",
+      "endDate": "2026-10-20",
       "createdBy": "Rohan Mehta (Secretary)"
     }
   ]

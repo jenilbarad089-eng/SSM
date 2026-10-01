@@ -4,7 +4,7 @@
 
 const STORAGE_KEY = 'ssm_database_v1';
 const SEED_VERSION_KEY = 'ssm_seed_version';
-const SEED_VERSION = '3.3'; // bump this to force fresh seed load
+const SEED_VERSION = '3.4'; // bump this to force fresh seed load
 const SESSION_KEY = 'ssm_current_user';
 const TOKEN_KEY = 'ssm_auth_token';
 
@@ -133,13 +133,13 @@ const SystemDB = {
 
     // Also auto-generate July maintenance bill for new resident
     this.data.maintenance.push({
-      id: 'INV-2026-07-' + Math.floor(100 + Math.random() * 900),
+      id: 'INV-2026-10-' + Math.floor(100 + Math.random() * 900),
       residentName: newResident.name,
       flat: newResident.flat,
-      month: 'July 2026',
+      month: 'October 2026',
       amount: 3500,
       status: 'Unpaid',
-      dueDate: '2026-07-31',
+      dueDate: '2026-10-31',
       txnId: null,
       paymentDate: null,
       receiptNo: null
@@ -177,18 +177,18 @@ const SystemDB = {
       user.maintenanceAmount = allocData.maintenance || user.maintenanceAmount || 3500;
       user.parkingSlot = allocData.parking || user.parkingSlot;
 
-      // Auto-generate July 2026 Maintenance Bill for allotted flat if not existing
+      // Auto-generate October 2026 Maintenance Bill for allotted flat if not existing
       if (user.flat) {
-        let bill = this.data.maintenance.find(b => b.flat === user.flat && b.month === 'July 2026');
+        let bill = this.data.maintenance.find(b => b.flat === user.flat && b.month === 'October 2026');
         if (!bill) {
           this.data.maintenance.push({
-            id: 'INV-2026-07-' + Math.floor(100 + Math.random() * 900),
+            id: 'INV-2026-10-' + Math.floor(100 + Math.random() * 900),
             residentName: user.name,
             flat: user.flat,
-            month: 'July 2026',
+            month: 'October 2026',
             amount: Number(user.maintenanceAmount) || 3500,
             status: 'Unpaid',
-            dueDate: '2026-07-31',
+            dueDate: '2026-10-31',
             txnId: null,
             paymentDate: null,
             receiptNo: null
@@ -418,9 +418,9 @@ const SystemDB = {
         id: 'INV-2026-' + Math.floor(1000 + Math.random() * 9000),
         flat: user.flat,
         residentName: user.name,
-        month: 'July 2026',
+        month: 'October 2026',
         amount: parseInt(String(allocData.maintenance || allocData.maintenanceDues || '3500').replace(/[^0-9]/g, '')) || 3500,
-        dueDate: '2026-07-31',
+        dueDate: '2026-10-31',
         status: 'Unpaid',
         paidDate: null
       };

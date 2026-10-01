@@ -69,10 +69,11 @@ function loadCommitteeDashboard() {
   const resolvedCmp = complaints.filter(c => c.status === 'Resolved').length;
   const resRate = complaints.length ? Math.round((resolvedCmp / complaints.length) * 100) : 0;
 
-  document.getElementById('commTotalRev').textContent = `₹${totalRev.toLocaleString()}`;
-  document.getElementById('commPendingDues').textContent = `₹${unpaidDues.toLocaleString()}`;
+  document.getElementById('commTotalColl').textContent = `₹${totalRev.toLocaleString()}`;
+  document.getElementById('commDues').textContent = `₹${unpaidDues.toLocaleString()}`;
   document.getElementById('commResolutionRate').textContent = `${resRate}%`;
-  document.getElementById('commAmenityRev').textContent = `₹${paidBookings.toLocaleString()}`;
+  const residentsCount = SystemDB.getUsers ? SystemDB.getUsers().filter(u => u.role === 'Resident' && u.status === 'Approved').length : 0;
+  document.getElementById('commResidentsCount').textContent = residentsCount;
 
   // Charts
   renderFinChart(paidMaint, paidBookings, unpaidDues);
@@ -154,49 +155,86 @@ function logout() {
 }
 
 function renderFinChart(maint, amenity, pending) {
-  const ctx = document.getElementById('commFinChart').getContext('2d');
+  const ctx = document.getElementById('committeeRevenueChart').getContext('2d');
   if (finChartInstance) finChartInstance.destroy();
+
+  // Build monthly trend from maintenance data
+  const maintenance = SystemDB.getMaintenance();
+  const months = ['May 2026', 'Jun 2026', 'Jul 2026', 'Aug 2026', 'Sep 2026', 'Oct 2026'];
+  const monthLabels = ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'];
+  const monthMap = { 'May 2026': 'May', 'June 2026': 'Jun', 'July 2026': 'Jul', 'August 2026': 'Aug', 'September 2026': 'Sep', 'October 2026': 'Oct' };
+
+  const revenue = monthLabels.map(() => 0);
+  const dues = monthLabels.map(() => 0);
+
+  maintenance.forEach(m => {
+    const label = monthMap[m.month];
+    const idx = monthLabels.indexOf(label);
+    if (idx !== -1) {
+      if (m.status === 'Paid') revenue[idx] += m.amount;
+      else dues[idx] += m.amount;
+    }
+  });
 
   finChartInstance = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['Maintenance Collections', 'Amenity Bookings', 'Pending Dues'],
-      datasets: [{
-        label: 'Financial Audit (₹)',
-        data: [maint, amenity, pending],
-        backgroundColor: ['#10b981', '#0ea5e9', '#ef4444'],
-        borderRadius: 8
-      }]
+      labels: monthLabels,
+      datasets: [
+        {
+          label: 'Collections (₹)',
+          data: revenue,
+          backgroundColor: 'rgba(16, 185, 129, 0.85)',
+          borderRadius: 6
+        },
+        {
+          label: 'Outstanding (₹)',
+          data: dues,
+          backgroundColor: 'rgba(239, 68, 68, 0.85)',
+          borderRadius: 6
+        }
+      ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { display: false } }
+      plugins: {
+        legend: { position: 'top', labels: { color: '#94a3b8', font: { size: 12 } } }
+      },
+      scales: {
+        x: { ticks: { color: '#94a3b8' }, grid: { display: false } },
+        y: { ticks: { color: '#94a3b8', callback: v => '₹' + v.toLocaleString() }, grid: { color: 'rgba(148,163,184,0.1)' } }
+      }
     }
   });
 }
 
 function renderPriorityChart(complaints) {
-  const high = complaints.filter(c => c.priority === 'High').length;
-  const med = complaints.filter(c => c.priority === 'Medium').length;
-  const low = complaints.filter(c => c.priority === 'Low').length;
+  const maintenance = SystemDB.getMaintenance();
+  const paid = maintenance.filter(m => m.status === 'Paid').length;
+  const unpaid = maintenance.filter(m => m.status === 'Unpaid').length;
 
-  const ctx = document.getElementById('commPriorityChart').getContext('2d');
+  const ctx = document.getElementById('committeeRatioChart').getContext('2d');
   if (priorityChartInstance) priorityChartInstance.destroy();
 
   priorityChartInstance = new Chart(ctx, {
-    type: 'pie',
+    type: 'doughnut',
     data: {
-      labels: ['High Priority', 'Medium Priority', 'Low Priority'],
+      labels: ['Paid', 'Unpaid'],
       datasets: [{
-        data: [high, med, low],
-        backgroundColor: ['#ef4444', '#f59e0b', '#64748b']
+        data: [paid, unpaid],
+        backgroundColor: ['#10b981', '#ef4444'],
+        borderWidth: 0,
+        hoverOffset: 8
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom' } }
+      cutout: '65%',
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 13 }, padding: 16 } }
+      }
     }
   });
 }
@@ -208,18 +246,18 @@ function renderAuditTable(maintenance, bookings) {
     ...maintenance.map(m => ({
       id: m.id,
       source: `${m.residentName} (${m.flat})`,
-      type: 'Maintenance Bill',
-      date: m.paymentDate || m.dueDate,
+      month: m.month || '—',
       value: `₹${m.amount.toLocaleString()}`,
-      status: m.status
+      status: m.status,
+      receipt: m.receiptNo || '—'
     })),
     ...bookings.map(b => ({
       id: b.id,
       source: `${b.residentName} (${b.flat})`,
-      type: `Amenity: ${b.amenityName}`,
-      date: b.date,
+      month: `Amenity: ${b.amenityName}`,
       value: `₹${b.amount.toLocaleString()}`,
-      status: b.status
+      status: b.status,
+      receipt: b.date || '—'
     }))
   ];
 
@@ -227,10 +265,10 @@ function renderAuditTable(maintenance, bookings) {
     <tr>
       <td class="fw-bold fs-7">${item.id}</td>
       <td class="fw-semibold">${item.source}</td>
-      <td><span class="badge bg-light text-dark border">${item.type}</span></td>
-      <td class="text-muted fs-7">${item.date}</td>
+      <td class="text-muted fs-7">${item.month}</td>
       <td class="fw-bold">${item.value}</td>
       <td><span class="badge ${item.status === 'Paid' || item.status === 'Confirmed' ? 'bg-success' : 'bg-warning text-dark'}">${item.status}</span></td>
+      <td class="text-muted fs-7">${item.receipt}</td>
     </tr>
   `).join('');
 }
