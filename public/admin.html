@@ -109,9 +109,17 @@
                 <h3 class="fw-bold mb-1">Executive Administrator Overview</h3>
                 <p class="caption-text mb-0">Real-time stats across residents, maintenance collections, and gate security.</p>
               </div>
-              <button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="loadAdminDashboard()">
-                <i class="fa-solid fa-arrows-rotate me-1"></i> Refresh Realtime Data
-              </button>
+              <div class="d-flex align-items-center gap-3">
+                <div class="live-indicator">
+                  <span class="live-dot"></span>
+                  <span>LIVE</span>
+                  <span class="refresh-ring"></span>
+                </div>
+                <span class="live-timestamp" id="adminLastUpdated">Updated just now</span>
+                <button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="refreshDashboardNow()">
+                  <i class="fa-solid fa-arrows-rotate me-1"></i> Refresh Now
+                </button>
+              </div>
             </div>
 
             <!-- KPI Cards Row -->
@@ -133,7 +141,7 @@
                 <div class="metric-card">
                   <div class="d-flex align-items-center justify-content-between">
                     <div>
-                      <span class="caption-text fw-semibold">July Maintenance Paid</span>
+                      <span class="caption-text fw-semibold">Monthly Collections</span>
                       <h2 class="fw-bold my-1 text-success" id="kpiCollection">₹0</h2>
                       <span class="badge bg-info-subtle text-info fs-8" id="kpiCollectionRate">0% Collected</span>
                     </div>
@@ -185,6 +193,21 @@
                   <h5 class="fw-bold mb-3"><i class="fa-solid fa-chart-pie text-warning me-2"></i> Complaint Resolution Matrix</h5>
                   <div style="height: 260px;">
                     <canvas id="complaintChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Activity Feed -->
+            <div class="row g-4 mb-4">
+              <div class="col-12">
+                <div class="hub-card p-4">
+                  <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h5 class="fw-bold mb-0"><i class="fa-solid fa-signal text-success me-2"></i> Live Activity Feed</h5>
+                    <span class="badge bg-success-subtle text-success fs-8"><i class="fa-solid fa-circle-dot me-1"></i> Real-time</span>
+                  </div>
+                  <div class="activity-feed" id="adminActivityFeed">
+                    <div class="text-center text-muted py-3"><i class="fa-solid fa-spinner fa-spin me-2"></i> Loading activity...</div>
                   </div>
                 </div>
               </div>

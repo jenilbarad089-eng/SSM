@@ -73,9 +73,17 @@
         <h3 class="fw-bold mb-1">Society Financial Audit & Governance</h3>
         <p class="caption-text mb-0">Read-only oversight portal for committee members, treasurers, and auditors.</p>
       </div>
-      <button class="btn btn-outline-info rounded-pill px-4" onclick="location.reload()">
-        <i class="fa-solid fa-rotate me-1"></i> Refresh Audit Data
-      </button>
+      <div class="d-flex align-items-center gap-3">
+        <div class="live-indicator">
+          <span class="live-dot"></span>
+          <span>LIVE</span>
+          <span class="refresh-ring"></span>
+        </div>
+        <span class="live-timestamp" id="commLastUpdated">Updated just now</span>
+        <button class="btn btn-outline-info rounded-pill px-3" onclick="refreshCommitteeNow()">
+          <i class="fa-solid fa-rotate me-1"></i> Refresh
+        </button>
+      </div>
     </div>
 
     <!-- Executive Audit Metrics -->
@@ -151,6 +159,17 @@
             <canvas id="committeeRatioChart"></canvas>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Live Activity Ticker -->
+    <div class="hub-card p-4 mb-4">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h5 class="fw-bold mb-0"><i class="fa-solid fa-signal text-success me-2"></i> Live Governance Feed</h5>
+        <span class="badge bg-success-subtle text-success fs-8"><i class="fa-solid fa-circle-dot me-1"></i> Auto-updating</span>
+      </div>
+      <div class="activity-feed" id="commActivityFeed">
+        <div class="text-center text-muted py-3"><i class="fa-solid fa-spinner fa-spin me-2"></i> Loading feed...</div>
       </div>
     </div>
 

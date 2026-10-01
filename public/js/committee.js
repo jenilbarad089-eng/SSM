@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   loadCommitteeDashboard();
+  startCommitteeRealtime();
 });
 
 function loadCommitteeDashboard() {
@@ -272,3 +273,133 @@ function renderAuditTable(maintenance, bookings) {
     </tr>
   `).join('');
 }
+
+// ===== REALTIME COMMITTEE DASHBOARD ENGINE =====
+
+let commRefreshInterval = null;
+let commLastRefreshTime = Date.now();
+
+function startCommitteeRealtime() {
+  if (commRefreshInterval) clearInterval(commRefreshInterval);
+  commRefreshInterval = setInterval(() => {
+    silentCommitteeRefresh();
+  }, 30000);
+
+  setInterval(updateCommLastRefresh, 1000);
+  renderCommActivityFeed();
+}
+
+function silentCommitteeRefresh() {
+  try {
+    loadCommitteeDashboard();
+    renderCommActivityFeed();
+    commLastRefreshTime = Date.now();
+  } catch(e) {
+    console.warn('Committee refresh error:', e);
+  }
+}
+
+function refreshCommitteeNow() {
+  const btn = event && event.currentTarget;
+  if (btn) {
+    const icon = btn.querySelector('i');
+    if (icon) icon.classList.add('fa-spin');
+    setTimeout(() => { if (icon) icon.classList.remove('fa-spin'); }, 1000);
+  }
+  loadCommitteeDashboard();
+  renderCommActivityFeed();
+  commLastRefreshTime = Date.now();
+  updateCommLastRefresh();
+}
+
+function updateCommLastRefresh() {
+  const el = document.getElementById('commLastUpdated');
+  if (!el) return;
+  const seconds = Math.floor((Date.now() - commLastRefreshTime) / 1000);
+  if (seconds < 5) el.textContent = 'Updated just now';
+  else if (seconds < 60) el.textContent = `Updated ${seconds}s ago`;
+  else el.textContent = `Updated ${Math.floor(seconds / 60)}m ago`;
+}
+
+function renderCommActivityFeed() {
+  const container = document.getElementById('commActivityFeed');
+  if (!container) return;
+
+  const activities = [];
+  const maintenance = SystemDB.getMaintenance();
+  const complaints = SystemDB.getComplaints();
+  const bookings = SystemDB.getBookings();
+  const polls = SystemDB.getPolls();
+
+  // Maintenance payments
+  maintenance.filter(m => m.status === 'Paid').slice(0, 3).forEach(m => {
+    activities.push({
+      icon: 'fa-indian-rupee-sign', iconBg: 'bg-success',
+      title: `₹${m.amount.toLocaleString()} collected — ${m.month}`,
+      detail: `${m.residentName} (${m.flat})`,
+      time: m.paymentDate || m.dueDate
+    });
+  });
+
+  // Outstanding dues
+  maintenance.filter(m => m.status === 'Unpaid').slice(0, 3).forEach(m => {
+    activities.push({
+      icon: 'fa-file-invoice-dollar', iconBg: 'bg-danger',
+      title: `₹${m.amount.toLocaleString()} overdue — ${m.month}`,
+      detail: `${m.residentName} (${m.flat}) — Due: ${m.dueDate}`,
+      time: m.dueDate
+    });
+  });
+
+  // Complaints
+  complaints.slice(0, 3).forEach(c => {
+    activities.push({
+      icon: 'fa-triangle-exclamation',
+      iconBg: c.status === 'Resolved' ? 'bg-success' : c.status === 'In Progress' ? 'bg-info' : 'bg-warning',
+      title: c.title,
+      detail: `${c.residentName} (${c.flat}) — ${c.status} — ${c.priority} Priority`,
+      time: c.date
+    });
+  });
+
+  // Bookings
+  bookings.slice(0, 2).forEach(b => {
+    activities.push({
+      icon: 'fa-calendar-check', iconBg: 'bg-primary',
+      title: `${b.amenityName} booked`,
+      detail: `${b.residentName} (${b.flat}) — ${b.timeSlot}`,
+      time: b.date
+    });
+  });
+
+  // Poll activity
+  polls.slice(0, 2).forEach(p => {
+    activities.push({
+      icon: 'fa-square-poll-vertical', iconBg: 'bg-warning',
+      title: `Poll: ${p.title}`,
+      detail: `${p.totalVotes} votes cast — Ends: ${p.endDate}`,
+      time: p.createdDate
+    });
+  });
+
+  activities.sort((a, b) => (b.time || '').localeCompare(a.time || ''));
+
+  if (!activities.length) {
+    container.innerHTML = '<div class="text-center text-muted py-3">No recent activity</div>';
+    return;
+  }
+
+  container.innerHTML = activities.slice(0, 10).map(a => `
+    <div class="activity-item">
+      <div class="activity-icon ${a.iconBg} bg-opacity-10">
+        <i class="fa-solid ${a.icon} ${a.iconBg.replace('bg-', 'text-')}"></i>
+      </div>
+      <div class="flex-grow-1">
+        <div class="fw-semibold fs-7 text-heading">${a.title}</div>
+        <div class="text-muted fs-8">${a.detail}</div>
+      </div>
+      <small class="text-muted fs-8 flex-shrink-0">${a.time}</small>
+    </div>
+  `).join('');
+}
+

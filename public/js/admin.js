@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   loadAdminDashboard();
+  startRealtimeDashboard();
 
   document.getElementById('changeRoleForm').addEventListener('submit', (e) => {
     e.preventDefault();
@@ -99,13 +100,16 @@ function renderKPIs() {
   document.getElementById('kpiResidents').textContent = residents.length;
 
   const maintenance = SystemDB.getMaintenance();
-  const julyBills = maintenance.filter(m => m.month.includes('July 2026'));
-  const paidBills = julyBills.filter(m => m.status === 'Paid');
-  const paidTotal = paidBills.reduce((acc, curr) => acc + curr.amount, 0);
-  const rate = julyBills.length ? Math.round((paidBills.length / julyBills.length) * 100) : 0;
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const now = new Date();
+  const currentMonthLabel = monthNames[now.getMonth()] + ' ' + now.getFullYear();
+  const currentBills = maintenance.filter(m => m.month === currentMonthLabel);
+  const paidBills = currentBills.filter(m => m.status === 'Paid');
+  const paidTotal = paidBills.reduce((a, b) => a + b.amount, 0);
+  const rate = currentBills.length ? Math.round((paidBills.length / currentBills.length) * 100) : 0;
 
   document.getElementById('kpiCollection').textContent = `₹${paidTotal.toLocaleString()}`;
-  document.getElementById('kpiCollectionRate').textContent = `${rate}% Collected (${paidBills.length}/${julyBills.length} Flatted)`;
+  document.getElementById('kpiCollectionRate').textContent = `${rate}% Collected (${paidBills.length}/${currentBills.length} Flatted)`;
 
   const complaints = SystemDB.getComplaints();
   const pending = complaints.filter(c => c.status === 'Pending' || c.status === 'In Progress');
@@ -116,57 +120,75 @@ function renderKPIs() {
 }
 
 function renderCharts() {
-  const maintenance = SystemDB.getMaintenance();
-  const julyBills = maintenance.filter(m => m.month.includes('July 2026'));
-  const paidSum = julyBills.filter(m => m.status === 'Paid').reduce((a, b) => a + b.amount, 0);
-  const unpaidSum = julyBills.filter(m => m.status === 'Unpaid').reduce((a, b) => a + b.amount, 0);
-
-  // Billing Bar Chart
-  const ctxBilling = document.getElementById('billingChart').getContext('2d');
-  if (billingChartInstance) billingChartInstance.destroy();
-
-  billingChartInstance = new Chart(ctxBilling, {
-    type: 'bar',
-    data: {
-      labels: ['Collected Amount', 'Pending Dues'],
-      datasets: [{
-        label: 'Maintenance (₹)',
-        data: [paidSum, unpaidSum],
-        backgroundColor: ['#10b981', '#ef4444'],
-        borderRadius: 8
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } }
-    }
-  });
-
-  // Complaint Doughnut Chart
+  const maint = SystemDB.getMaintenance();
   const complaints = SystemDB.getComplaints();
-  const pendingCount = complaints.filter(c => c.status === 'Pending').length;
-  const progressCount = complaints.filter(c => c.status === 'In Progress').length;
-  const resolvedCount = complaints.filter(c => c.status === 'Resolved').length;
 
-  const ctxCmp = document.getElementById('complaintChart').getContext('2d');
-  if (complaintChartInstance) complaintChartInstance.destroy();
+  // --- Multi-Month Revenue Trend Bar Chart ---
+  const monthMap = { 'May 2026': 'May', 'June 2026': 'Jun', 'July 2026': 'Jul', 'August 2026': 'Aug', 'September 2026': 'Sep', 'October 2026': 'Oct' };
+  const monthLabels = ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'];
+  const collected = monthLabels.map(() => 0);
+  const outstanding = monthLabels.map(() => 0);
 
-  complaintChartInstance = new Chart(ctxCmp, {
-    type: 'doughnut',
-    data: {
-      labels: ['Pending', 'In Progress', 'Resolved'],
-      datasets: [{
-        data: [pendingCount, progressCount, resolvedCount],
-        backgroundColor: ['#f59e0b', '#0ea5e9', '#10b981']
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom' } }
+  maint.forEach(m => {
+    const label = monthMap[m.month];
+    const idx = monthLabels.indexOf(label);
+    if (idx !== -1) {
+      if (m.status === 'Paid') collected[idx] += m.amount;
+      else outstanding[idx] += m.amount;
     }
   });
+
+  const billingCtx = document.getElementById('billingChart');
+  if (billingCtx) {
+    if (billingChartInstance) billingChartInstance.destroy();
+    billingChartInstance = new Chart(billingCtx.getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: monthLabels,
+        datasets: [
+          { label: 'Collected (₹)', data: collected, backgroundColor: 'rgba(16,185,129,0.85)', borderRadius: 6 },
+          { label: 'Outstanding (₹)', data: outstanding, backgroundColor: 'rgba(239,68,68,0.85)', borderRadius: 6 }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top', labels: { color: '#94a3b8', font: { size: 12 } } } },
+        scales: {
+          x: { ticks: { color: '#94a3b8' }, grid: { display: false } },
+          y: { ticks: { color: '#94a3b8', callback: v => '₹' + v.toLocaleString() }, grid: { color: 'rgba(148,163,184,0.1)' } }
+        }
+      }
+    });
+  }
+
+  // --- Complaint Status Doughnut ---
+  const pending = complaints.filter(c => c.status === 'Pending').length;
+  const inProgress = complaints.filter(c => c.status === 'In Progress').length;
+  const resolved = complaints.filter(c => c.status === 'Resolved').length;
+
+  const complaintCtx = document.getElementById('complaintChart');
+  if (complaintCtx) {
+    if (complaintChartInstance) complaintChartInstance.destroy();
+    complaintChartInstance = new Chart(complaintCtx.getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Pending', 'In Progress', 'Resolved'],
+        datasets: [{
+          data: [pending, inProgress, resolved],
+          backgroundColor: ['#f59e0b', '#0ea5e9', '#10b981'],
+          borderWidth: 0,
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 13 }, padding: 16 } } }
+      }
+    });
+  }
 }
 
 function renderResidentsTable() {
@@ -880,4 +902,148 @@ function safeHideModal(modalOrId) {
   if (!el || typeof bootstrap === 'undefined') return;
   const inst = bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el);
   if (inst) inst.hide();
+}
+
+// ===== REALTIME DASHBOARD ENGINE =====
+
+let dashboardRefreshInterval = null;
+let lastRefreshTime = Date.now();
+
+function startRealtimeDashboard() {
+  // Refresh every 30 seconds
+  if (dashboardRefreshInterval) clearInterval(dashboardRefreshInterval);
+  dashboardRefreshInterval = setInterval(() => {
+    silentDashboardRefresh();
+  }, 30000);
+
+  // Update timestamp every second
+  setInterval(updateLastRefreshTimestamp, 1000);
+
+  // Initial activity feed
+  renderActivityFeed();
+}
+
+function silentDashboardRefresh() {
+  // Re-read data from SystemDB (picks up any localStorage changes)
+  try {
+    renderKPIs();
+    renderCharts();
+    renderActivityFeed();
+    lastRefreshTime = Date.now();
+  } catch(e) {
+    console.warn('Dashboard refresh error:', e);
+  }
+}
+
+function refreshDashboardNow() {
+  // Animate refresh
+  const btn = event && event.currentTarget;
+  if (btn) {
+    const icon = btn.querySelector('i');
+    if (icon) icon.classList.add('fa-spin');
+    setTimeout(() => { if (icon) icon.classList.remove('fa-spin'); }, 1000);
+  }
+
+  loadAdminDashboard();
+  renderActivityFeed();
+  lastRefreshTime = Date.now();
+  updateLastRefreshTimestamp();
+}
+
+function updateLastRefreshTimestamp() {
+  const el = document.getElementById('adminLastUpdated');
+  if (!el) return;
+  const seconds = Math.floor((Date.now() - lastRefreshTime) / 1000);
+  if (seconds < 5) el.textContent = 'Updated just now';
+  else if (seconds < 60) el.textContent = `Updated ${seconds}s ago`;
+  else el.textContent = `Updated ${Math.floor(seconds / 60)}m ago`;
+}
+
+function animateValue(elementId, newValue) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  el.classList.add('metric-animate', 'updating');
+  setTimeout(() => {
+    el.classList.remove('updating');
+  }, 300);
+}
+
+function renderActivityFeed() {
+  const container = document.getElementById('adminActivityFeed');
+  if (!container) return;
+
+  const activities = [];
+
+  // Recent complaints
+  const complaints = SystemDB.getComplaints();
+  complaints.slice(0, 3).forEach(c => {
+    activities.push({
+      icon: 'fa-triangle-exclamation',
+      iconBg: c.status === 'Resolved' ? 'bg-success' : c.status === 'In Progress' ? 'bg-info' : 'bg-warning',
+      title: c.title,
+      detail: `${c.residentName} (${c.flat}) — ${c.status}`,
+      time: c.date,
+      sort: c.date
+    });
+  });
+
+  // Recent maintenance payments
+  const maintenance = SystemDB.getMaintenance();
+  maintenance.filter(m => m.status === 'Paid').slice(0, 3).forEach(m => {
+    activities.push({
+      icon: 'fa-indian-rupee-sign',
+      iconBg: 'bg-success',
+      title: `₹${m.amount.toLocaleString()} collected — ${m.month}`,
+      detail: `${m.residentName} (${m.flat}) via ${m.txnId || 'Online'}`,
+      time: m.paymentDate || m.dueDate,
+      sort: m.paymentDate || m.dueDate
+    });
+  });
+
+  // Recent visitors
+  const visitors = SystemDB.getVisitors();
+  visitors.slice(0, 3).forEach(v => {
+    activities.push({
+      icon: 'fa-person-walking',
+      iconBg: v.status === 'Approved' ? 'bg-primary' : 'bg-warning',
+      title: `${v.name} — ${v.purpose}`,
+      detail: `Flat ${v.flat} (${v.residentName}) — ${v.status}`,
+      time: v.entryTime ? v.entryTime.split(' ')[0] : '',
+      sort: v.entryTime ? v.entryTime.split(' ')[0] : ''
+    });
+  });
+
+  // Recent notices
+  const notices = SystemDB.getNotices();
+  notices.slice(0, 2).forEach(n => {
+    activities.push({
+      icon: 'fa-bullhorn',
+      iconBg: 'bg-info',
+      title: n.title,
+      detail: `Published by ${n.postedBy}`,
+      time: n.date,
+      sort: n.date
+    });
+  });
+
+  // Sort by date descending
+  activities.sort((a, b) => (b.sort || '').localeCompare(a.sort || ''));
+
+  if (!activities.length) {
+    container.innerHTML = '<div class="text-center text-muted py-3">No recent activity</div>';
+    return;
+  }
+
+  container.innerHTML = activities.slice(0, 10).map(a => `
+    <div class="activity-item">
+      <div class="activity-icon ${a.iconBg} bg-opacity-10">
+        <i class="fa-solid ${a.icon} ${a.iconBg.replace('bg-', 'text-')}"></i>
+      </div>
+      <div class="flex-grow-1">
+        <div class="fw-semibold fs-7 text-heading">${a.title}</div>
+        <div class="text-muted fs-8">${a.detail}</div>
+      </div>
+      <small class="text-muted fs-8 flex-shrink-0">${a.time}</small>
+    </div>
+  `).join('');
 }
