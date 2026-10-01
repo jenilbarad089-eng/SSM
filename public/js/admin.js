@@ -27,8 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const newRole = document.getElementById('roleSelect').value;
 
     SystemDB.updateUserRole(id, newRole);
-    const modalEl = document.getElementById('changeRoleModal');
-    bootstrap.Modal.getInstance(modalEl).hide();
+    safeHideModal('changeRoleModal');
     loadAdminDashboard();
     if (typeof showToast === 'function') {
       showToast(`User role successfully updated to ${newRole}!`, "success");
@@ -44,8 +43,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const email = document.getElementById('resEmail').value;
 
     SystemDB.addResident({ name, flat, phone, email });
-    const modalEl = document.getElementById('addResidentModal');
-    bootstrap.Modal.getInstance(modalEl).hide();
+    safeHideModal('addResidentModal');
     document.getElementById('addResidentForm').reset();
     loadAdminDashboard();
     if (typeof showToast === 'function') {
@@ -60,8 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const notes = document.getElementById('editCmpNotes').value;
 
     SystemDB.updateComplaintStatus(id, status, notes);
-    const modalEl = document.getElementById('updateComplaintModal');
-    bootstrap.Modal.getInstance(modalEl).hide();
+    safeHideModal('updateComplaintModal');
     loadAdminDashboard();
     if (typeof showToast === 'function') {
       showToast(`Complaint ${id} status updated to ${status}.`, "success");
@@ -75,8 +72,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const content = document.getElementById('noticeContent').value;
 
     SystemDB.addNotice({ title, category, content });
-    const modalEl = document.getElementById('addNoticeModal');
-    bootstrap.Modal.getInstance(modalEl).hide();
+    safeHideModal('addNoticeModal');
     document.getElementById('addNoticeForm').reset();
     loadAdminDashboard();
     if (typeof showToast === 'function') {
@@ -677,7 +673,7 @@ document.getElementById('approveMemberForm').addEventListener('submit', async (e
     });
     const data = await res.json();
     if (data.success) {
-      bootstrap.Modal.getInstance(document.getElementById('approveMemberModal')).hide();
+      safeHideModal('approveMemberModal');
       alert('Member approved successfully!');
       loadPendingApprovals();
       loadAdminDashboard();
@@ -704,7 +700,7 @@ document.getElementById('rejectMemberForm').addEventListener('submit', async (e)
     });
     const data = await res.json();
     if (data.success) {
-      bootstrap.Modal.getInstance(document.getElementById('rejectMemberModal')).hide();
+      safeHideModal('rejectMemberModal');
       alert('Member registration rejected.');
       loadPendingApprovals();
     } else {
@@ -877,4 +873,11 @@ function exportAuditLogsCSV() {
   }
   SystemDB.exportToCSV('SocietyHub_AuditLogs_' + new Date().toISOString().slice(0,10) + '.csv', logs);
   if (typeof showToast === 'function') showToast("Audit logs exported to CSV successfully!", "success");
+}
+
+function safeHideModal(modalOrId) {
+  const el = typeof modalOrId === 'string' ? document.getElementById(modalOrId) : modalOrId;
+  if (!el || typeof bootstrap === 'undefined') return;
+  const inst = bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el);
+  if (inst) inst.hide();
 }

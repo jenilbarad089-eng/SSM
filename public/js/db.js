@@ -4,7 +4,7 @@
 
 const STORAGE_KEY = 'ssm_database_v1';
 const SEED_VERSION_KEY = 'ssm_seed_version';
-const SEED_VERSION = '3.2'; // bump this to force fresh seed load
+const SEED_VERSION = '3.3'; // bump this to force fresh seed load
 const SESSION_KEY = 'ssm_current_user';
 const TOKEN_KEY = 'ssm_auth_token';
 

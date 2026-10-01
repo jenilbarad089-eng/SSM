@@ -3,10 +3,12 @@
  * Enables Standalone App Installation & Offline Assets Caching
  */
 
-const CACHE_NAME = 'societyhub-v2.5';
+const CACHE_NAME = 'societyhub-v3.0';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
+  '/login.html',
+  '/presentation.html',
   '/admin.html',
   '/resident.html',
   '/guard.html',
@@ -20,7 +22,9 @@ const ASSETS_TO_CACHE = [
   '/css/style.css',
   '/js/theme.js',
   '/js/db.js',
+  '/js/auth.js',
   '/js/firebase-auth.js',
+  '/js/notifications.js',
   '/js/admin.js',
   '/js/resident.js',
   '/js/guard.js',
@@ -33,7 +37,11 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log('[Service Worker] Caching App Shell & Assets');
-      return cache.addAll(ASSETS_TO_CACHE);
+      return Promise.allSettled(
+        ASSETS_TO_CACHE.map(url =>
+          cache.add(url).catch(err => console.warn('[Service Worker] Cache failed for:', url, err.message))
+        )
+      );
     }).then(() => self.skipWaiting())
   );
 });

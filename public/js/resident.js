@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const res = SystemDB.payMaintenance(id, method);
     if (res.success) {
-      bootstrap.Modal.getInstance(document.getElementById('payBillModal')).hide();
+      safeHideModal('payBillModal');
       loadResidentDashboard();
       if (typeof showToast === 'function') {
         showToast("Payment successful! Maintenance invoice status updated to Paid.", "success");
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const description = document.getElementById('cmpDesc').value;
 
     const res = SystemDB.addComplaint({ category, title, priority, description });
-    bootstrap.Modal.getInstance(document.getElementById('newComplaintModal')).hide();
+    safeHideModal('newComplaintModal');
     document.getElementById('newComplaintForm').reset();
     loadResidentDashboard();
     if (typeof showToast === 'function') {
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const res = SystemDB.bookAmenity({ amenityId, date, timeSlot, purpose });
     if (res.success) {
-      bootstrap.Modal.getInstance(document.getElementById('bookAmenityModal')).hide();
+      safeHideModal('bookAmenityModal');
       document.getElementById('bookAmenityForm').reset();
       loadResidentDashboard();
       if (typeof showToast === 'function') {
@@ -333,4 +333,11 @@ function renderNotices() {
 function logout() {
   SystemDB.logout();
   window.location.href = 'index.html';
+}
+
+function safeHideModal(modalOrId) {
+  const el = typeof modalOrId === 'string' ? document.getElementById(modalOrId) : modalOrId;
+  if (!el || typeof bootstrap === 'undefined') return;
+  const inst = bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el);
+  if (inst) inst.hide();
 }

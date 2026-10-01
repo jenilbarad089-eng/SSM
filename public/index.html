@@ -57,6 +57,7 @@
             <li><a href="index.html" class="nav-pill active"><i class="fa-solid fa-house"></i> Home</a></li>
             <li><a href="#features" class="nav-pill"><i class="fa-solid fa-grid-2"></i> Features</a></li>
             <li><a href="#modules" class="nav-pill"><i class="fa-solid fa-cubes"></i> Modules</a></li>
+            <li><a href="presentation.html" class="nav-pill text-warning fw-bold"><i class="fa-solid fa-chalkboard-user text-warning"></i> Live Presentation</a></li>
             <li><a href="docs.html" class="nav-pill"><i class="fa-solid fa-book"></i> Docs</a></li>
             <li><a href="changelog.html" class="nav-pill"><i class="fa-solid fa-list-check"></i> Changelog</a></li>
           </ul>
@@ -99,12 +100,15 @@
           </p>
 
           <div class="d-flex flex-wrap gap-3 mb-4">
+            <a href="presentation.html" class="btn btn-warning px-4 py-3 text-dark fw-bold text-decoration-none d-inline-flex align-items-center rounded-pill shadow-sm">
+              <i class="fa-solid fa-chalkboard-user me-2"></i> Live Presentation
+            </a>
             <a href="login.html" class="btn-primary-custom px-4 py-3 text-decoration-none d-inline-flex align-items-center">
-              <i class="fa-solid fa-user-plus me-2"></i> Register Member Account
+              <i class="fa-solid fa-user-plus me-2"></i> Member Sign In / Register
             </a>
-            <a href="login.html" class="btn-google-auth px-4 py-3 text-decoration-none d-inline-flex align-items-center">
-              <i class="fa-solid fa-bolt text-warning me-2"></i> Try Interactive Demo
-            </a>
+            <button class="btn-google-auth px-4 py-3 text-decoration-none d-inline-flex align-items-center" onclick="openAuthModal('signin', 'Admin')">
+              <i class="fa-solid fa-bolt text-warning me-2"></i> Instant Admin Demo
+            </button>
           </div>
 
           <!-- Feature Bullets -->
@@ -283,6 +287,7 @@
           <h6 class="footer-col-title">Navigation</h6>
           <ul class="footer-links">
             <li><a href="index.html"><i class="fa-solid fa-angle-right"></i> Home</a></li>
+            <li><a href="presentation.html" class="text-warning fw-semibold"><i class="fa-solid fa-angle-right"></i> Live Deck</a></li>
             <li><a href="#features"><i class="fa-solid fa-angle-right"></i> Features</a></li>
             <li><a href="#modules"><i class="fa-solid fa-angle-right"></i> Modules</a></li>
             <li><a href="docs.html"><i class="fa-solid fa-angle-right"></i> User Guides</a></li>
@@ -293,6 +298,7 @@
         <div class="col-lg-2 col-6">
           <h6 class="footer-col-title">Resources</h6>
           <ul class="footer-links">
+            <li><a href="SocietyHub_Presentation.pptx" download><i class="fa-solid fa-download"></i> PPTX Deck</a></li>
             <li><a href="docs.html#api"><i class="fa-solid fa-angle-right"></i> REST API</a></li>
             <li><a href="changelog.html"><i class="fa-solid fa-angle-right"></i> Changelog</a></li>
             <li><a href="manifest.json"><i class="fa-solid fa-angle-right"></i> PWA App</a></li>
@@ -450,10 +456,17 @@
       initFirebaseAuth();
 
       const currentUser = SystemDB.getCurrentUser();
+      const params = new URLSearchParams(window.location.search);
       if (currentUser && currentUser.role && currentUser.status === 'Approved') {
-        redirectToDashboard(currentUser.role);
+        if (params.get('redirect') === 'true') {
+          redirectToDashboard(currentUser.role);
+          return;
+        }
+        updateNavForLoggedInUser(currentUser);
       } else if (currentUser && currentUser.status === 'Pending') {
-        window.location.href = 'waiting-approval.html';
+        if (params.get('redirect') === 'true') {
+          window.location.href = 'waiting-approval.html';
+        }
       }
 
       // Auth Sign In Form Submit
@@ -501,7 +514,46 @@
       }
     });
 
+    function updateNavForLoggedInUser(user) {
+      const targetUrl = (user.role === 'Admin') ? 'admin.html' :
+                        (user.role === 'Security Guard') ? 'guard.html' :
+                        (user.role === 'Committee Member') ? 'committee.html' : 'resident.html';
+      const actionsDiv = document.querySelector('.navbar-actions');
+      if (actionsDiv) {
+        const signinLink = actionsDiv.querySelector('.btn-signin');
+        if (signinLink) {
+          signinLink.href = targetUrl;
+          signinLink.className = 'btn-signin bg-success border-success text-white';
+          signinLink.innerHTML = `<i class="fa-solid fa-gauge-high"></i> <span>Dashboard (${user.role.split(' ')[0]})</span>`;
+        }
+        if (!document.getElementById('navLogoutBtn')) {
+          const logoutBtn = document.createElement('button');
+          logoutBtn.id = 'navLogoutBtn';
+          logoutBtn.className = 'btn-theme-toggle ms-1';
+          logoutBtn.title = 'Logout (' + user.name + ')';
+          logoutBtn.innerHTML = '<i class="fa-solid fa-arrow-right-from-bracket text-danger"></i>';
+          logoutBtn.onclick = () => {
+            SystemDB.logout();
+            window.location.reload();
+          };
+          actionsDiv.appendChild(logoutBtn);
+        }
+      }
+      const mobileSignin = document.querySelector('.mobile-bottom-nav a[onclick*="openAuthModal"]');
+      if (mobileSignin) {
+        mobileSignin.removeAttribute('onclick');
+        mobileSignin.href = targetUrl;
+        mobileSignin.innerHTML = '<i class="fa-solid fa-gauge-high text-success"></i><span>Dashboard</span>';
+      }
+    }
+
     function openAuthModal(mode = 'signin', role = '') {
+      if (mode === 'signin' && role) {
+        if (role === 'Admin') return quickFillDemo('admin');
+        if (role === 'Resident') return quickFillDemo('resident1');
+        if (role === 'Security Guard') return quickFillDemo('guard');
+        if (role === 'Committee Member') return quickFillDemo('committee');
+      }
       const modalEl = document.getElementById('authModal');
       if (!modalEl) return;
       const modal = new bootstrap.Modal(modalEl);
@@ -535,15 +587,28 @@
 
     function quickFillDemo(roleKey) {
       const demoMap = {
-        'admin': { email: 'admin@smartsociety.com', pass: 'admin123' },
-        'resident1': { email: 'jenilbarad089@gmail.com', pass: 'resident123' },
+        'admin': { email: 'jenilbarad089@gmail.com', pass: 'admin123' },
+        'resident1': { email: 'amit.patel@gmail.com', pass: 'resident123' },
         'guard': { email: 'guard@smartsociety.com', pass: 'guard123' },
-        'committee': { email: 'suresh@smartsociety.com', pass: 'committee123' }
+        'committee': { email: 'suresh.treasurer@smartsociety.com', pass: 'committee123' }
       };
       const credentials = demoMap[roleKey] || demoMap['admin'];
-      document.getElementById('loginUsername').value = credentials.email;
-      document.getElementById('loginPassword').value = credentials.pass;
-      document.getElementById('authSigninForm').dispatchEvent(new Event('submit'));
+      const modalEl = document.getElementById('authModal');
+      if (modalEl && typeof bootstrap !== 'undefined') {
+        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+        switchAuthTab('signin');
+        modal.show();
+      }
+      const userEl = document.getElementById('loginUsername');
+      const passEl = document.getElementById('loginPassword');
+      if (userEl && passEl) {
+        userEl.value = credentials.email;
+        passEl.value = credentials.pass;
+        setTimeout(() => {
+          const form = document.getElementById('authSigninForm');
+          if (form) form.dispatchEvent(new Event('submit'));
+        }, 120);
+      }
     }
 
     function updatePasswordStrength(val) {

@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SocietyHub v3.0 — Live Executive Presentation</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #090D16;
+      --bg-card: #111827;
+      --bg-card-hover: #1E293B;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --accent-blue: #3B82F6;
+      --accent-orange: #FF6B00;
+      --accent-green: #10B981;
+      --accent-yellow: #F59E0B;
+      --accent-purple: #8B5CF6;
+      --accent-red: #EF4444;
+      --text-white: #F8FAFC;
+      --text-muted: #94A3B8;
+      --font-heading: 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    [data-theme="light"] {
+      --bg-dark: #F1F5F9;
+      --bg-card: #FFFFFF;
+      --bg-card-hover: #F8FAFC;
+      --border-color: rgba(0, 0, 0, 0.1);
+      --text-white: #0F172A;
+      --text-muted: #64748B;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-white);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* Top Presentation Bar */
+    .pres-header {
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-white);
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1.15rem;
+    }
+
+    .brand-logo i {
+      color: var(--accent-orange);
+      font-size: 1.3rem;
+    }
+
+    .pres-controls-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pres-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-color);
+      color: var(--text-white);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .pres-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+      color: #FFFFFF;
+      transform: translateY(-1px);
+    }
+
+    .pres-btn.btn-active {
+      background: var(--accent-orange);
+      color: #FFFFFF;
+      border-color: var(--accent-orange);
+    }
+
+    .pres-btn-primary {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: #FFFFFF;
+    }
+
+    .pres-btn-primary:hover {
+      background: #2563EB;
+      color: #FFFFFF;
+    }
+
+    .slide-select {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-color);
+      color: var(--text-white);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+      max-width: 240px;
+    }
+
+    .slide-select option {
+      background: #111827;
+      color: #FFFFFF;
+    }
+
+    /* Presentation Viewport */
+    .pres-viewport {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+    }
+
+    /* Slide Card (Aspect Ratio 16:9 container) */
+    .slide-deck {
+      width: 100%;
+      max-width: 1200px;
+      position: relative;
+      min-height: 640px;
+    }
+
+    .slide {
+      display: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 40px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      min-height: 640px;
+      animation: fadeInSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes fadeInSlide {
+      from {
+        opacity: 0;
+        transform: scale(0.98) translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    /* Slide Elements */
+    .slide-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      width: fit-content;
+    }
+
+    .slide-title {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 2.2rem;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .slide-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-bottom: 25px;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* Cards & Grids in Slides */
+    .info-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 18px;
+      transition: all 0.2s ease;
+      height: 100%;
+    }
+
+    .info-card:hover {
+      background: rgba(255, 255, 255, 0.07);
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .info-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .info-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    /* Bottom Navigation Bar */
+    .pres-footer {
+      background: rgba(17, 24, 39, 0.9);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      bottom: 0;
+      z-index: 1000;
+      gap: 15px;
+    }
+
+    .progress-track {
+      flex: 1;
+      max-width: 450px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 0 15px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-orange));
+      transition: width 0.3s ease;
+    }
+
+    .nav-arrow-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+    }
+
+    .nav-arrow-btn:hover:not(:disabled) {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: #FFFFFF;
+      transform: scale(1.05);
+    }
+
+    .nav-arrow-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* Slide Thumbnails / Indicators */
+    .slide-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .dot.active {
+      background: var(--accent-orange);
+      transform: scale(1.3);
+    }
+
+    /* Speaker Notes Drawer */
+    .speaker-notes-panel {
+      position: fixed;
+      bottom: 65px;
+      right: 20px;
+      width: 380px;
+      background: #111827;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      display: none;
+      z-index: 1050;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+
+    .speaker-notes-panel.show {
+      display: block;
+      animation: fadeInSlide 0.2s ease;
+    }
+
+    /* Quick Launch Demo Modal */
+    .role-launch-btn {
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      color: var(--text-white);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .role-launch-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--accent-orange);
+      color: #FFFFFF;
+      transform: translateX(4px);
+    }
+
+    /* Fullscreen mode styling */
+    :fullscreen .pres-header {
+      opacity: 0.3;
+      transition: opacity 0.2s ease;
+    }
+    :fullscreen .pres-header:hover {
+      opacity: 1;
+    }
+    :fullscreen .pres-viewport {
+      padding: 10px;
+    }
+    :fullscreen .slide {
+      min-height: calc(100vh - 140px);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .slide {
+        padding: 20px;
+        min-height: 520px;
+      }
+      .slide-title {
+        font-size: 1.5rem;
+      }
+      .progress-track, .slide-dots {
+        display: none;
+      }
+      .slide-select {
+        max-width: 140px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Presentation Toolbar -->
+  <header class="pres-header">
+    <div class="d-flex align-items-center gap-3">
+      <a href="index.html" class="brand-logo" title="Back to SocietyHub Website">
+        <i class="fa-solid fa-building-user"></i>
+        <span>Society<span style="color: var(--accent-orange);">Hub</span></span>
+      </a>
+      <span class="badge bg-warning bg-opacity-25 text-warning px-2.5 py-1 rounded-pill small fw-bold d-none d-sm-inline-block">
+        <i class="fa-solid fa-tv me-1"></i> Live Deck v3.0
+      </span>
+    </div>
+
+    <div class="pres-controls-group">
+      <!-- Jump to Slide Selector -->
+      <select class="slide-select" id="slideSelect" onchange="goToSlide(parseInt(this.value))">
+        <option value="1">1. Cover & Overview</option>
+        <option value="2">2. Executive Agenda</option>
+        <option value="3">3. Problem & Solution</option>
+        <option value="4">4. Core Feature Modules</option>
+        <option value="5">5. Enterprise Tech Stack</option>
+        <option value="6">6. System Architecture</option>
+        <option value="7">7. Role-Based Access (RBAC)</option>
+        <option value="8">8. Member Directory (10 Users)</option>
+        <option value="9">9. Admin Console (8 Tabs)</option>
+        <option value="10">10. Budget & Development</option>
+        <option value="11">11. Live Demo & Q&A</option>
+      </select>
+
+      <!-- Auto Play / Timer Button -->
+      <button class="pres-btn" id="autoplayBtn" onclick="toggleAutoplay()" title="Auto Advance Slides (10s)">
+        <i class="fa-solid fa-play" id="autoplayIcon"></i>
+        <span class="d-none d-md-inline" id="autoplayText">Auto</span>
+      </button>
+
+      <!-- Speaker Notes Toggle -->
+      <button class="pres-btn" id="notesBtn" onclick="toggleSpeakerNotes()" title="Speaker Notes (Shortcut: N)">
+        <i class="fa-solid fa-note-sticky text-warning"></i>
+        <span class="d-none d-md-inline">Notes</span>
+      </button>
+
+      <!-- Fullscreen Toggle -->
+      <button class="pres-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen (Shortcut: F)">
+        <i class="fa-solid fa-expand"></i>
+        <span class="d-none d-md-inline">Fullscreen</span>
+      </button>
+
+      <!-- Download PPTX file -->
+      <a href="SocietyHub_Presentation.pptx" download="SocietyHub_Presentation.pptx" class="pres-btn pres-btn-primary" title="Download PowerPoint .pptx file">
+        <i class="fa-solid fa-download"></i>
+        <span class="d-none d-md-inline">Download .PPTX</span>
+      </a>
+
+      <!-- Quick Demo Launcher Modal Button -->
+      <button class="pres-btn btn-active" data-bs-toggle="modal" data-bs-target="#demoModal" title="Launch Live Interactive Demo">
+        <i class="fa-solid fa-rocket"></i>
+        <span class="d-none d-sm-inline">Demo Portals</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Presentation Viewport -->
+  <main class="pres-viewport">
+    <div class="slide-deck">
+
+      <!-- ══════════════════════════════════════════════════════════════
+           SLIDE 1: Cover & Project Identity
+           ══════════════════════════════════════════════════════════════ -->
+      <div class="slide active" id="slide-1" data-title="Cover & Project Identity" data-notes="Welcome everyone. SocietyHub v3.0 is a complete, production-ready SaaS platform engineered to digitize residential society operations end-to-end. We feature 4 distinct role portals, 10 active seeding members across 3 towers, automated billing, complaint resolution, visitor security, and full PWA offline support.">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <span class="slide-badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-50">
+            <i class="fa-solid fa-sparkles me-1"></i> Project Presentation
+          </span>
+          <span class="text-muted small fw-semibold"><i class="fa-solid fa-calendar me-1"></i> October 2026</span>
+        </div>
+
+        <div class="row align-items-center my-auto g-4">
+          <div class="col-lg-7">
+            <h1 class="slide-title display-4 fw-extrabold text-white mb-2">
+              Society<span style="color: var(--accent-orange);">Hub</span> <span class="fs-4 text-primary align-middle">v3.0</span>
+            </h1>
+            <p class="slide-subtitle fs-4 mb-4 text-light">
+              Next-Generation Residential Housing Society Management Platform
+            </p>
+            <p class="text-muted fs-6 mb-4 pe-lg-4">
+              A comprehensive digital operating system bridging Society Administrators, Managing Committees, Residents, and Security Guards with real-time billing, paperless gate registers, automated complaint lifecycle tracking, and instant PDF receipts.
+            </p>
+
+            <div class="d-flex flex-wrap gap-3">
+              <button class="pres-btn pres-btn-primary px-4 py-2.5 fs-6" onclick="goToSlide(2)">
+                Explore Presentation <i class="fa-solid fa-arrow-right ms-2"></i>
+              </button>
+              <button class="pres-btn btn-active px-4 py-2.5 fs-6" data-bs-toggle="modal" data-bs-target="#demoModal">
+                <i class="fa-solid fa-play me-2"></i> 1-Click Live Demo
+              </button>
+              <a href="index.html" class="pres-btn px-3 py-2.5 fs-6">
+                <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Visit Website
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-5">
+            <!-- Key Highlight KPI Grid -->
+            <div class="row g-3">
+              <div class="col-6">
+                <div class="info-card text-center py-4 border-primary border-opacity-25">
+                  <h2 class="display-5 fw-bold text-primary mb-1">10</h2>
+                  <span class="text-muted small fw-semibold">Active Members</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="info-card text-center py-4 border-warning border-opacity-25">
+                  <h2 class="display-5 fw-bold text-warning mb-1">8</h2>
+                  <span class="text-muted small fw-semibold">Admin Modules</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="info-card text-center py-4 border-success border-opacity-25">
+                  <h2 class="display-5 fw-bold text-success mb-1">4</h2>
+                  <span class="text-muted small fw-semibold">Role Portals</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="info-card text-center py-4 border-danger border-opacity-25">
+                  <h2 class="display-5 fw-bold text-danger mb-1">100%</h2>
+                  <span class="text-muted small fw-semibold">PWA Offline Sync</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Author & Society Meta Card -->
+            <div class="info-card mt-3">
+              <div class="d-flex align-items-center gap-3">
+                <div class="bg-primary bg-opacity-25 p-3 rounded-circle text-primary">
+                  <i class="fa-solid fa-user-shield fs-4"></i>
+                </div>
+                <div>
+                  <h6 class="fw-bold text-white mb-0">Jenil Barad</h6>
+                  <small class="text-muted d-block">Lead Developer & Society Administrator</small>
+                  <small class="text-warning">SocietyHub Grand Residency, Mumbai • SOC-MH-4001</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════════
+           SLIDE 2: Executive Agenda
+           ══════════════════════════════════════════════════════════════ -->
+      <div class="slide" id="slide-2" data-title="Executive Agenda" data-notes="Our agenda today covers the foundational problem we address, our complete multi-role feature set, the modern technology stack powering the platform, architecture patterns, role access boundaries, live member directory, full admin modules, project budget, and concludes with a live interactive portal demonstration.">
+        <span class="slide-badge bg-info bg-opacity-25 text-info">Agenda & Roadmap</span>
+        <h2 class="slide-title">Executive Presentation Outline</h2>
+        <p class="slide-subtitle">Structured roadmap of system specifications, architecture, and live capabilities.</p>
+
+        <div class="slide-body">
+          <div class="row g-3">
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card" onclick="goToSlide(3)" style="cursor: pointer;">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <span class="badge bg-primary rounded-pill px-2.5">01</span>
+                  <i class="fa-solid fa-circle-question text-muted"></i>
+                </div>
+                <h6 class="fw-bold text-white mb-1">Problem & Solution</h6>
+                <p class="text-muted small mb-0">Manual society management gaps vs digital cloud workflows.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card" onclick="goToSlide(4)" style="cursor: pointer;">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <span class="badge bg-warning rounded-pill px-2.5">02</span>
+                  <i class="fa-solid fa-cubes text-muted"></i>
+                </div>
+                <h6 class="fw-bold text-white mb-1">Core Modules</h6>
+                <p class="text-muted small mb-0">8 major modules spanning finance, gates, complaints, and voting.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card" onclick="goToSlide(5)" style="cursor: pointer;">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <span class="badge bg-success rounded-pill px-2.5">03</span>
+                  <i class="fa-solid fa-layer-group text-muted"></i>
+                </div>
+                <h6 class="fw-bold text-white mb-1">Technology Stack</h6>
+                <p class="text-muted small mb-0">Node.js, Express, Firebase Auth, JWT, and LocalStorage SystemDB.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card" onclick="goToSlide(6)" style="cursor: pointer;">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <span class="badge bg-danger rounded-pill px-2.5">04</span>
+                  <i class="fa-solid fa-sitemap text-muted"></i>
+                </div>
+                <h6 class="fw-bold text-white mb-1">System Architecture</h6>
+                <p class="text-muted small mb-0">Multi-tier client-server structure, security filters, and data flow.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card" onclick="goToSlide(7)" style="cursor: pointer;">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <span class="badge bg-purple rounded-pill px-2.5" style="background: var(--accent-purple);">05</span>
+                  <i class="fa-solid fa-users-gear text-muted"></i>
+                </div>
+                <h6 class="fw-bold text-white mb-1">Role-Based Access</h6>
+                <p class="text-muted small mb-0">Strict RBAC boundaries: Admin, Committee, Resident, Guard.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card" onclick="goToSlide(8)" style="cursor: pointer;">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <span class="badge bg-info rounded-pill px-2.5">06</span>
+                  <i class="fa-solid fa-address-book text-muted"></i>
+                </div>
+                <h6 class="fw-bold text-white mb-1">Member Directory</h6>
+                <p class="text-muted small mb-0">All 10 members mapped across Towers A, B, and C with full data.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card" onclick="goToSlide(9)" style="cursor: pointer;">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <span class="badge bg-warning rounded-pill px-2.5">07</span>
+                  <i class="fa-solid fa-sliders text-muted"></i>
+                </div>
+                <h6 class="fw-bold text-white mb-1">Admin Console</h6>
+                <p class="text-muted small mb-0">Detailed walkthrough of the 8 management tabs and audit trail.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card" onclick="goToSlide(10)" style="cursor: pointer;">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <span class="badge bg-success rounded-pill px-2.5">08</span>
+                  <i class="fa-solid fa-coins text-muted"></i>
+                </div>
+                <h6 class="fw-bold text-white mb-1">Budget & Roadmap</h6>
+                <p class="text-muted small mb-0">Full INR commercial development expenditure and milestones.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════════
+           SLIDE 3: Problem Statement vs Solution
+           ══════════════════════════════════════════════════════════════ -->
+      <div class="slide" id="slide-3" data-title="Problem vs Solution" data-notes="Traditional housing societies suffer from fragmented, manual processes. Paper registers get damaged or forged at security gates, maintenance payment reconciliations take weeks, resident complaints get buried in WhatsApp chats, and notice boards are ignored. SocietyHub replaces this entire friction layer with automated, real-time, transparent cloud workflows.">
+        <span class="slide-badge bg-danger bg-opacity-25 text-danger">The Problem vs Solution</span>
+        <h2 class="slide-title">Why Housing Societies Need SocietyHub</h2>
+        <p class="slide-subtitle">Transforming paper-cluttered manual operations into modern digital administration.</p>
+
+        <div class="slide-body">
+          <div class="row g-4">
+            <!-- Left: The Pain Points -->
+            <div class="col-md-6">
+              <div class="p-4 rounded-3 h-100 border border-danger border-opacity-25" style="background: rgba(239, 68, 68, 0.05);">
+                <h5 class="fw-bold text-danger mb-3 d-flex align-items-center gap-2">
+                  <i class="fa-solid fa-triangle-exclamation"></i> Traditional Manual Challenges
+                </h5>
+                <ul class="list-unstyled d-flex flex-column gap-3 mb-0">
+                  <li class="d-flex align-items-start gap-2">
+                    <i class="fa-solid fa-xmark text-danger mt-1"></i>
+                    <div>
+                      <strong class="text-white">Paper Billing & Unreconciled Dues:</strong>
+                      <span class="text-muted small d-block">Delayed collections, lost paper receipts, manual bank reconciliation spreadsheets.</span>
+                    </div>
+                  </li>
+                  <li class="d-flex align-items-start gap-2">
+                    <i class="fa-solid fa-xmark text-danger mt-1"></i>
+                    <div>
+                      <strong class="text-white">Unsecure Gate Physical Registers:</strong>
+                      <span class="text-muted small d-block">Visitors write fake phone numbers, no resident verification prior to entry, lost logs.</span>
+                    </div>
+                  </li>
+                  <li class="d-flex align-items-start gap-2">
+                    <i class="fa-solid fa-xmark text-danger mt-1"></i>
+                    <div>
+                      <strong class="text-white">Untracked WhatsApp Complaints:</strong>
+                      <span class="text-muted small d-block">Complaints lost in group chats, zero accountability, unresolved leakages and electrical faults.</span>
+                    </div>
+                  </li>
+                  <li class="d-flex align-items-start gap-2">
+                    <i class="fa-solid fa-xmark text-danger mt-1"></i>
+                    <div>
+                      <strong class="text-white">Missed Notice Announcements:</strong>
+                      <span class="text-muted small d-block">Physical notice boards on lobby pillars go unread during emergencies or AGM meetings.</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Right: The SocietyHub Solution -->
+            <div class="col-md-6">
+              <div class="p-4 rounded-3 h-100 border border-success border-opacity-25" style="background: rgba(16, 185, 129, 0.05);">
+                <h5 class="fw-bold text-success mb-3 d-flex align-items-center gap-2">
+                  <i class="fa-solid fa-circle-check"></i> SocietyHub Cloud Solution
+                </h5>
+                <ul class="list-unstyled d-flex flex-column gap-3 mb-0">
+                  <li class="d-flex align-items-start gap-2">
+                    <i class="fa-solid fa-check text-success mt-1"></i>
+                    <div>
+                      <strong class="text-white">Automated Maintenance & Instant Receipts:</strong>
+                      <span class="text-muted small d-block">1-click payments, live balance tracking, and printable PDF invoices generated instantly.</span>
+                    </div>
+                  </li>
+                  <li class="d-flex align-items-start gap-2">
+                    <i class="fa-solid fa-check text-success mt-1"></i>
+                    <div>
+                      <strong class="text-white">Digital Gate Pass & Security Verification:</strong>
+                      <span class="text-muted small d-block">Security guards log entry with verification codes; residents approve passes in real-time.</span>
+                    </div>
+                  </li>
+                  <li class="d-flex align-items-start gap-2">
+                    <i class="fa-solid fa-check text-success mt-1"></i>
+                    <div>
+                      <strong class="text-white">Ticketed Complaint Redressal Engine:</strong>
+                      <span class="text-muted small d-block">Lifecycle tracking: Pending → In Progress → Resolved, with resolution audit trails.</span>
+                    </div>
+                  </li>
+                  <li class="d-flex align-items-start gap-2">
+                    <i class="fa-solid fa-check text-success mt-1"></i>
+                    <div>
+                      <strong class="text-white">Universal Notification Center & Polls:</strong>
+                      <span class="text-muted small d-block">High-priority alerts sent to resident dashboards; democratic society voting polls.</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════════
+           SLIDE 4: Core Feature Modules
+           ══════════════════════════════════════════════════════════════ -->
+      <div class="slide" id="slide-4" data-title="Core Modules" data-notes="SocietyHub includes 8 full-fledged modules. These are not static mockups; every module connects to the database engine with state persistence. The modules range from financial collections to gate passes, amenities, complaints, notices, democratic polls, and audit logging.">
+        <span class="slide-badge bg-warning bg-opacity-25 text-warning">Feature Architecture</span>
+        <h2 class="slide-title">8 Comprehensive Feature Modules</h2>
+        <p class="slide-subtitle">Modular architecture engineered for seamless multi-stakeholder collaboration.</p>
+
+        <div class="slide-body">
+          <div class="row g-3">
+            <div class="col-md-3">
+              <div class="info-card border-top border-3 border-primary">
+                <div class="info-card-header">
+                  <div class="info-icon bg-primary bg-opacity-25 text-primary">
+                    <i class="fa-solid fa-key"></i>
+                  </div>
+                  <h6 class="fw-bold text-white mb-0">Role-Based Auth</h6>
+                </div>
+                <p class="text-muted small mb-0">4 tailored portals with JWT security, bcrypt password hashing, and Google OAuth support.</p>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="info-card border-top border-3 border-success">
+                <div class="info-card-header">
+                  <div class="info-icon bg-success bg-opacity-25 text-success">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                  </div>
+                  <h6 class="fw-bold text-white mb-0">Billing & Dues</h6>
+                </div>
+                <p class="text-muted small mb-0">Automated invoices, online payment simulation, printable receipts, and payment status badges.</p>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="info-card border-top border-3 border-warning">
+                <div class="info-card-header">
+                  <div class="info-icon bg-warning bg-opacity-25 text-warning">
+                    <i class="fa-solid fa-headset"></i>
+                  </div>
+                  <h6 class="fw-bold text-white mb-0">Complaints Desk</h6>
+                </div>
+                <p class="text-muted small mb-0">Ticket logging with category tagging (Plumbing, Lift, Electrical), priority, and resolution notes.</p>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="info-card border-top border-3 border-info">
+                <div class="info-card-header">
+                  <div class="info-icon bg-info bg-opacity-25 text-info">
+                    <i class="fa-solid fa-bullhorn"></i>
+                  </div>
+                  <h6 class="fw-bold text-white mb-0">Notice Broadcast</h6>
+                </div>
+                <p class="text-muted small mb-0">Instant society announcements, AGM meeting notices, maintenance shutdowns, and emergency alerts.</p>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="info-card border-top border-3 border-danger">
+                <div class="info-card-header">
+                  <div class="info-icon bg-danger bg-opacity-25 text-danger">
+                    <i class="fa-solid fa-shield-halved"></i>
+                  </div>
+                  <h6 class="fw-bold text-white mb-0">Gate Pass & Visitors</h6>
+                </div>
+                <p class="text-muted small mb-0">Guard logging of visitors, delivery agents, and cabs with resident approval verification codes.</p>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="info-card border-top border-3 border-purple" style="border-top-color: var(--accent-purple) !important;">
+                <div class="info-card-header">
+                  <div class="info-icon text-purple" style="background: rgba(139, 92, 246, 0.2); color: var(--accent-purple);">
+                    <i class="fa-solid fa-check-to-slot"></i>
+                  </div>
+                  <h6 class="fw-bold text-white mb-0">Society Voting Polls</h6>
+                </div>
+                <p class="text-muted small mb-0">Democratic decision-making engine for solar installations, EV chargers, and festival celebrations.</p>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="info-card border-top border-3 border-teal" style="border-top-color: #06B6D4 !important;">
+                <div class="info-card-header">
+                  <div class="info-icon" style="background: rgba(6, 182, 212, 0.2); color: #06B6D4;">
+                    <i class="fa-solid fa-calendar-check"></i>
+                  </div>
+                  <h6 class="fw-bold text-white mb-0">Amenity Booking</h6>
+                </div>
+                <p class="text-muted small mb-0">Slot booking system for Clubhouse, Swimming Pool, Gym, and Community Hall with conflict checks.</p>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="info-card border-top border-3 border-pink" style="border-top-color: #EC4899 !important;">
+                <div class="info-card-header">
+                  <div class="info-icon" style="background: rgba(236, 72, 153, 0.2); color: #EC4899;">
+                    <i class="fa-solid fa-chart-line"></i>
+                  </div>
+                  <h6 class="fw-bold text-white mb-0">Audit & Analytics</h6>
+                </div>
+                <p class="text-muted small mb-0">Real-time KPI graphs, collection metrics, immutable system event logs, and CSV data export.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════════
+           SLIDE 5: Technology Stack
+           ══════════════════════════════════════════════════════════════ -->
+      <div class="slide" id="slide-5" data-title="Tech Stack" data-notes="We selected a lightweight, robust, zero-bloat technology stack. The client is clean HTML5 and Bootstrap 5 with responsive dark/light theme switching. The backend is an Express Node.js server with bcrypt hashing and JWT tokens. For resilience, we built an offline-first SystemDB in LocalStorage with automatic seed merging. Deployment is hosted on Vercel with HTTPS.">
+        <span class="slide-badge bg-primary bg-opacity-25 text-primary">Full-Stack Frameworks</span>
+        <h2 class="slide-title">Modern Full-Stack Technology Stack</h2>
+        <p class="slide-subtitle">High performance, zero framework bloat, offline-first reliability.</p>
+
+        <div class="slide-body">
+          <div class="row g-4">
+            <!-- Frontend Layer -->
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card border-primary border-opacity-50">
+                <h5 class="fw-bold text-primary mb-3"><i class="fa-solid fa-desktop me-2"></i> Frontend</h5>
+                <ul class="list-unstyled d-flex flex-column gap-2 small text-muted mb-0">
+                  <li><strong class="text-white">• HTML5 & CSS3:</strong> Modern semantic DOM structure with custom CSS variables.</li>
+                  <li><strong class="text-white">• Bootstrap 5.3:</strong> Responsive 12-column grid, modals, tabs, and offcanvas.</li>
+                  <li><strong class="text-white">• FontAwesome 6:</strong> Consistent iconography across dashboards.</li>
+                  <li><strong class="text-white">• Chart.js:</strong> Interactive bar and doughnut financial visual charts.</li>
+                  <li><strong class="text-white">• Google Fonts:</strong> Plus Jakarta Sans & Inter typography.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Backend Layer -->
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card border-warning border-opacity-50">
+                <h5 class="fw-bold text-warning mb-3"><i class="fa-solid fa-server me-2"></i> Backend API</h5>
+                <ul class="list-unstyled d-flex flex-column gap-2 small text-muted mb-0">
+                  <li><strong class="text-white">• Node.js & Express:</strong> High-throughput REST API serving endpoints.</li>
+                  <li><strong class="text-white">• bcryptjs:</strong> Industrial salt-rounds password hashing.</li>
+                  <li><strong class="text-white">• jsonwebtoken (JWT):</strong> Stateless authentication tokens.</li>
+                  <li><strong class="text-white">• CORS & Middleware:</strong> Route protection and role verification guards.</li>
+                  <li><strong class="text-white">• Auth Middleware:</strong> Server-side token validation on protected APIs.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Data & Storage Layer -->
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card border-success border-opacity-50">
+                <h5 class="fw-bold text-success mb-3"><i class="fa-solid fa-database me-2"></i> Data Engine</h5>
+                <ul class="list-unstyled d-flex flex-column gap-2 small text-muted mb-0">
+                  <li><strong class="text-white">• SystemDB Engine:</strong> Resilient offline-first LocalStorage state manager.</li>
+                  <li><strong class="text-white">• seed.json Master:</strong> Complete schema for users, flats, billing, and logs.</li>
+                  <li><strong class="text-white">• Version Cache Busting:</strong> Auto-updates client state on schema revision.</li>
+                  <li><strong class="text-white">• Firebase SDK:</strong> Google OAuth single-sign-on client integration.</li>
+                  <li><strong class="text-white">• CSV Exporter:</strong> Client-side dynamic CSV audit log generation.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- DevOps & Deployment -->
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card border-danger border-opacity-50">
+                <h5 class="fw-bold text-danger mb-3"><i class="fa-solid fa-cloud-arrow-up me-2"></i> Cloud & PWA</h5>
+                <ul class="list-unstyled d-flex flex-column gap-2 small text-muted mb-0">
+                  <li><strong class="text-white">• Vercel Cloud:</strong> Edge global CDN hosting with zero-config serverless runtime.</li>
+                  <li><strong class="text-white">• PWA Service Worker:</strong> Standalone desktop/mobile installable app.</li>
+                  <li><strong class="text-white">• Offline Caching:</strong> Core assets cached for offline operation.</li>
+                  <li><strong class="text-white">• GitHub CI/CD:</strong> Automated branch deployment pipelines.</li>
+                  <li><strong class="text-white">• SSL/TLS Enforced:</strong> 100% encrypted HTTPS traffic.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════════
+           SLIDE 6: System Architecture Diagram
+           ══════════════════════════════════════════════════════════════ -->
+      <div class="slide" id="slide-6" data-title="Architecture" data-notes="This diagram displays our clean 3-tier architecture. On the left is the client presentation tier, where all user interactions take place. In the center is the logic and API tier, handling token verification, notification routing, and data updates. On the right is the data tier containing our master datasets and offline persistence.">
+        <span class="slide-badge bg-info bg-opacity-25 text-info">System Architecture</span>
+        <h2 class="slide-title">Three-Tier Architecture & Data Flow</h2>
+        <p class="slide-subtitle">Clear separation of concerns ensuring scalability, security, and offline resilience.</p>
+
+        <div class="slide-body">
+          <div class="row align-items-center g-3">
+            <!-- Tier 1 -->
+            <div class="col-lg-4">
+              <div class="info-card border-primary">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                  <span class="badge bg-primary">Tier 1</span>
+                  <h6 class="fw-bold text-white mb-0">Client Presentation</h6>
+                </div>
+                <div class="d-flex flex-column gap-2 small">
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-light">
+                    <i class="fa-solid fa-globe text-primary me-2"></i> <code>index.html</code> (Landing Page)
+                  </div>
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-light">
+                    <i class="fa-solid fa-lock text-warning me-2"></i> <code>login.html</code> (Auth Portal)
+                  </div>
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-light">
+                    <i class="fa-solid fa-user-shield text-danger me-2"></i> <code>admin.html</code> (Admin Console)
+                  </div>
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-light">
+                    <i class="fa-solid fa-house-user text-info me-2"></i> <code>resident.html</code> (Resident Hub)
+                  </div>
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-light">
+                    <i class="fa-solid fa-shield-halved text-warning me-2"></i> <code>guard.html</code> (Security Gate)
+                  </div>
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-light">
+                    <i class="fa-solid fa-users text-purple me-2"></i> <code>committee.html</code> (Committee)
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tier 2 -->
+            <div class="col-lg-4">
+              <div class="info-card border-warning">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                  <span class="badge bg-warning text-dark">Tier 2</span>
+                  <h6 class="fw-bold text-white mb-0">Logic & Security Engine</h6>
+                </div>
+                <div class="d-flex flex-column gap-2 small">
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-light">
+                    <i class="fa-solid fa-shield-cat text-warning me-2"></i> <code>auth-routes.js</code> (bcrypt & JWT)
+                  </div>
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-light">
+                    <i class="fa-solid fa-database text-success me-2"></i> <code>db.js</code> (SystemDB State Manager)
+                  </div>
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-light">
+                    <i class="fa-solid fa-bell text-danger me-2"></i> <code>notifications.js</code> (Global Center)
+                  </div>
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-light">
+                    <i class="fa-solid fa-receipt text-info me-2"></i> <code>receipt.js</code> (Invoice Generator)
+                  </div>
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-light">
+                    <i class="fa-solid fa-palette text-purple me-2"></i> <code>theme.js</code> (Theme Controller)
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tier 3 -->
+            <div class="col-lg-4">
+              <div class="info-card border-success">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                  <span class="badge bg-success">Tier 3</span>
+                  <h6 class="fw-bold text-white mb-0">Data & Persistence</h6>
+                </div>
+                <div class="d-flex flex-column gap-2 small">
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-light">
+                    <i class="fa-solid fa-hard-drive text-success me-2"></i> <code>seed.json</code> (Master Dataset)
+                  </div>
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-light">
+                    <i class="fa-solid fa-microchip text-primary me-2"></i> <code>LocalStorage</code> (Client Cache)
+                  </div>
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-light">
+                    <i class="fa-solid fa-fire text-danger me-2"></i> <code>Firebase Auth</code> (OAuth Engine)
+                  </div>
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-light">
+                    <i class="fa-solid fa-file-csv text-warning me-2"></i> <code>Audit Logs</code> (CSV Export)
+                  </div>
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-light">
+                    <i class="fa-solid fa-cloud text-info me-2"></i> <code>Vercel Cloud</code> (Edge Serverless)
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════════
+           SLIDE 7: Role-Based Access Control (RBAC)
+           ══════════════════════════════════════════════════════════════ -->
+      <div class="slide" id="slide-7" data-title="Roles & Portals" data-notes="Role-Based Access Control is the backbone of SocietyHub. Each of our 4 roles has explicit boundary constraints. Administrators have full system authority. Committee members manage community votes, notices, and budgets. Residents access personal billing and amenities. Security guards are restricted to gate passes and entry registers.">
+        <span class="slide-badge bg-danger bg-opacity-25 text-danger">Security Architecture</span>
+        <h2 class="slide-title">4 Specialized Role Portals & RBAC Matrix</h2>
+        <p class="slide-subtitle">Fine-grained permissions and dedicated interfaces designed for each stakeholder.</p>
+
+        <div class="slide-body">
+          <div class="row g-3">
+            <!-- Role 1: Admin -->
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card border-top border-4 border-danger">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <h6 class="fw-bold text-danger mb-0"><i class="fa-solid fa-user-shield me-1"></i> Administrator</h6>
+                  <span class="badge bg-danger">Root</span>
+                </div>
+                <small class="text-white d-block mb-2">Lead: Jenil Barad (A-101)</small>
+                <ul class="list-unstyled d-flex flex-column gap-1 small text-muted mb-3">
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Full system oversight & KPIs</li>
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Approve/reject new members</li>
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Assign roles & allot flats</li>
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Maintenance invoice dispatch</li>
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Export audit trails to CSV</li>
+                </ul>
+                <button class="pres-btn pres-btn-primary w-100 justify-content-center" onclick="launchDemoRole('admin')">
+                  <i class="fa-solid fa-arrow-right-to-bracket me-1"></i> Open Admin
+                </button>
+              </div>
+            </div>
+
+            <!-- Role 2: Committee -->
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card border-top border-4 border-info">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <h6 class="fw-bold text-info mb-0"><i class="fa-solid fa-users me-1"></i> Committee</h6>
+                  <span class="badge bg-info text-dark">Management</span>
+                </div>
+                <small class="text-white d-block mb-2">Suresh Kumar & Rohan Mehta</small>
+                <ul class="list-unstyled d-flex flex-column gap-1 small text-muted mb-3">
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Publish society notices</li>
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Create & manage voting polls</li>
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Review collection budget KPIs</li>
+                  <li><i class="fa-solid fa-check text-success me-1"></i> View resident directory</li>
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Amenity schedules overview</li>
+                </ul>
+                <button class="pres-btn pres-btn-primary w-100 justify-content-center" onclick="launchDemoRole('committee')">
+                  <i class="fa-solid fa-arrow-right-to-bracket me-1"></i> Open Committee
+                </button>
+              </div>
+            </div>
+
+            <!-- Role 3: Resident -->
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card border-top border-4 border-primary">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <h6 class="fw-bold text-primary mb-0"><i class="fa-solid fa-house-user me-1"></i> Resident</h6>
+                  <span class="badge bg-primary">Community</span>
+                </div>
+                <small class="text-white d-block mb-2">Amit Patel, Priya Verma, etc.</small>
+                <ul class="list-unstyled d-flex flex-column gap-1 small text-muted mb-3">
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Pay maintenance fees online</li>
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Instant PDF receipt generation</li>
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Lodge & track repair tickets</li>
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Approve visitor gate passes</li>
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Book Clubhouse & Gym slots</li>
+                </ul>
+                <button class="pres-btn pres-btn-primary w-100 justify-content-center" onclick="launchDemoRole('resident')">
+                  <i class="fa-solid fa-arrow-right-to-bracket me-1"></i> Open Resident
+                </button>
+              </div>
+            </div>
+
+            <!-- Role 4: Guard -->
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card border-top border-4 border-warning">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <h6 class="fw-bold text-warning mb-0"><i class="fa-solid fa-shield-halved me-1"></i> Security Guard</h6>
+                  <span class="badge bg-warning text-dark">Gatepost</span>
+                </div>
+                <small class="text-white d-block mb-2">Bahadur Singh & Vikram Yadav</small>
+                <ul class="list-unstyled d-flex flex-column gap-1 small text-muted mb-3">
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Fast visitor entry registration</li>
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Issue 6-digit gate pass codes</li>
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Real-time exit time logging</li>
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Verification check with flat</li>
+                  <li><i class="fa-solid fa-check text-success me-1"></i> Shift logs & emergency contacts</li>
+                </ul>
+                <button class="pres-btn pres-btn-primary w-100 justify-content-center" onclick="launchDemoRole('guard')">
+                  <i class="fa-solid fa-arrow-right-to-bracket me-1"></i> Open Guard
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════════
+           SLIDE 8: Member Directory (All 10 Seeding Members)
+           ══════════════════════════════════════════════════════════════ -->
+      <div class="slide" id="slide-8" data-title="Members Directory" data-notes="Here is the master society directory. We have seeded 10 distinct profiles across Tower A, Tower B, and Tower C, encompassing owners, tenants, committee members, and security staff with complete metadata, shifts, and parking slot allocations.">
+        <span class="slide-badge bg-info bg-opacity-25 text-info">Master Dataset</span>
+        <h2 class="slide-title">10 Seeding Members Across 3 Towers</h2>
+        <p class="slide-subtitle">Complete demographic mapping with flats, contact details, and role assignments.</p>
+
+        <div class="slide-body">
+          <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-dark table-hover table-bordered border-secondary border-opacity-25 small mb-0">
+              <thead class="table-secondary table-opacity-10 text-uppercase fs-7">
+                <tr>
+                  <th>#</th>
+                  <th>Member Name</th>
+                  <th>Role</th>
+                  <th>Flat / Gate</th>
+                  <th>Tower / Shift</th>
+                  <th>Phone</th>
+                  <th>Status</th>
+                  <th>Quick Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td><strong>Jenil Barad</strong></td>
+                  <td><span class="badge bg-danger">Admin</span></td>
+                  <td>A-101</td>
+                  <td>Tower A</td>
+                  <td>9876543210</td>
+                  <td><span class="badge bg-success">Approved</span></td>
+                  <td><button class="btn btn-xs btn-outline-danger py-0 px-2" onclick="launchDemoRole('admin')">Login</button></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td><strong>Suresh Kumar</strong></td>
+                  <td><span class="badge bg-info text-dark">Committee (Treasurer)</span></td>
+                  <td>A-402</td>
+                  <td>Tower A</td>
+                  <td>9765432109</td>
+                  <td><span class="badge bg-success">Approved</span></td>
+                  <td><button class="btn btn-xs btn-outline-info py-0 px-2" onclick="launchDemoRole('committee')">Login</button></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td><strong>Rohan Mehta</strong></td>
+                  <td><span class="badge bg-info text-dark">Committee (Secretary)</span></td>
+                  <td>B-301</td>
+                  <td>Tower B</td>
+                  <td>9876543218</td>
+                  <td><span class="badge bg-success">Approved</span></td>
+                  <td><button class="btn btn-xs btn-outline-info py-0 px-2" onclick="launchDemoRole('committee')">Login</button></td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td><strong>Amit Patel</strong></td>
+                  <td><span class="badge bg-primary">Resident (Owner)</span></td>
+                  <td>A-302</td>
+                  <td>Tower A</td>
+                  <td>9812345678</td>
+                  <td><span class="badge bg-success">Approved</span></td>
+                  <td><button class="btn btn-xs btn-outline-primary py-0 px-2" onclick="launchDemoRole('resident')">Login</button></td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td><strong>Priya Verma</strong></td>
+                  <td><span class="badge bg-primary">Resident (Tenant)</span></td>
+                  <td>C-501</td>
+                  <td>Tower C</td>
+                  <td>9823456789</td>
+                  <td><span class="badge bg-success">Approved</span></td>
+                  <td><button class="btn btn-xs btn-outline-primary py-0 px-2" onclick="launchDemoRole('resident')">Login</button></td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td><strong>Rahul Sharma</strong></td>
+                  <td><span class="badge bg-primary">Resident (Owner)</span></td>
+                  <td>B-104</td>
+                  <td>Tower B</td>
+                  <td>9834567890</td>
+                  <td><span class="badge bg-success">Approved</span></td>
+                  <td><button class="btn btn-xs btn-outline-primary py-0 px-2" onclick="launchDemoRole('resident')">Login</button></td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td><strong>Neha Gupta</strong></td>
+                  <td><span class="badge bg-primary">Resident (Tenant)</span></td>
+                  <td>B-202</td>
+                  <td>Tower B</td>
+                  <td>9845678901</td>
+                  <td><span class="badge bg-success">Approved</span></td>
+                  <td><button class="btn btn-xs btn-outline-primary py-0 px-2" onclick="launchDemoRole('resident')">Login</button></td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td><strong>Ananya Deshmukh</strong></td>
+                  <td><span class="badge bg-primary">Resident (Owner)</span></td>
+                  <td>A-604</td>
+                  <td>Tower A</td>
+                  <td>9856789012</td>
+                  <td><span class="badge bg-success">Approved</span></td>
+                  <td><button class="btn btn-xs btn-outline-primary py-0 px-2" onclick="launchDemoRole('resident')">Login</button></td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td><strong>Bahadur Singh</strong></td>
+                  <td><span class="badge bg-warning text-dark">Security Guard</span></td>
+                  <td>Gate 1</td>
+                  <td>Morning Shift</td>
+                  <td>9988776655</td>
+                  <td><span class="badge bg-success">Approved</span></td>
+                  <td><button class="btn btn-xs btn-outline-warning py-0 px-2" onclick="launchDemoRole('guard')">Login</button></td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td><strong>Vikram Yadav</strong></td>
+                  <td><span class="badge bg-warning text-dark">Security Guard</span></td>
+                  <td>Gate 2</td>
+                  <td>Evening Shift</td>
+                  <td>9867890123</td>
+                  <td><span class="badge bg-success">Approved</span></td>
+                  <td><button class="btn btn-xs btn-outline-warning py-0 px-2" onclick="launchDemoRole('guard')">Login</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════════
+           SLIDE 9: Admin Management Console (All 8 Tabs)
+           ══════════════════════════════════════════════════════════════ -->
+      <div class="slide" id="slide-9" data-title="Admin Console" data-notes="The Admin Console in admin.html is an executive command center organized into 8 tabs. It provides live financial collection KPIs, member management with role changes and flat allotment, full complaint ticket redressal modals, maintenance invoicing, broadcast notice publishing, gate visitor logs, and CSV-exportable system audit logs.">
+        <span class="slide-badge bg-warning bg-opacity-25 text-warning">Administration Engine</span>
+        <h2 class="slide-title">Admin Dashboard — 8 Management Tabs</h2>
+        <p class="slide-subtitle">An executive single-pane-of-glass console controlling all society operations.</p>
+
+        <div class="slide-body">
+          <div class="row g-3">
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card">
+                <span class="badge bg-primary mb-2">Tab 1</span>
+                <h6 class="fw-bold text-white mb-1"><i class="fa-solid fa-chart-pie me-1"></i> Overview KPIs</h6>
+                <p class="text-muted small mb-0">Total members (10), collections (₹1.84L), active complaints, monthly collections bar chart.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card">
+                <span class="badge bg-warning text-dark mb-2">Tab 2</span>
+                <h6 class="fw-bold text-white mb-1"><i class="fa-solid fa-address-book me-1"></i> Member Directory</h6>
+                <p class="text-muted small mb-0">Rich member cards with avatar, flat, shift, dues, and actions to allot flats or edit roles.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card">
+                <span class="badge bg-danger mb-2">Tab 3</span>
+                <h6 class="fw-bold text-white mb-1"><i class="fa-solid fa-ticket me-1"></i> Complaint Redressal</h6>
+                <p class="text-muted small mb-0">Active tickets with priority badges. Admin modal updates status and adds resolution notes.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card">
+                <span class="badge bg-success mb-2">Tab 4</span>
+                <h6 class="fw-bold text-white mb-1"><i class="fa-solid fa-money-bill-wave me-1"></i> Maintenance Billing</h6>
+                <p class="text-muted small mb-0">8 invoices across resident flats with payment receipt download and transaction IDs.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card">
+                <span class="badge bg-info text-dark mb-2">Tab 5</span>
+                <h6 class="fw-bold text-white mb-1"><i class="fa-solid fa-bullhorn me-1"></i> Notice Publisher</h6>
+                <p class="text-muted small mb-0">Broadcasts AGM alerts, water tank cleanings, and emergency alerts directly to portals.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card">
+                <span class="badge bg-secondary mb-2">Tab 6</span>
+                <h6 class="fw-bold text-white mb-1"><i class="fa-solid fa-car me-1"></i> Visitor Gate Log</h6>
+                <p class="text-muted small mb-0">Real-time gate pass logs with entry/exit timestamps and resident approval confirmation.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card">
+                <span class="badge bg-purple mb-2" style="background: var(--accent-purple);">Tab 7</span>
+                <h6 class="fw-bold text-white mb-1"><i class="fa-solid fa-shield-halved me-1"></i> Role & Access Control</h6>
+                <p class="text-muted small mb-0">Grant/revoke admin privileges, change user roles, and allot parking spaces.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+              <div class="info-card">
+                <span class="badge bg-teal mb-2" style="background: #06B6D4;">Tab 8</span>
+                <h6 class="fw-bold text-white mb-1"><i class="fa-solid fa-list-check me-1"></i> Audit Trail Logs</h6>
+                <p class="text-muted small mb-0">Immutable records of logins, payments, and notices with 1-click CSV file export.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════════
+           SLIDE 10: Budget Breakdown & Development Roadmap
+           ══════════════════════════════════════════════════════════════ -->
+      <div class="slide" id="slide-10" data-title="Budget & Plan" data-notes="Here is our project budget and development timeline. The project was executed in 5 systematic phases spanning 8 weeks. Total commercial expenditure is ₹1,11,650 INR covering frontend, backend, security auth, testing, domain registration, and contingency.">
+        <span class="slide-badge bg-success bg-opacity-25 text-success">Commercial Planning</span>
+        <h2 class="slide-title">Budget Breakdown & Development Plan</h2>
+        <p class="slide-subtitle">Clear commercial financial allocation and 5-phase engineering roadmap.</p>
+
+        <div class="slide-body">
+          <div class="row g-4">
+            <!-- Left: 5-Phase Timeline -->
+            <div class="col-lg-6">
+              <h6 class="fw-bold text-primary mb-3"><i class="fa-solid fa-timeline me-2"></i> 8-Week Development Roadmap</h6>
+              <div class="d-flex flex-column gap-2 small">
+                <div class="p-2.5 rounded bg-dark border-start border-4 border-primary">
+                  <div class="d-flex justify-content-between mb-1">
+                    <strong class="text-white">Phase 1: Foundation (Weeks 1-2)</strong>
+                    <span class="badge bg-primary">Completed</span>
+                  </div>
+                  <span class="text-muted">Semantic HTML layout, CSS master theme, seed schema, responsive navbar.</span>
+                </div>
+
+                <div class="p-2.5 rounded bg-dark border-start border-4 border-warning">
+                  <div class="d-flex justify-content-between mb-1">
+                    <strong class="text-white">Phase 2: Core Modules (Weeks 3-4)</strong>
+                    <span class="badge bg-warning text-dark">Completed</span>
+                  </div>
+                  <span class="text-muted">Resident portal, maintenance billing engine, complaint tickets, notices.</span>
+                </div>
+
+                <div class="p-2.5 rounded bg-dark border-start border-4 border-success">
+                  <div class="d-flex justify-content-between mb-1">
+                    <strong class="text-white">Phase 3: Admin Console (Weeks 5-6)</strong>
+                    <span class="badge bg-success">Completed</span>
+                  </div>
+                  <span class="text-muted">8-tab admin console, Chart.js KPIs, member directory, audit CSV export.</span>
+                </div>
+
+                <div class="p-2.5 rounded bg-dark border-start border-4 border-info">
+                  <div class="d-flex justify-content-between mb-1">
+                    <strong class="text-white">Phase 4: Guard & Committee (Week 7)</strong>
+                    <span class="badge bg-info text-dark">Completed</span>
+                  </div>
+                  <span class="text-muted">Gate pass issuing, visitor entry logs, society polls, amenity booking.</span>
+                </div>
+
+                <div class="p-2.5 rounded bg-dark border-start border-4 border-danger">
+                  <div class="d-flex justify-content-between mb-1">
+                    <strong class="text-white">Phase 5: Deploy & PWA (Week 8)</strong>
+                    <span class="badge bg-danger">Production</span>
+                  </div>
+                  <span class="text-muted">Service Worker offline cache, Vercel serverless deployment, documentation.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Itemized Budget -->
+            <div class="col-lg-6">
+              <h6 class="fw-bold text-success mb-3"><i class="fa-solid fa-coins me-2"></i> Budget Allocation (INR)</h6>
+              <div class="table-responsive">
+                <table class="table table-dark table-sm table-bordered border-secondary border-opacity-25 small mb-0">
+                  <thead class="table-secondary table-opacity-10">
+                    <tr>
+                      <th>Module / Resource</th>
+                      <th class="text-end">Cost (₹)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Frontend Development (Bootstrap, JS, Charts)</td><td class="text-end fw-semibold">₹ 25,000</td></tr>
+                    <tr><td>Backend REST API (Node.js & Express)</td><td class="text-end fw-semibold">₹ 30,000</td></tr>
+                    <tr><td>Firebase Auth & Security Setup</td><td class="text-end fw-semibold">₹ 8,000</td></tr>
+                    <tr><td>UI/UX Design & CSS Design System</td><td class="text-end fw-semibold">₹ 15,000</td></tr>
+                    <tr><td>PWA Offline Caching & Notifications</td><td class="text-end fw-semibold">₹ 10,000</td></tr>
+                    <tr><td>Testing, QA & Multi-Device Validation</td><td class="text-end fw-semibold">₹ 8,000</td></tr>
+                    <tr><td>Cloud Hosting (Vercel Global Edge)</td><td class="text-end fw-semibold text-success">₹ 0 (Free Tier)</td></tr>
+                    <tr><td>Domain Registration (1 Year)</td><td class="text-end fw-semibold">₹ 1,500</td></tr>
+                    <tr><td>Documentation & Presentation Deck</td><td class="text-end fw-semibold">₹ 4,000</td></tr>
+                    <tr><td>Contingency Buffer (10%)</td><td class="text-end fw-semibold">₹ 10,150</td></tr>
+                    <tr class="table-primary table-opacity-25">
+                      <td class="fw-bold text-white">TOTAL PROJECT INVESTMENT</td>
+                      <td class="text-end fw-extrabold text-warning fs-6">₹ 1,11,650</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════════
+           SLIDE 11: Live Demonstration, Portal Launcher & Q&A
+           ══════════════════════════════════════════════════════════════ -->
+      <div class="slide" id="slide-11" data-title="Live Demo & Q&A" data-notes="Thank you for your time. SocietyHub v3.0 is live and ready for testing. You can click any role button below to launch straight into that user's portal, or ask questions regarding any architecture, security, or business logic aspects.">
+        <span class="slide-badge bg-primary bg-opacity-25 text-primary">Live Demonstration</span>
+        <h2 class="slide-title">Interactive Live Demonstration & Q&A</h2>
+        <p class="slide-subtitle">Launch directly into any portal role or inspect system documentation.</p>
+
+        <div class="slide-body">
+          <div class="row align-items-center g-4">
+            <div class="col-lg-6">
+              <h5 class="fw-bold text-white mb-3"><i class="fa-solid fa-play text-warning me-2"></i> Launch Role Portals</h5>
+              <div class="d-flex flex-column gap-3">
+                <div class="role-launch-btn" onclick="launchDemoRole('admin')">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="bg-danger bg-opacity-25 p-3 rounded text-danger"><i class="fa-solid fa-user-shield fs-4"></i></div>
+                    <div>
+                      <strong class="text-white d-block">Admin Portal (Jenil Barad)</strong>
+                      <span class="text-muted small">Access 8 management tabs, approvals, billing, and logs.</span>
+                    </div>
+                  </div>
+                  <i class="fa-solid fa-arrow-right text-muted"></i>
+                </div>
+
+                <div class="role-launch-btn" onclick="launchDemoRole('resident')">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="bg-primary bg-opacity-25 p-3 rounded text-primary"><i class="fa-solid fa-house-user fs-4"></i></div>
+                    <div>
+                      <strong class="text-white d-block">Resident Portal (Amit Patel - Flat A-302)</strong>
+                      <span class="text-muted small">Pay maintenance fees, lodge complaints, approve visitors.</span>
+                    </div>
+                  </div>
+                  <i class="fa-solid fa-arrow-right text-muted"></i>
+                </div>
+
+                <div class="role-launch-btn" onclick="launchDemoRole('guard')">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="bg-warning bg-opacity-25 p-3 rounded text-warning"><i class="fa-solid fa-shield-halved fs-4"></i></div>
+                    <div>
+                      <strong class="text-white d-block">Security Guard Portal (Bahadur Singh - Gate 1)</strong>
+                      <span class="text-muted small">Visitor logging, gate pass verification, and entry/exit times.</span>
+                    </div>
+                  </div>
+                  <i class="fa-solid fa-arrow-right text-muted"></i>
+                </div>
+
+                <div class="role-launch-btn" onclick="launchDemoRole('committee')">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="bg-info bg-opacity-25 p-3 rounded text-info"><i class="fa-solid fa-users fs-4"></i></div>
+                    <div>
+                      <strong class="text-white d-block">Committee Member Portal (Suresh Kumar)</strong>
+                      <span class="text-muted small">Society polls, notice broadcasts, and community metrics.</span>
+                    </div>
+                  </div>
+                  <i class="fa-solid fa-arrow-right text-muted"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="info-card p-4 text-center">
+                <i class="fa-solid fa-circle-check text-success display-3 mb-3"></i>
+                <h4 class="fw-bold text-white mb-2">Thank You! Questions & Discussion</h4>
+                <p class="text-muted mb-4">
+                  SocietyHub v3.0 is deployed and fully operational on Vercel.
+                </p>
+
+                <div class="d-flex flex-column gap-2 text-start small mb-4">
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 d-flex justify-content-between">
+                    <span class="text-muted">Live Deployment:</span>
+                    <a href="https://societyhub11.vercel.app" target="_blank" class="text-primary text-decoration-none fw-bold">societyhub11.vercel.app</a>
+                  </div>
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 d-flex justify-content-between">
+                    <span class="text-muted">GitHub Repository:</span>
+                    <a href="https://github.com/jenilbarad089-eng/SSM" target="_blank" class="text-primary text-decoration-none fw-bold">jenilbarad089-eng/SSM</a>
+                  </div>
+                  <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 d-flex justify-content-between">
+                    <span class="text-muted">Lead Developer:</span>
+                    <span class="text-white">Jenil Barad (jenilbarad089@gmail.com)</span>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-center gap-3">
+                  <a href="index.html" class="pres-btn pres-btn-primary px-4 py-2">
+                    <i class="fa-solid fa-house me-1"></i> Home
+                  </a>
+                  <a href="SocietyHub_Presentation.pptx" download="SocietyHub_Presentation.pptx" class="pres-btn btn-active px-4 py-2">
+                    <i class="fa-solid fa-download me-1"></i> Get .PPTX
+                  </a>
+                  <a href="docs.html" class="pres-btn px-4 py-2">
+                    <i class="fa-solid fa-book me-1"></i> Docs
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Bottom Presentation Navigation Bar -->
+  <footer class="pres-footer">
+    <div class="d-flex align-items-center gap-2">
+      <button class="nav-arrow-btn" id="prevBtn" onclick="prevSlide()" title="Previous Slide (Shortcut: Left Arrow)">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <button class="nav-arrow-btn" id="nextBtn" onclick="nextSlide()" title="Next Slide (Shortcut: Right Arrow or Space)">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+      <span class="fw-bold fs-7 ms-2" id="slideIndicator">Slide 1 of 11</span>
+    </div>
+
+    <!-- Progress Track Bar -->
+    <div class="progress-track d-none d-md-block">
+      <div class="progress-fill" id="progressFill" style="width: 9.09%;"></div>
+    </div>
+
+    <!-- Slide Dots (Clickable) -->
+    <div class="slide-dots d-none d-lg-flex" id="slideDots">
+      <!-- Dots populated dynamically by JS -->
+    </div>
+
+    <div class="d-flex align-items-center gap-2">
+      <span class="badge bg-secondary bg-opacity-25 text-muted px-2 py-1 rounded small d-none d-xl-inline-block">
+        <i class="fa-solid fa-keyboard me-1"></i> Use ← / → keys
+      </span>
+      <button class="pres-btn btn-sm" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+        <i class="fa-solid fa-sun" id="themeIcon"></i>
+      </button>
+    </div>
+  </footer>
+
+  <!-- Speaker Notes Drawer -->
+  <div class="speaker-notes-panel" id="speakerNotesPanel">
+    <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom border-secondary border-opacity-25">
+      <strong class="text-warning small"><i class="fa-solid fa-note-sticky me-1"></i> Speaker Notes</strong>
+      <button type="button" class="btn-close btn-close-white" style="font-size: 0.7rem;" onclick="toggleSpeakerNotes()"></button>
+    </div>
+    <p class="small text-light mb-0" id="speakerNotesText">
+      Welcome to the SocietyHub v3.0 Presentation.
+    </p>
+  </div>
+
+  <!-- Interactive 1-Click Demo Launcher Modal -->
+  <div class="modal fade" id="demoModal" tabindex="-1" aria-labelledby="demoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark border border-secondary border-opacity-50 text-white rounded-4 shadow-lg">
+        <div class="modal-header border-bottom border-secondary border-opacity-25">
+          <h5 class="modal-title fw-bold" id="demoModalLabel">
+            <i class="fa-solid fa-rocket text-warning me-2"></i> Launch Live Role Demo
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <p class="text-muted small mb-4">
+            Select any role below to automatically authenticate with demo credentials and jump straight into the corresponding portal:
+          </p>
+          <div class="d-flex flex-column gap-3">
+            <button class="role-launch-btn text-start" onclick="launchDemoRole('admin')">
+              <div class="d-flex align-items-center gap-3">
+                <div class="bg-danger bg-opacity-25 p-2.5 rounded text-danger"><i class="fa-solid fa-user-shield fs-4"></i></div>
+                <div>
+                  <strong class="text-white d-block">Admin (Jenil Barad)</strong>
+                  <span class="text-muted small">8 Modules, Member Direct Control, Approvals, Billing</span>
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-right text-muted"></i>
+            </button>
+
+            <button class="role-launch-btn text-start" onclick="launchDemoRole('resident')">
+              <div class="d-flex align-items-center gap-3">
+                <div class="bg-primary bg-opacity-25 p-2.5 rounded text-primary"><i class="fa-solid fa-house-user fs-4"></i></div>
+                <div>
+                  <strong class="text-white d-block">Resident (Amit Patel - Flat A-302)</strong>
+                  <span class="text-muted small">Pay Maintenance, File Complaints, Approve Visitors</span>
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-right text-muted"></i>
+            </button>
+
+            <button class="role-launch-btn text-start" onclick="launchDemoRole('guard')">
+              <div class="d-flex align-items-center gap-3">
+                <div class="bg-warning bg-opacity-25 p-2.5 rounded text-warning"><i class="fa-solid fa-shield-halved fs-4"></i></div>
+                <div>
+                  <strong class="text-white d-block">Security Guard (Bahadur Singh - Gate 1)</strong>
+                  <span class="text-muted small">Visitor Gate Passes, Real-Time Entry/Exit Registers</span>
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-right text-muted"></i>
+            </button>
+
+            <button class="role-launch-btn text-start" onclick="launchDemoRole('committee')">
+              <div class="d-flex align-items-center gap-3">
+                <div class="bg-info bg-opacity-25 p-2.5 rounded text-info"><i class="fa-solid fa-users fs-4"></i></div>
+                <div>
+                  <strong class="text-white d-block">Committee Member (Suresh Kumar)</strong>
+                  <span class="text-muted small">Society Voting Polls, AGM Notices, Financial Summaries</span>
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-right text-muted"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/firebase-auth.js"></script>
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 11;
+    let autoplayTimer = null;
+    let isAutoplaying = false;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await SystemDB.init();
+      initDots();
+      updateSlideDisplay();
+
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+          e.preventDefault();
+          nextSlide();
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault();
+          prevSlide();
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          goToSlide(1);
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          goToSlide(totalSlides);
+        } else if (e.key.toLowerCase() === 'f') {
+          e.preventDefault();
+          toggleFullscreen();
+        } else if (e.key.toLowerCase() === 'n') {
+          e.preventDefault();
+          toggleSpeakerNotes();
+        }
+      });
+    });
+
+    function initDots() {
+      const dotsContainer = document.getElementById('slideDots');
+      dotsContainer.innerHTML = '';
+      for (let i = 1; i <= totalSlides; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i === 1 ? ' active' : '');
+        dot.title = `Slide ${i}`;
+        dot.onclick = () => goToSlide(i);
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    function goToSlide(n) {
+      if (n < 1 || n > totalSlides) return;
+      currentSlide = n;
+      updateSlideDisplay();
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlideDisplay();
+      } else if (isAutoplaying) {
+        currentSlide = 1;
+        updateSlideDisplay();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlideDisplay();
+      }
+    }
+
+    function updateSlideDisplay() {
+      // Toggle slide visibility
+      document.querySelectorAll('.slide').forEach((slide, idx) => {
+        if (idx + 1 === currentSlide) {
+          slide.classList.add('active');
+          // Update speaker notes
+          const notes = slide.getAttribute('data-notes') || 'No speaker notes for this slide.';
+          document.getElementById('speakerNotesText').textContent = notes;
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      // Update indicators
+      document.getElementById('slideIndicator').textContent = `Slide ${currentSlide} of ${totalSlides}`;
+      document.getElementById('slideSelect').value = currentSlide;
+
+      // Update progress bar
+      const pct = (currentSlide / totalSlides) * 100;
+      document.getElementById('progressFill').style.width = pct + '%';
+
+      // Update dots
+      const dots = document.querySelectorAll('.dot');
+      dots.forEach((dot, idx) => {
+        if (idx + 1 === currentSlide) dot.classList.add('active');
+        else dot.classList.remove('active');
+      });
+
+      // Update buttons state
+      document.getElementById('prevBtn').disabled = (currentSlide === 1);
+      document.getElementById('nextBtn').disabled = (currentSlide === totalSlides && !isAutoplaying);
+    }
+
+    // Autoplay feature
+    function toggleAutoplay() {
+      isAutoplaying = !isAutoplaying;
+      const btn = document.getElementById('autoplayBtn');
+      const icon = document.getElementById('autoplayIcon');
+      const text = document.getElementById('autoplayText');
+
+      if (isAutoplaying) {
+        btn.classList.add('btn-active');
+        icon.className = 'fa-solid fa-pause';
+        text.textContent = 'Pause';
+        autoplayTimer = setInterval(nextSlide, 8000);
+      } else {
+        btn.classList.remove('btn-active');
+        icon.className = 'fa-solid fa-play';
+        text.textContent = 'Auto';
+        clearInterval(autoplayTimer);
+        autoplayTimer = null;
+      }
+    }
+
+    // Speaker notes toggle
+    function toggleSpeakerNotes() {
+      const panel = document.getElementById('speakerNotesPanel');
+      panel.classList.toggle('show');
+    }
+
+    // Fullscreen toggle
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn('Fullscreen request failed:', err);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    // Direct 1-Click Launch into demo portals
+    async function launchDemoRole(roleKey) {
+      const demoMap = {
+        'admin': { email: 'jenilbarad089@gmail.com', pass: 'admin123', redirect: 'admin.html' },
+        'resident': { email: 'amit.patel@gmail.com', pass: 'resident123', redirect: 'resident.html' },
+        'guard': { email: 'guard@smartsociety.com', pass: 'guard123', redirect: 'guard.html' },
+        'committee': { email: 'suresh.treasurer@smartsociety.com', pass: 'committee123', redirect: 'committee.html' }
+      };
+
+      const creds = demoMap[roleKey] || demoMap['admin'];
+      try {
+        const res = await firebaseLoginWithEmail(creds.email, creds.pass);
+        if (res.success) {
+          window.location.href = creds.redirect;
+        } else {
+          // Fallback direct session
+          let user = SystemDB.data.users.find(u => u.email === creds.email);
+          if (user) {
+            sessionStorage.setItem('ssm_current_user', JSON.stringify(user));
+            window.location.href = creds.redirect;
+          } else {
+            window.location.href = 'login.html';
+          }
+        }
+      } catch (err) {
+        window.location.href = creds.redirect;
+      }
+    }
+  </script>
+</body>
+</html>
