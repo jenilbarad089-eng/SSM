@@ -4,7 +4,7 @@
 
 const STORAGE_KEY = 'ssm_database_v1';
 const SEED_VERSION_KEY = 'ssm_seed_version';
-const SEED_VERSION = '3.5'; // bump this to force fresh seed load
+const SEED_VERSION = '3.6'; // bump this to force fresh seed load
 const SESSION_KEY = 'ssm_current_user';
 const TOKEN_KEY = 'ssm_auth_token';
 
@@ -221,32 +221,102 @@ const SystemDB = {
 
   addComplaint(complaint) {
     const user = this.getCurrentUser();
+    const isSubmittedByAdmin = user && user.role === 'Admin';
+    const residentName = complaint.residentName || (user ? user.name : 'Resident');
+    const flat = complaint.flat || (user ? user.flat : 'A-302');
+    const dateStr = new Date().toISOString().split('T')[0];
+    const timeStr = new Date().toISOString().replace('T', ' ').substring(0, 16);
+
     const newComplaint = {
       id: 'CMP-' + Math.floor(100 + Math.random() * 900),
-      residentName: user ? user.name : complaint.residentName,
-      flat: user ? user.flat : complaint.flat,
-      category: complaint.category,
-      title: complaint.title,
-      description: complaint.description,
-      status: 'Pending',
+      residentName: residentName,
+      flat: flat,
+      category: complaint.category || 'General',
+      title: complaint.title || 'Maintenance Request',
+      description: complaint.description || '',
+      status: complaint.status || 'Pending',
       priority: complaint.priority || 'Medium',
-      date: new Date().toISOString().split('T')[0],
-      notes: 'Complaint submitted by resident.'
+      date: dateStr,
+      assignedTo: complaint.assignedTo || (isSubmittedByAdmin ? 'Maintenance Desk' : 'Unassigned'),
+      adminDirections: complaint.adminDirections || (isSubmittedByAdmin ? (complaint.notes || 'Admin registered ticket with standard priority.') : 'Ticket registered by resident. Awaiting admin review and technician allocation.'),
+      notes: complaint.notes || (isSubmittedByAdmin ? 'Registered directly via Admin Operations.' : 'Complaint submitted by resident.'),
+      createdAt: timeStr,
+      updatedAt: timeStr,
+      timeline: [
+        {
+          status: 'Created',
+          title: 'Ticket Lodged',
+          details: `Lodged by ${isSubmittedByAdmin ? 'Administrator' : residentName} for Flat ${flat}`,
+          timestamp: timeStr
+        }
+      ]
     };
+
+    if (complaint.adminDirections && isSubmittedByAdmin) {
+      newComplaint.timeline.push({
+        status: complaint.status || 'Pending',
+        title: 'Admin Directive Issued',
+        details: `Assigned to: ${newComplaint.assignedTo} | Directive: ${complaint.adminDirections}`,
+        timestamp: timeStr
+      });
+    }
+
+    if (!this.data.complaints) this.data.complaints = [];
     this.data.complaints.unshift(newComplaint);
     this.save();
     return { success: true, complaint: newComplaint };
   },
 
-  updateComplaintStatus(id, status, notes) {
+  updateComplaintStatus(id, updateDataOrStatus, maybeNotes) {
     const cmp = this.data.complaints.find(c => c.id === id);
-    if (cmp) {
-      cmp.status = status;
-      if (notes) cmp.notes = notes;
-      this.save();
-      return { success: true, complaint: cmp };
+    if (!cmp) return { success: false, message: 'Complaint not found' };
+
+    const timeStr = new Date().toISOString().replace('T', ' ').substring(0, 16);
+    let status = '';
+    let notes = '';
+    let adminDirections = '';
+    let assignedTo = '';
+    let priority = '';
+
+    if (typeof updateDataOrStatus === 'object' && updateDataOrStatus !== null) {
+      status = updateDataOrStatus.status || cmp.status;
+      notes = updateDataOrStatus.notes || cmp.notes;
+      adminDirections = updateDataOrStatus.adminDirections || updateDataOrStatus.notes || cmp.adminDirections;
+      assignedTo = updateDataOrStatus.assignedTo || cmp.assignedTo;
+      priority = updateDataOrStatus.priority || cmp.priority;
+    } else {
+      status = updateDataOrStatus || cmp.status;
+      notes = maybeNotes || cmp.notes;
+      adminDirections = maybeNotes || cmp.adminDirections;
     }
-    return { success: false, message: 'Complaint not found' };
+
+    cmp.status = status;
+    if (notes) cmp.notes = notes;
+    if (adminDirections) cmp.adminDirections = adminDirections;
+    if (assignedTo) cmp.assignedTo = assignedTo;
+    if (priority) cmp.priority = priority;
+    cmp.updatedAt = timeStr;
+
+    if (!cmp.timeline) {
+      cmp.timeline = [
+        {
+          status: 'Created',
+          title: 'Ticket Lodged',
+          details: `Lodged for Flat ${cmp.flat}`,
+          timestamp: cmp.date || timeStr
+        }
+      ];
+    }
+
+    cmp.timeline.push({
+      status: status,
+      title: `Status: ${status}`,
+      details: `${adminDirections ? 'Directive: ' + adminDirections : 'Status updated by Admin.'} ${assignedTo ? '(Assigned: ' + assignedTo + ')' : ''}`,
+      timestamp: timeStr
+    });
+
+    this.save();
+    return { success: true, complaint: cmp };
   },
 
   // Maintenance

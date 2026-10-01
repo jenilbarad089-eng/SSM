@@ -212,20 +212,53 @@ function renderComplaints() {
   const tbody = document.getElementById('resComplaintsTableBody');
   const complaints = SystemDB.getComplaints().filter(c => c.flat === currentUser.flat || c.residentName === currentUser.name);
 
-  tbody.innerHTML = complaints.map(c => `
+  if (!complaints.length) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-4">No complaints lodged yet. Click "Lodge New Complaint" to raise a ticket.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = complaints.map(c => {
+    const isEmergency = c.priority === 'High' || c.priority === 'Emergency';
+    const assigned = c.assignedTo || 'Maintenance Desk';
+    const directive = c.adminDirections || c.notes || 'Awaiting admin review and technician allocation.';
+
+    return `
     <tr>
-      <td class="fw-bold fs-7">${c.id}</td>
+      <td class="fw-bold fs-7 font-monospace">${c.id}</td>
       <td>
-        <div class="fw-semibold">${c.title}</div>
-        <small class="badge bg-light text-secondary border">${c.category}</small>
+        <div class="fw-semibold text-heading">${c.title}</div>
+        <small class="badge bg-light text-secondary border me-1">${c.category}</small>
         <small class="text-muted d-block mt-1">${c.description}</small>
       </td>
-      <td><span class="badge ${c.priority === 'High' ? 'bg-danger text-white' : 'bg-secondary-subtle text-dark'}">${c.priority}</span></td>
-      <td><span class="${c.status === 'Pending' ? 'badge-pending' : c.status === 'In Progress' ? 'badge-progress' : 'badge-resolved'}">${c.status}</span></td>
-      <td class="text-muted fs-7">${c.date}</td>
-      <td class="fs-7 text-secondary">${c.notes || 'Awaiting admin review.'}</td>
-    </tr>
-  `).join('');
+      <td>
+        <span class="badge ${isEmergency ? 'bg-danger text-white' : c.priority === 'Medium' ? 'bg-warning text-dark' : 'bg-secondary-subtle text-dark'}">
+          <i class="fa-solid ${isEmergency ? 'fa-triangle-exclamation' : 'fa-circle-info'} me-1"></i>${c.priority || 'Medium'}
+        </span>
+      </td>
+      <td>
+        <span class="${c.status === 'Pending' ? 'badge-pending' : c.status === 'In Progress' ? 'badge-progress' : c.status === 'Resolved' ? 'badge-resolved' : 'badge bg-secondary text-white'}">
+          ${c.status === 'In Progress' ? '<i class="fa-solid fa-spinner fa-spin me-1"></i>' : c.status === 'Resolved' ? '<i class="fa-solid fa-circle-check me-1"></i>' : ''}${c.status}
+        </span>
+      </td>
+      <td>
+        <div class="p-2 rounded-3 bg-secondary bg-opacity-10 border border-secondary border-opacity-25" style="max-width: 280px;">
+          <div class="d-flex align-items-center gap-1 mb-1">
+            <span class="badge bg-info-subtle text-info fs-8 py-0.5"><i class="fa-solid fa-user-gear me-1"></i>${assigned}</span>
+            <span class="badge bg-warning-subtle text-warning fs-8 py-0.5">Admin Directive</span>
+          </div>
+          <div class="fs-8 text-secondary fst-italic text-truncate" title="${directive}">
+            "${directive}"
+          </div>
+        </div>
+      </td>
+      <td class="text-muted fs-8">${c.date}</td>
+      <td class="text-end">
+        <button class="btn btn-sm btn-outline-info rounded-pill px-3" onclick="openComplaintTracker('${c.id}')">
+          <i class="fa-solid fa-timeline me-1"></i> Track
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
 }
 
 function renderVisitors() {
@@ -341,3 +374,81 @@ function safeHideModal(modalOrId) {
   const inst = bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el);
   if (inst) inst.hide();
 }
+
+function openComplaintTracker(id) {
+  const complaints = SystemDB.getComplaints();
+  const c = complaints.find(item => item.id === id);
+  if (!c) return;
+
+  document.getElementById('trackTicketId').textContent = c.id;
+  document.getElementById('trackCategory').textContent = c.category || 'General';
+  
+  const statusBadge = document.getElementById('trackStatusBadge');
+  statusBadge.textContent = c.status;
+  statusBadge.className = c.status === 'Pending' ? 'badge-pending' : c.status === 'In Progress' ? 'badge-progress' : c.status === 'Resolved' ? 'badge-resolved' : 'badge bg-secondary text-white';
+
+  document.getElementById('trackAssignedTo').textContent = c.assignedTo || 'Maintenance Desk';
+  
+  const directiveText = document.getElementById('trackDirectiveText');
+  directiveText.textContent = c.adminDirections || c.notes || 'Awaiting admin directive and action schedule.';
+
+  document.getElementById('trackDescription').textContent = c.description || c.title;
+
+  // Render Timeline
+  const container = document.getElementById('trackTimelineContainer');
+  let timeline = c.timeline;
+  if (!timeline || !timeline.length) {
+    timeline = [
+      {
+        status: 'Created',
+        title: 'Ticket Submitted',
+        details: `Submitted on ${c.date} for Flat ${c.flat}`,
+        timestamp: c.date
+      }
+    ];
+    if (c.notes || c.adminDirections) {
+      timeline.push({
+        status: c.status,
+        title: `Admin Action (${c.status})`,
+        details: `${c.adminDirections || c.notes} (Assigned: ${c.assignedTo || 'Maintenance Desk'})`,
+        timestamp: c.updatedAt || c.date
+      });
+    }
+  }
+
+  container.innerHTML = timeline.map((step, idx) => `
+    <div class="d-flex align-items-start gap-3 mb-3 position-relative">
+      <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 ${step.status === 'Resolved' ? 'bg-success text-white' : step.status === 'In Progress' ? 'bg-info text-white' : 'bg-warning text-dark'}" style="width: 32px; height: 32px; font-size: 0.8rem; z-index: 2;">
+        <i class="fa-solid ${step.status === 'Resolved' ? 'fa-check' : step.status === 'In Progress' ? 'fa-screwdriver-wrench' : 'fa-clock'}"></i>
+      </div>
+      <div class="flex-grow-1 p-2.5 rounded-3 bg-light bg-opacity-10 border">
+        <div class="d-flex align-items-center justify-content-between mb-1">
+          <strong class="text-heading fs-7">${step.title}</strong>
+          <small class="text-muted fs-8">${step.timestamp || ''}</small>
+        </div>
+        <p class="mb-0 text-secondary fs-8">${step.details || ''}</p>
+      </div>
+    </div>
+  `).join('');
+
+  new bootstrap.Modal(document.getElementById('complaintTrackerModal')).show();
+}
+
+// Background Realtime Sync for Resident Portal (every 20s + instant storage sync)
+setInterval(() => {
+  if (currentUser) {
+    loadResidentDashboard();
+  }
+}, 20000);
+
+window.addEventListener('storage', (e) => {
+  if (e.key === 'ssm_database_v1' && currentUser) {
+    try {
+      SystemDB.init().then(() => {
+        loadResidentDashboard();
+      });
+    } catch(err) {
+      console.warn('Resident storage sync error:', err);
+    }
+  }
+});

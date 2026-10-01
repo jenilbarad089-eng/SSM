@@ -250,11 +250,14 @@
 
           <!-- TAB 3: Complaint Tickets -->
           <div class="tab-pane fade" id="tab-complaints" role="tabpanel">
-            <div class="d-flex align-items-center justify-content-between mb-4">
+            <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
               <div>
-                <h3 class="fw-bold mb-1">Society Complaint Lifecycle</h3>
-                <p class="caption-text mb-0">Review resident issue tickets and update resolution status.</p>
+                <h3 class="fw-bold mb-1">Society Complaint Lifecycle & Directives</h3>
+                <p class="caption-text mb-0">Review resident issue tickets, assign technicians, and issue admin directives.</p>
               </div>
+              <button class="btn btn-primary-custom rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#adminLodgeComplaintModal">
+                <i class="fa-solid fa-plus me-1"></i> Lodge Complaint on Behalf
+              </button>
             </div>
 
             <div class="hub-card p-3">
@@ -264,11 +267,12 @@
                     <tr>
                       <th>Ticket ID</th>
                       <th>Resident & Flat</th>
-                      <th>Category & Title</th>
+                      <th>Issue & Category</th>
                       <th>Priority</th>
                       <th>Status</th>
+                      <th>Assigned Lead & Directive</th>
                       <th>Date</th>
-                      <th class="text-end">Update Action</th>
+                      <th class="text-end">Action</th>
                     </tr>
                   </thead>
                   <tbody id="adminComplaintsTableBody">
@@ -466,12 +470,94 @@
     </div>
   </div>
 
-  <!-- MODAL: Update Complaint Status -->
+  <!-- MODAL: Lodge Complaint on Behalf (Admin) -->
+  <div class="modal fade" id="adminLodgeComplaintModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content hub-card border-0">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="fw-bold"><i class="fa-solid fa-headset me-2 text-warning"></i> Lodge Complaint Ticket on Behalf</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="adminLodgeComplaintForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label caption-text fw-semibold">Select Resident / Flat</label>
+              <select class="form-select" id="adminLodgeResidentSelect" required>
+                <!-- Populated dynamically with active residents and flats -->
+              </select>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label caption-text fw-semibold">Category</label>
+                <select class="form-select" id="adminLodgeCategory" required>
+                  <option value="Plumbing">Plumbing & Water</option>
+                  <option value="Electrical">Electrical & Power</option>
+                  <option value="Elevator">Elevator & Lift</option>
+                  <option value="Cleanliness">Cleanliness & Waste</option>
+                  <option value="Security">Security & Access</option>
+                  <option value="Parking">Parking & Vehicle</option>
+                  <option value="General">General Maintenance</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label class="form-label caption-text fw-semibold">Priority Level</label>
+                <select class="form-select" id="adminLodgePriority" required>
+                  <option value="Low">Low</option>
+                  <option value="Medium" selected>Medium</option>
+                  <option value="High">High / Urgent</option>
+                  <option value="Emergency">Emergency</option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label caption-text fw-semibold">Issue Title / Summary</label>
+              <input type="text" class="form-control" id="adminLodgeTitle" required placeholder="e.g. Broken pipe in master bathroom">
+            </div>
+            <div class="mb-3">
+              <label class="form-label caption-text fw-semibold">Issue Description</label>
+              <textarea class="form-control" id="adminLodgeDesc" rows="2" required placeholder="Describe exact location, issue severity, and observation..."></textarea>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label caption-text fw-semibold">Assign Technician / Lead</label>
+                <select class="form-select" id="adminLodgeAssignedTo">
+                  <option value="Arjun Plumber (Mistry)">Arjun Plumber (Mistry)</option>
+                  <option value="Mahesh Electrician">Mahesh Electrician</option>
+                  <option value="Elevator AMC Team">Elevator AMC Team</option>
+                  <option value="Housekeeping Lead">Housekeeping Lead</option>
+                  <option value="Security Gate In-Charge">Security Gate In-Charge</option>
+                  <option value="External Vendor">External Vendor</option>
+                  <option value="Maintenance Desk" selected>Maintenance Desk</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label class="form-label caption-text fw-semibold">Initial Status</label>
+                <select class="form-select" id="adminLodgeStatus">
+                  <option value="Pending">Pending</option>
+                  <option value="In Progress" selected>In Progress</option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label caption-text fw-semibold">Admin Directives / Action Instructions</label>
+              <textarea class="form-control" id="adminLodgeDirections" rows="2" placeholder="e.g. Inspect leak at 10 AM, replace rubber washer, submit bill to admin."></textarea>
+            </div>
+          </div>
+          <div class="modal-footer border-0 pt-0">
+            <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary-custom px-4">Lodge Ticket</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Update Complaint Status & Directives -->
   <div class="modal fade" id="updateComplaintModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content hub-card border-0">
         <div class="modal-header border-0 pb-0">
-          <h5 class="fw-bold"><i class="fa-solid fa-pen-to-square me-2 text-warning"></i> Update Complaint Resolution</h5>
+          <h5 class="fw-bold"><i class="fa-solid fa-pen-to-square me-2 text-warning"></i> Manage Complaint Resolution & Directives</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <form id="updateComplaintForm">
@@ -481,22 +567,46 @@
               <label class="form-label caption-text fw-semibold">Ticket ID & Title</label>
               <input type="text" class="form-control" id="editCmpTitle" readonly>
             </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label caption-text fw-semibold">Resolution Status</label>
+                <select class="form-select" id="editCmpStatus" required>
+                  <option value="Pending">Pending Review</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Resolved">Resolved</option>
+                  <option value="On Hold">On Hold / Awaiting Parts</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label class="form-label caption-text fw-semibold">Priority Level</label>
+                <select class="form-select" id="editCmpPriority" required>
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High / Urgent</option>
+                  <option value="Emergency">Emergency</option>
+                </select>
+              </div>
+            </div>
             <div class="mb-3">
-              <label class="form-label caption-text fw-semibold">Resolution Status</label>
-              <select class="form-select" id="editCmpStatus" required>
-                <option value="Pending">Pending</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Resolved">Resolved</option>
+              <label class="form-label caption-text fw-semibold">Assigned Technician / Service Vendor</label>
+              <select class="form-select" id="editCmpAssignedTo">
+                <option value="Arjun Plumber (Mistry)">Arjun Plumber (Mistry)</option>
+                <option value="Mahesh Electrician">Mahesh Electrician</option>
+                <option value="Elevator AMC Team">Elevator AMC Team</option>
+                <option value="Housekeeping Lead">Housekeeping Lead</option>
+                <option value="Security Gate In-Charge">Security Gate In-Charge</option>
+                <option value="External Vendor">External Vendor</option>
+                <option value="Maintenance Desk">Maintenance Desk</option>
               </select>
             </div>
             <div class="mb-3">
-              <label class="form-label caption-text fw-semibold">Admin Resolution Notes</label>
-              <textarea class="form-control" id="editCmpNotes" rows="3" placeholder="Add update details or technician notes..."></textarea>
+              <label class="form-label caption-text fw-semibold">Admin Directives & Action Instructions</label>
+              <textarea class="form-control" id="editCmpDirections" rows="3" placeholder="Directives given to technician and visible to resident (e.g. Electrician scheduled for 4 PM)..."></textarea>
             </div>
           </div>
           <div class="modal-footer border-0 pt-0">
             <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary-custom px-4">Save Resolution</button>
+            <button type="submit" class="btn btn-primary-custom px-4">Update Directives</button>
           </div>
         </form>
       </div>

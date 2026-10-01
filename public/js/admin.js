@@ -52,17 +52,64 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
+  // Admin Lodge Complaint on Behalf
+  const adminLodgeForm = document.getElementById('adminLodgeComplaintForm');
+  if (adminLodgeForm) {
+    adminLodgeForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const resVal = document.getElementById('adminLodgeResidentSelect').value;
+      const [flat, residentName] = resVal.split('||');
+      const category = document.getElementById('adminLodgeCategory').value;
+      const priority = document.getElementById('adminLodgePriority').value;
+      const title = document.getElementById('adminLodgeTitle').value;
+      const description = document.getElementById('adminLodgeDesc').value;
+      const assignedTo = document.getElementById('adminLodgeAssignedTo').value;
+      const status = document.getElementById('adminLodgeStatus').value;
+      const adminDirections = document.getElementById('adminLodgeDirections').value;
+
+      const res = SystemDB.addComplaint({
+        residentName: residentName || 'Resident',
+        flat: flat || 'A-101',
+        category,
+        priority,
+        title,
+        description,
+        assignedTo,
+        status,
+        adminDirections,
+        notes: adminDirections || 'Admin registered ticket.'
+      });
+
+      safeHideModal('adminLodgeComplaintModal');
+      adminLodgeForm.reset();
+      loadAdminDashboard();
+      if (typeof showToast === 'function') {
+        showToast(`Complaint ${res.complaint ? res.complaint.id : ''} lodged successfully for Flat ${flat}!`, "success");
+      }
+    });
+  }
+
+  // Admin Update Complaint & Directives
   document.getElementById('updateComplaintForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const id = document.getElementById('editCmpId').value;
     const status = document.getElementById('editCmpStatus').value;
-    const notes = document.getElementById('editCmpNotes').value;
+    const priority = document.getElementById('editCmpPriority').value;
+    const assignedTo = document.getElementById('editCmpAssignedTo').value;
+    const adminDirections = document.getElementById('editCmpDirections').value;
 
-    SystemDB.updateComplaintStatus(id, status, notes);
+    SystemDB.updateComplaintStatus(id, {
+      status,
+      priority,
+      assignedTo,
+      adminDirections,
+      notes: adminDirections || `Status changed to ${status}.`
+    });
+
     safeHideModal('updateComplaintModal');
     loadAdminDashboard();
     if (typeof showToast === 'function') {
-      showToast(`Complaint ${id} status updated to ${status}.`, "success");
+      showToast(`Complaint ${id} updated & directives issued to ${assignedTo}.`, "success");
     }
   });
 
@@ -296,12 +343,41 @@ function renderComplaintsTable() {
   const tbody = document.getElementById('adminComplaintsTableBody');
   const complaints = SystemDB.getComplaints();
 
-  tbody.innerHTML = complaints.map(c => `
+  // Also populate resident select for the Lodge Complaint Modal
+  const resSelect = document.getElementById('adminLodgeResidentSelect');
+  if (resSelect) {
+    const residents = SystemDB.getResidents ? SystemDB.getResidents().filter(r => r.role === 'Resident' && r.status === 'Approved') : [];
+    if (residents.length) {
+      resSelect.innerHTML = residents.map(r => 
+        `<option value="${r.flat || 'A-101'}||${r.name}">${r.flat || 'Flat'} — ${r.name} (${r.tower || 'Tower A'})</option>`
+      ).join('');
+    } else {
+      resSelect.innerHTML = `
+        <option value="A-302||Amit Patel">A-302 — Amit Patel (Tower A)</option>
+        <option value="C-501||Priya Verma">C-501 — Priya Verma (Tower C)</option>
+        <option value="B-104||Rahul Sharma">B-104 — Rahul Sharma (Tower B)</option>
+        <option value="B-202||Neha Gupta">B-202 — Neha Gupta (Tower B)</option>
+        <option value="A-604||Ananya Deshmukh">A-604 — Ananya Deshmukh (Tower A)</option>
+      `;
+    }
+  }
+
+  if (!complaints.length) {
+    tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-4">No complaint tickets logged.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = complaints.map(c => {
+    const assigned = c.assignedTo || 'Maintenance Desk';
+    const directive = c.adminDirections || c.notes || 'No active directive issued.';
+    const isEmergency = c.priority === 'Emergency' || c.priority === 'High';
+    
+    return `
     <tr>
       <td class="fw-bold fs-7">${c.id}</td>
       <td>
         <div class="fw-semibold">${c.residentName}</div>
-        <small class="text-muted">Flat: ${c.flat}</small>
+        <small class="badge bg-primary-subtle text-primary border-0">Flat ${c.flat}</small>
       </td>
       <td>
         <div class="fw-semibold">${c.title}</div>
@@ -309,28 +385,47 @@ function renderComplaintsTable() {
         <small class="text-muted d-block mt-1">${c.description}</small>
       </td>
       <td>
-        <span class="badge ${c.priority === 'High' ? 'bg-danger text-white' : 'bg-secondary-subtle text-dark'}">${c.priority}</span>
-      </td>
-      <td>
-        <span class="${c.status === 'Pending' ? 'badge-pending' : c.status === 'In Progress' ? 'badge-progress' : 'badge-resolved'}">
-          ${c.status}
+        <span class="badge ${isEmergency ? 'bg-danger text-white' : c.priority === 'Medium' ? 'bg-warning text-dark' : 'bg-secondary-subtle text-dark'}">
+          <i class="fa-solid ${isEmergency ? 'fa-triangle-exclamation' : 'fa-circle-info'} me-1"></i>${c.priority || 'Medium'}
         </span>
       </td>
-      <td class="text-muted fs-7">${c.date}</td>
+      <td>
+        <span class="${c.status === 'Pending' ? 'badge-pending' : c.status === 'In Progress' ? 'badge-progress' : c.status === 'Resolved' ? 'badge-resolved' : 'badge bg-secondary text-white'}">
+          ${c.status === 'In Progress' ? '<i class="fa-solid fa-spinner fa-spin me-1"></i>' : c.status === 'Resolved' ? '<i class="fa-solid fa-circle-check me-1"></i>' : ''}${c.status}
+        </span>
+      </td>
+      <td>
+        <div class="d-flex flex-column gap-1" style="max-width: 240px;">
+          <span class="badge bg-info-subtle text-info text-start text-truncate" title="${assigned}">
+            <i class="fa-solid fa-user-gear me-1"></i>${assigned}
+          </span>
+          <small class="text-muted fs-8 fst-italic text-truncate" title="${directive}">
+            "${directive}"
+          </small>
+        </div>
+      </td>
+      <td class="text-muted fs-8">${c.date}</td>
       <td class="text-end">
-        <button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="openUpdateCmpModal('${c.id}', '${c.title.replace(/'/g, "\\'")}', '${c.status}', '${(c.notes||'').replace(/'/g, "\\'")}')">
-          <i class="fa-solid fa-pen-to-square me-1"></i> Update
+        <button class="btn btn-sm btn-outline-warning rounded-pill px-3" onclick="openUpdateCmpModal('${c.id}')">
+          <i class="fa-solid fa-pen-to-square me-1"></i> Direct
         </button>
       </td>
-    </tr>
-  `).join('');
+    </tr>`;
+  }).join('');
 }
 
-function openUpdateCmpModal(id, title, status, notes) {
-  document.getElementById('editCmpId').value = id;
-  document.getElementById('editCmpTitle').value = `${id}: ${title}`;
-  document.getElementById('editCmpStatus').value = status;
-  document.getElementById('editCmpNotes').value = notes;
+function openUpdateCmpModal(id) {
+  const complaints = SystemDB.getComplaints();
+  const c = complaints.find(item => item.id === id);
+  if (!c) return;
+
+  document.getElementById('editCmpId').value = c.id;
+  document.getElementById('editCmpTitle').value = `${c.id}: ${c.title} (${c.residentName} - Flat ${c.flat})`;
+  document.getElementById('editCmpStatus').value = c.status || 'Pending';
+  document.getElementById('editCmpPriority').value = c.priority || 'Medium';
+  document.getElementById('editCmpAssignedTo').value = c.assignedTo || 'Maintenance Desk';
+  document.getElementById('editCmpDirections').value = c.adminDirections || c.notes || '';
+  
   new bootstrap.Modal(document.getElementById('updateComplaintModal')).show();
 }
 
@@ -1047,3 +1142,16 @@ function renderActivityFeed() {
     </div>
   `).join('');
 }
+
+// Instant Multi-Tab Realtime Sync
+window.addEventListener('storage', (e) => {
+  if (e.key === 'ssm_database_v1') {
+    try {
+      SystemDB.init().then(() => {
+        silentDashboardRefresh();
+      });
+    } catch(err) {
+      console.warn('Storage sync error:', err);
+    }
+  }
+});

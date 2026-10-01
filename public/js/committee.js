@@ -403,3 +403,16 @@ function renderCommActivityFeed() {
   `).join('');
 }
 
+// Instant Multi-Tab Realtime Sync for Committee
+window.addEventListener('storage', (e) => {
+  if (e.key === 'ssm_database_v1') {
+    try {
+      SystemDB.init().then(() => {
+        silentCommitteeRefresh();
+      });
+    } catch(err) {
+      console.warn('Committee storage sync error:', err);
+    }
+  }
+});
+

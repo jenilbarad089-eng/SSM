@@ -271,10 +271,28 @@
       "category": "Plumbing",
       "title": "Severe water leakage in master bathroom",
       "description": "Pipe joint broken under washbasin, water overflowing into hallway.",
-      "status": "Pending",
+      "status": "In Progress",
       "priority": "High",
-      "date": "2026-10-22",
-      "notes": "Admin notified plumbing maintenance team. On-site visit scheduled."
+      "date": "2026-10-01",
+      "assignedTo": "Arjun Plumber (Mistry)",
+      "adminDirections": "Urgent plumber dispatched. Pipe connector kit allocated from society inventory.",
+      "notes": "Admin assigned Arjun Plumber. On-site visit scheduled for 10:30 AM.",
+      "createdAt": "2026-10-01 09:15",
+      "updatedAt": "2026-10-01 10:00",
+      "timeline": [
+        {
+          "status": "Created",
+          "title": "Ticket Lodged",
+          "details": "Lodged by Amit Patel for Flat A-302",
+          "timestamp": "2026-10-01 09:15"
+        },
+        {
+          "status": "In Progress",
+          "title": "Admin Directive & Lead Assigned",
+          "details": "Assigned to Arjun Plumber (Mistry). Directive: Urgent repair scheduled.",
+          "timestamp": "2026-10-01 10:00"
+        }
+      ]
     },
     {
       "id": "CMP-102",
@@ -285,8 +303,26 @@
       "description": "Two LED tubelights are malfunctioning near elevator lobby C.",
       "status": "In Progress",
       "priority": "Medium",
-      "date": "2026-10-20",
-      "notes": "Electrician assigned; LED spares ordered from vendor."
+      "date": "2026-10-01",
+      "assignedTo": "Mahesh Electrician",
+      "adminDirections": "Replace ballast and upgrade fixtures with 20W LED units.",
+      "notes": "Electrician assigned; LED spares ordered from vendor.",
+      "createdAt": "2026-10-01 08:30",
+      "updatedAt": "2026-10-01 09:45",
+      "timeline": [
+        {
+          "status": "Created",
+          "title": "Ticket Lodged",
+          "details": "Lodged by Priya Verma for Flat C-501",
+          "timestamp": "2026-10-01 08:30"
+        },
+        {
+          "status": "In Progress",
+          "title": "Electrician Dispatched",
+          "details": "Assigned to Mahesh Electrician with directive for LED upgrade.",
+          "timestamp": "2026-10-01 09:45"
+        }
+      ]
     },
     {
       "id": "CMP-103",
@@ -298,7 +334,25 @@
       "status": "Resolved",
       "priority": "Low",
       "date": "2026-10-01",
-      "notes": "Sensor recalibrated and battery replaced by maintenance team."
+      "assignedTo": "Security Gate In-Charge",
+      "adminDirections": "Sensor recalibrated and RF receiver battery replaced. Verified working smoothly.",
+      "notes": "Sensor recalibrated and battery replaced by maintenance team.",
+      "createdAt": "2026-10-01 07:00",
+      "updatedAt": "2026-10-01 11:20",
+      "timeline": [
+        {
+          "status": "Created",
+          "title": "Ticket Lodged",
+          "details": "Lodged by Rahul Sharma for Flat B-104",
+          "timestamp": "2026-10-01 07:00"
+        },
+        {
+          "status": "Resolved",
+          "title": "Inspection Completed & Resolved",
+          "details": "Barrier sensor calibrated and operational check verified.",
+          "timestamp": "2026-10-01 11:20"
+        }
+      ]
     },
     {
       "id": "CMP-104",
@@ -306,11 +360,23 @@
       "flat": "B-202",
       "category": "Cleanliness",
       "title": "Garbage not picked up from B-Wing corridor",
-      "description": "Dry waste bags lying outside B-Wing entry since 3 days.",
+      "description": "Dry waste bags lying outside B-Wing entry since 2 days.",
       "status": "Pending",
       "priority": "Medium",
-      "date": "2026-10-23",
-      "notes": "Housekeeping team notified. Pickup scheduled tomorrow."
+      "date": "2026-10-01",
+      "assignedTo": "Housekeeping Lead",
+      "adminDirections": "Housekeeping supervisor instructed to clear B-Wing and sanitize floor.",
+      "notes": "Housekeeping team notified. Pickup scheduled today.",
+      "createdAt": "2026-10-01 10:15",
+      "updatedAt": "2026-10-01 10:30",
+      "timeline": [
+        {
+          "status": "Created",
+          "title": "Ticket Lodged",
+          "details": "Lodged by Neha Gupta for Flat B-202",
+          "timestamp": "2026-10-01 10:15"
+        }
+      ]
     },
     {
       "id": "CMP-105",
@@ -321,8 +387,26 @@
       "description": "Grinding noise audible above 4th floor, particularly during morning rush.",
       "status": "In Progress",
       "priority": "High",
-      "date": "2026-10-21",
-      "notes": "Elevator AMC team contacted for urgent inspection."
+      "date": "2026-10-01",
+      "assignedTo": "Elevator AMC Team",
+      "adminDirections": "Urgent AMC engineer visit scheduled. Cable lubrication & safety brake check ordered.",
+      "notes": "Elevator AMC team contacted for urgent inspection.",
+      "createdAt": "2026-10-01 09:00",
+      "updatedAt": "2026-10-01 10:10",
+      "timeline": [
+        {
+          "status": "Created",
+          "title": "Ticket Lodged",
+          "details": "Lodged by Ananya Deshmukh for Flat A-604",
+          "timestamp": "2026-10-01 09:00"
+        },
+        {
+          "status": "In Progress",
+          "title": "AMC Vendor Notified",
+          "details": "Assigned to Elevator AMC Team with priority high dispatch.",
+          "timestamp": "2026-10-01 10:10"
+        }
+      ]
     }
   ],
   "maintenance": [

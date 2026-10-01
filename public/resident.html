@@ -222,12 +222,17 @@
           <div class="tab-pane fade" id="tab-res-complaints" role="tabpanel">
             <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
               <div>
-                <h3 class="fw-bold mb-1">Society Complaint Lifecycle</h3>
-                <p class="caption-text mb-0">Register complaints for plumbing, electrical, security, or maintenance issues.</p>
+                <h3 class="fw-bold mb-1">Society Complaint Lifecycle & Admin Directives</h3>
+                <p class="caption-text mb-0">Register complaints, track assigned maintenance leads, and receive live admin directives.</p>
               </div>
-              <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#newComplaintModal">
-                <i class="fa-solid fa-plus me-1"></i> Lodge New Complaint
-              </button>
+              <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="loadResidentDashboard()">
+                  <i class="fa-solid fa-rotate me-1"></i> Sync Status
+                </button>
+                <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#newComplaintModal">
+                  <i class="fa-solid fa-plus me-1"></i> Lodge New Complaint
+                </button>
+              </div>
             </div>
 
             <div class="hub-card p-3">
@@ -236,11 +241,12 @@
                   <thead>
                     <tr>
                       <th>Ticket ID</th>
-                      <th>Category & Title</th>
+                      <th>Issue & Category</th>
                       <th>Priority</th>
                       <th>Status</th>
-                      <th>Submitted On</th>
-                      <th>Admin Resolution Notes</th>
+                      <th>Admin Directives & Assigned Lead</th>
+                      <th>Logged On</th>
+                      <th class="text-end">Track Lifecycle</th>
                     </tr>
                   </thead>
                   <tbody id="resComplaintsTableBody">
@@ -428,6 +434,75 @@
             <button type="submit" class="btn btn-primary-custom px-4">Submit Ticket</button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Complaint Lifecycle & Directives Tracker -->
+  <div class="modal fade" id="complaintTrackerModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content hub-card border-0">
+        <div class="modal-header border-0 pb-0">
+          <div>
+            <h5 class="fw-bold mb-0" id="trackerModalTitle"><i class="fa-solid fa-timeline me-2 text-warning"></i> Complaint Resolution Tracker</h5>
+            <small class="text-muted" id="trackerModalSubtitle">Real-time status and admin directives for your ticket.</small>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body py-4">
+          <!-- Ticket Header Overview -->
+          <div class="p-3 rounded-4 bg-light bg-opacity-10 border mb-4">
+            <div class="row g-3 align-items-center">
+              <div class="col-md-3">
+                <span class="text-muted fs-8 d-block">Ticket ID</span>
+                <span class="fw-bold fs-6 font-monospace" id="trackTicketId">CMP-101</span>
+              </div>
+              <div class="col-md-3">
+                <span class="text-muted fs-8 d-block">Category</span>
+                <span class="badge bg-secondary-subtle text-dark" id="trackCategory">Plumbing</span>
+              </div>
+              <div class="col-md-3">
+                <span class="text-muted fs-8 d-block">Current Status</span>
+                <span id="trackStatusBadge" class="badge-progress">In Progress</span>
+              </div>
+              <div class="col-md-3">
+                <span class="text-muted fs-8 d-block">Assigned Lead</span>
+                <span class="fw-bold text-info" id="trackAssignedTo">Arjun Plumber</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Admin Directive Box -->
+          <div class="p-3 rounded-4 bg-warning bg-opacity-10 border border-warning mb-4" id="trackDirectiveBox">
+            <div class="d-flex align-items-start gap-2">
+              <i class="fa-solid fa-bullhorn text-warning fs-5 mt-1"></i>
+              <div class="flex-grow-1">
+                <div class="fw-bold text-heading fs-7 mb-1">Official Admin Directive & Action Plan</div>
+                <p class="mb-0 fs-7" id="trackDirectiveText">Technician notified and on-site inspection scheduled.</p>
+              </div>
+              <span class="badge bg-warning text-dark fs-8">Active Directive</span>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-4">
+            <h6 class="fw-bold fs-7 mb-1 text-heading">Reported Issue Details</h6>
+            <div class="p-3 rounded-3 bg-secondary bg-opacity-10 fs-7" id="trackDescription">
+              Water leakage under bathroom sink.
+            </div>
+          </div>
+
+          <!-- Timeline Stepper -->
+          <div>
+            <h6 class="fw-bold fs-7 mb-3 text-heading"><i class="fa-solid fa-clock-rotate-left me-1"></i> Lifecycle Progress Timeline</h6>
+            <div class="ps-2" id="trackTimelineContainer">
+              <!-- Dynamically populated timeline items -->
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close Tracker</button>
+        </div>
       </div>
     </div>
   </div>
