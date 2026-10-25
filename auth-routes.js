@@ -31,6 +31,14 @@ function writeSeed(data) {
     console.warn('writeSeed skipped on read-only system:', err.message);
   }
 }
+function getISTDate() {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Kolkata',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).format(new Date());
+}
 function generateToken(user) {
   return jwt.sign(
     { id: user.id, email: user.email, name: user.name, role: user.role, flat: user.flat, status: user.status || 'Approved' },
@@ -147,7 +155,7 @@ router.post('/register', async (req, res) => {
       return num > max ? num : max;
     }, 0);
 
-    const now = new Date().toISOString().split('T')[0];
+    const now = getISTDate();
     const newUser = {
       id: 'USR-' + (maxId + 1),
       username: email.split('@')[0],
@@ -266,7 +274,7 @@ router.post('/approve', authenticateToken, requireRole('Admin'), (req, res) => {
       return res.status(400).json({ success: false, message: 'User is not pending approval.' });
     }
 
-    const now = new Date().toISOString().split('T')[0];
+    const now = getISTDate();
     user.status = 'Approved';
     user.approvedAt = now;
     user.approvedBy = req.user.id;

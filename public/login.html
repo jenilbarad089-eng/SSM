@@ -90,6 +90,15 @@
         <span class="fw-bold text-dark">Society<span style="color: var(--accent-orange);">Hub</span></span>
       </a>
       <p class="text-muted caption-text mb-0">Enterprise Residential Society Management & Role Access Gateway</p>
+      <div class="d-flex justify-content-center mt-2">
+        <div class="ist-clock-badge d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill" title="Indian Standard Time (IST) • Live Real-Time Clock">
+          <span class="live-dot-pulse"></span>
+          <i class="fa-regular fa-clock text-warning"></i>
+          <span class="fw-bold fs-8" id="istLiveTime">--:--:-- (IST)</span>
+          <span class="text-muted fs-8">&bull;</span>
+          <span class="text-muted fs-8" id="istLiveDate">-- --- ----</span>
+        </div>
+      </div>
     </div>
 
     <!-- Auth Card -->
@@ -317,6 +326,7 @@
   <script src="js/db.js"></script>
   <script src="js/firebase-auth.js"></script>
   <script src="js/notifications.js"></script>
+  <script src="js/ist-clock.js"></script>
   <script>
     const ALL_SOCIETY_ACCOUNTS = [
       {

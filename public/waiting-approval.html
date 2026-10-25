@@ -144,8 +144,18 @@
       <h2 class="fw-bold mb-2" style="color: var(--text-primary);">Registration Submitted</h2>
       <p class="mb-4" style="color: var(--text-secondary);">Your account has been submitted for verification by the Society Administrator.</p>
 
-      <div class="status-badge-pending mb-4">
+      <div class="status-badge-pending mb-3">
         <i class="fa-solid fa-circle"></i> Pending Approval
+      </div>
+
+      <div class="mb-4">
+        <div class="ist-clock-badge d-inline-flex align-items-center gap-2 px-3 py-1.5 rounded-pill" title="Indian Standard Time (IST)">
+          <span class="live-dot-pulse"></span>
+          <i class="fa-regular fa-clock text-warning"></i>
+          <span class="fw-bold fs-8" id="istLiveTime">--:--:-- (IST)</span>
+          <span class="text-muted fs-8">&bull;</span>
+          <span class="text-muted fs-8" id="istLiveDate">-- --- ----</span>
+        </div>
       </div>
 
       <!-- Timeline -->
@@ -201,6 +211,7 @@
   </div>
 
   <script src="js/db.js"></script>
+  <script src="js/ist-clock.js"></script>
   <script>
     function handleLogout() {
       localStorage.removeItem('ssm_auth_token');

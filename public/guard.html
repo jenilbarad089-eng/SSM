@@ -37,6 +37,15 @@
       </a>
 
       <div class="d-flex align-items-center gap-3">
+        <div class="ist-clock-badge d-none d-sm-flex align-items-center gap-2 px-3 py-1 rounded-pill me-1" title="Indian Standard Time (IST) • Gate Clock">
+          <span class="live-dot-pulse"></span>
+          <i class="fa-regular fa-clock text-warning"></i>
+          <div class="d-flex flex-column text-start" style="line-height: 1.15;">
+            <span class="fw-bold fs-8" id="istLiveTime">--:--:-- (IST)</span>
+            <span class="text-muted fs-9" id="istLiveDate">-- --- ----</span>
+          </div>
+        </div>
+        <div class="nav-divider d-none d-sm-block"></div>
         <div class="btn-nav-icon d-none d-sm-flex" onclick="toggleNotificationPanel(this)" title="Notifications">
           <i class="fa-solid fa-bell"></i>
           <span class="notif-dot"></span>
@@ -66,6 +75,27 @@
   <div class="container-fluid px-4 py-4">
     
     <!-- Top Summary Banner -->
+    <!-- Gate Operations IST Live Clock Banner -->
+    <div class="hub-card p-3 mb-4 d-flex align-items-center justify-content-between flex-wrap gap-3 border-start border-4 border-warning">
+      <div class="d-flex align-items-center gap-3">
+        <div class="bg-warning text-dark rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+          <i class="fa-solid fa-clock fs-5"></i>
+        </div>
+        <div>
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="live-dot-pulse"></span>
+            <strong class="fs-6">Gate Operations Live Clock (Indian Standard Time)</strong>
+            <span class="badge bg-warning text-dark fs-8">Asia/Kolkata (UTC+5:30)</span>
+          </div>
+          <small class="text-muted">All visitor entries, vehicle records, and gate passes are synchronized in real-time IST.</small>
+        </div>
+      </div>
+      <div class="text-end">
+        <div class="fs-4 fw-bold text-warning font-monospace" id="guardGateISTTime">--:--:-- (IST)</div>
+        <div class="text-muted fs-8" id="guardGateISTDate">--</div>
+      </div>
+    </div>
+
     <div class="row g-3 mb-4">
       <div class="col-md-4">
         <div class="metric-card">
@@ -222,5 +252,6 @@
   <script src="js/firebase-auth.js"></script>
   <script src="js/notifications.js"></script>
   <script src="js/guard.js"></script>
+  <script src="js/ist-clock.js"></script>
 </body>
 </html>

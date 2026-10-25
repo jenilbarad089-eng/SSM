@@ -64,6 +64,14 @@
 
           <!-- Right Actions (inside collapse so they stack on mobile) -->
           <div class="navbar-actions" role="group" aria-label="Navbar actions">
+            <div class="ist-clock-badge d-none d-md-flex align-items-center gap-2 px-3 py-1 rounded-pill me-2" title="Indian Standard Time (IST) • Live Time">
+              <span class="live-dot-pulse"></span>
+              <i class="fa-regular fa-clock text-warning"></i>
+              <div class="d-flex flex-column text-start" style="line-height: 1.15;">
+                <span class="fw-bold fs-8" id="istLiveTime">--:--:-- (IST)</span>
+                <span class="text-muted fs-9" id="istLiveDate">-- --- ----</span>
+              </div>
+            </div>
             <button class="btn-pwa-install" id="pwaInstallBtn" onclick="installPWA()"
               title="Install SocietyHub as a standalone app" aria-label="Install App" style="display:none;">
               <i class="fa-solid fa-download" aria-hidden="true"></i>
@@ -739,5 +747,6 @@
       }
     }
   </script>
+  <script src="js/ist-clock.js"></script>
 </body>
 </html>

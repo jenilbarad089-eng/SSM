@@ -127,6 +127,32 @@ const SystemDB = {
     return this.data.users || [];
   },
 
+  // Indian Standard Time (IST) Helpers (Asia/Kolkata, UTC+5:30)
+  getISTTimestamp(d = new Date()) {
+    if (typeof window !== 'undefined' && window.IST && window.IST.getTimestamp) {
+      return window.IST.getTimestamp(d);
+    }
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Kolkata',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    }).format(d);
+    return parts.replace(',', '');
+  },
+
+  getISTDate(d = new Date()) {
+    return new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Kolkata',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).format(d);
+  },
+
   // Residents Operations
   getResidents() {
     return this.data.users.filter(u => u.role === 'Resident' || u.role === 'Admin');
@@ -241,8 +267,8 @@ const SystemDB = {
     const isSubmittedByAdmin = user && user.role === 'Admin';
     const residentName = complaint.residentName || (user ? user.name : 'Resident');
     const flat = complaint.flat || (user ? user.flat : 'A-302');
-    const dateStr = new Date().toISOString().split('T')[0];
-    const timeStr = new Date().toISOString().replace('T', ' ').substring(0, 16);
+    const dateStr = this.getISTDate();
+    const timeStr = this.getISTTimestamp();
 
     const newComplaint = {
       id: 'CMP-' + Math.floor(100 + Math.random() * 900),
@@ -288,7 +314,7 @@ const SystemDB = {
     const cmp = this.data.complaints.find(c => c.id === id);
     if (!cmp) return { success: false, message: 'Complaint not found' };
 
-    const timeStr = new Date().toISOString().replace('T', ' ').substring(0, 16);
+    const timeStr = this.getISTTimestamp();
     let status = '';
     let notes = '';
     let adminDirections = '';
@@ -350,7 +376,7 @@ const SystemDB = {
     if (bill.status === 'Paid') return { success: false, message: 'Bill is already paid' };
 
     bill.status = 'Paid';
-    bill.paymentDate = new Date().toISOString().split('T')[0];
+    bill.paymentDate = this.getISTDate();
     bill.txnId = 'TXN' + Math.floor(100000000 + Math.random() * 900000000);
     bill.receiptNo = 'REC-2026-' + Math.floor(100 + Math.random() * 900);
     bill.paymentMethod = paymentMethod || 'UPI / Online Card';
@@ -373,7 +399,7 @@ const SystemDB = {
       residentName: visitorData.residentName || 'Resident of ' + visitorData.flat,
       purpose: visitorData.purpose,
       vehicleNo: visitorData.vehicleNo || 'N/A',
-      entryTime: new Date().toISOString().replace('T', ' ').substring(0, 16),
+      entryTime: this.getISTTimestamp(),
       exitTime: 'Still In Society',
       status: 'Pending',
       gatePassCode: 'GP-' + Math.floor(1000 + Math.random() * 9000)
@@ -396,7 +422,7 @@ const SystemDB = {
   markVisitorExit(id) {
     const vis = this.data.visitors.find(v => v.id === id);
     if (vis) {
-      vis.exitTime = new Date().toISOString().replace('T', ' ').substring(0, 16);
+      vis.exitTime = this.getISTTimestamp();
       this.save();
       return { success: true, visitor: vis };
     }
@@ -415,7 +441,7 @@ const SystemDB = {
       title: notice.title,
       category: notice.category || 'General',
       postedBy: user ? user.name : 'Admin',
-      date: new Date().toISOString().split('T')[0],
+      date: this.getISTDate(),
       content: notice.content
     };
     this.data.notices.unshift(newNotice);
@@ -553,7 +579,7 @@ const SystemDB = {
       options: pollData.options.map((opt, i) => ({ id: 'opt' + (i+1), text: opt, votes: 0 })),
       totalVotes: 0,
       status: 'Active',
-      createdDate: new Date().toISOString().split('T')[0],
+      createdDate: this.getISTDate(),
       endDate: pollData.endDate || '2026-08-31',
       createdBy: userName
     };

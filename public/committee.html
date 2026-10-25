@@ -39,6 +39,15 @@
       </a>
 
       <div class="d-flex align-items-center gap-3">
+        <div class="ist-clock-badge d-none d-sm-flex align-items-center gap-2 px-3 py-1 rounded-pill me-1" title="Indian Standard Time (IST) • Live Real-Time Clock">
+          <span class="live-dot-pulse"></span>
+          <i class="fa-regular fa-clock text-warning"></i>
+          <div class="d-flex flex-column text-start" style="line-height: 1.15;">
+            <span class="fw-bold fs-8" id="istLiveTime">--:--:-- (IST)</span>
+            <span class="text-muted fs-9" id="istLiveDate">-- --- ----</span>
+          </div>
+        </div>
+        <div class="nav-divider d-none d-sm-block"></div>
         <div class="btn-nav-icon d-none d-sm-flex" onclick="toggleNotificationPanel(this)" title="Notifications">
           <i class="fa-solid fa-bell"></i>
           <span class="notif-dot"></span>
@@ -79,7 +88,10 @@
           <span>LIVE</span>
           <span class="refresh-ring"></span>
         </div>
-        <span class="live-timestamp" id="commLastUpdated">Updated just now</span>
+        <span class="live-timestamp d-flex align-items-center gap-1.5" id="commLastUpdated">
+            <i class="fa-solid fa-clock text-warning"></i>
+            <span id="commDashboardISTTime" class="fw-bold">--:--:-- (IST)</span> &bull; <span id="commDashboardISTDate" class="text-muted">--</span>
+          </span>
         <button class="btn btn-outline-info rounded-pill px-3" onclick="refreshCommitteeNow()">
           <i class="fa-solid fa-rotate me-1"></i> Refresh
         </button>
@@ -267,5 +279,6 @@
   <script src="js/firebase-auth.js"></script>
   <script src="js/notifications.js"></script>
   <script src="js/committee.js"></script>
+  <script src="js/ist-clock.js"></script>
 </body>
 </html>
