@@ -398,12 +398,44 @@
 
             <!-- Quick Demo Accounts Presets -->
             <div class="border-top border-secondary border-opacity-25 pt-3 mt-3">
-              <span class="caption-text text-muted d-block mb-2 text-center"><i class="fa-solid fa-wand-magic-sparkles me-1"></i> Quick 1-Click Demo Login Presets</span>
-              <div class="row g-2">
-                <div class="col-6"><button type="button" class="demo-role-btn btn-sm w-100 text-center py-2" onclick="quickFillDemo('admin')">👑 Admin</button></div>
-                <div class="col-6"><button type="button" class="demo-role-btn btn-sm w-100 text-center py-2" onclick="quickFillDemo('resident1')">🏠 Resident</button></div>
-                <div class="col-6"><button type="button" class="demo-role-btn btn-sm w-100 text-center py-2" onclick="quickFillDemo('guard')">🛡️ Guard</button></div>
-                <div class="col-6"><button type="button" class="demo-role-btn btn-sm w-100 text-center py-2" onclick="quickFillDemo('committee')">📊 Committee</button></div>
+              <span class="caption-text text-muted d-block mb-1.5 text-center"><i class="fa-solid fa-users me-1 text-warning"></i> Select Member by Name & Role (All Portals)</span>
+              
+              <div class="mb-2">
+                <select class="form-select form-select-sm" id="modalAccountPicker" onchange="modalSelectAccount(this.value)">
+                  <option value="">-- Choose Member from Any Portal --</option>
+                  <optgroup label="👑 Super Admin Portal">
+                    <option value="jenilbarad089@gmail.com">Jenil Barad (Admin) — jenilbarad089@gmail.com</option>
+                  </optgroup>
+                  <optgroup label="📊 Committee Management Portal">
+                    <option value="suresh.treasurer@smartsociety.com">Suresh Kumar (Treasurer) — suresh.treasurer@smartsociety.com</option>
+                    <option value="rohan.secretary@smartsociety.com">Rohan Mehta (Secretary) — rohan.secretary@smartsociety.com</option>
+                  </optgroup>
+                  <optgroup label="🛡️ Security Guard Portal">
+                    <option value="guard@smartsociety.com">Bahadur Singh (Head Guard, Gate 1) — guard@smartsociety.com</option>
+                    <option value="vikram.yadav@gmail.com">Vikram Yadav (Guard, Gate 2) — vikram.yadav@gmail.com</option>
+                  </optgroup>
+                  <optgroup label="🏠 Resident Portal">
+                    <option value="amit.patel@gmail.com">Amit Patel (Owner, Flat A-302) — amit.patel@gmail.com</option>
+                    <option value="priya.v@gmail.com">Priya Verma (Owner, Flat C-501) — priya.v@gmail.com</option>
+                    <option value="rahul.sharma@gmail.com">Rahul Sharma (Owner, Flat B-104) — rahul.sharma@gmail.com</option>
+                    <option value="neha.gupta@gmail.com">Neha Gupta (Tenant, Flat B-202) — neha.gupta@gmail.com</option>
+                    <option value="ananya.d@gmail.com">Ananya Deshmukh (Owner, Flat A-604) — ananya.d@gmail.com</option>
+                    <option value="sanjay.sharma@gmail.com">Sanjay Sharma (Pending, Flat B-304) — sanjay.sharma@gmail.com</option>
+                  </optgroup>
+                </select>
+              </div>
+
+              <div class="row g-2 mb-2">
+                <div class="col-6"><button type="button" class="demo-role-btn btn-sm w-100 text-center py-2" onclick="quickFillDemo('admin')">👑 Admin (Jenil)</button></div>
+                <div class="col-6"><button type="button" class="demo-role-btn btn-sm w-100 text-center py-2" onclick="quickFillDemo('committee')">📊 Comm (Suresh)</button></div>
+                <div class="col-6"><button type="button" class="demo-role-btn btn-sm w-100 text-center py-2" onclick="quickFillDemo('guard')">🛡️ Guard (Bahadur)</button></div>
+                <div class="col-6"><button type="button" class="demo-role-btn btn-sm w-100 text-center py-2" onclick="quickFillDemo('resident1')">🏠 Resident (Amit)</button></div>
+              </div>
+
+              <div class="text-center mt-2">
+                <a href="login.html" class="small text-primary text-decoration-none fw-semibold">
+                  <i class="fa-solid fa-address-book me-1"></i> View Full 11-Member Directory & 1-Click Access →
+                </a>
               </div>
             </div>
           </form>
@@ -582,6 +614,35 @@
         if (signinBtn) signinBtn.classList.add('active');
         if (regForm) regForm.classList.add('d-none');
         if (signinForm) signinForm.classList.remove('d-none');
+      }
+    }
+
+    const MODAL_ACCOUNTS_MAP = {
+      'jenilbarad089@gmail.com': { email: 'jenilbarad089@gmail.com', pass: 'admin123' },
+      'suresh.treasurer@smartsociety.com': { email: 'suresh.treasurer@smartsociety.com', pass: 'committee123' },
+      'rohan.secretary@smartsociety.com': { email: 'rohan.secretary@smartsociety.com', pass: 'committee123' },
+      'guard@smartsociety.com': { email: 'guard@smartsociety.com', pass: 'guard123' },
+      'vikram.yadav@gmail.com': { email: 'vikram.yadav@gmail.com', pass: 'guard123' },
+      'amit.patel@gmail.com': { email: 'amit.patel@gmail.com', pass: 'resident123' },
+      'priya.v@gmail.com': { email: 'priya.v@gmail.com', pass: 'resident123' },
+      'rahul.sharma@gmail.com': { email: 'rahul.sharma@gmail.com', pass: 'resident123' },
+      'neha.gupta@gmail.com': { email: 'neha.gupta@gmail.com', pass: 'resident123' },
+      'ananya.d@gmail.com': { email: 'ananya.d@gmail.com', pass: 'resident123' },
+      'sanjay.sharma@gmail.com': { email: 'sanjay.sharma@gmail.com', pass: 'resident123' }
+    };
+
+    function modalSelectAccount(email) {
+      if (!email || !MODAL_ACCOUNTS_MAP[email]) return;
+      const creds = MODAL_ACCOUNTS_MAP[email];
+      const userEl = document.getElementById('loginUsername');
+      const passEl = document.getElementById('loginPassword');
+      if (userEl && passEl) {
+        userEl.value = creds.email;
+        passEl.value = creds.pass;
+        setTimeout(() => {
+          const form = document.getElementById('authSigninForm');
+          if (form) form.dispatchEvent(new Event('submit'));
+        }, 120);
       }
     }
 

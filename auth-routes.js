@@ -87,6 +87,8 @@ router.post('/login', (req, res) => {
         user = seed.users.find(u => u.email === 'neha.gupta@gmail.com');
       } else if (['ananya', 'ananya.d@gmail.com'].includes(lookup)) {
         user = seed.users.find(u => u.email === 'ananya.d@gmail.com');
+      } else if (['sanjay', 'sanjay.sharma@gmail.com'].includes(lookup)) {
+        user = seed.users.find(u => u.email === 'sanjay.sharma@gmail.com');
       }
     }
     if (!user) {

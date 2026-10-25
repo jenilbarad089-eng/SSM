@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign In & Registration - SocietyHub Enterprise SaaS</title>
+  <title>Sign In & Portal Access - SocietyHub Enterprise SaaS</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,38 +26,85 @@
 
   <!-- Custom Master Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .fs-7 { font-size: 0.85rem !important; }
+    .fs-8 { font-size: 0.75rem !important; }
+    .member-account-card {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: rgba(255, 255, 255, 0.04);
+      cursor: pointer;
+    }
+    [data-theme="light"] .member-account-card {
+      border: 1px solid rgba(0, 0, 0, 0.09);
+      background-color: #ffffff;
+    }
+    .member-account-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      border-color: var(--accent-orange) !important;
+    }
+    .member-account-card.selected-card {
+      border-color: var(--accent-orange) !important;
+      background-color: rgba(255, 107, 0, 0.07) !important;
+    }
+    .member-directory-container::-webkit-scrollbar {
+      width: 6px;
+    }
+    .member-directory-container::-webkit-scrollbar-thumb {
+      background: rgba(150, 150, 150, 0.35);
+      border-radius: 4px;
+    }
+    .role-pill-btn {
+      font-size: 0.78rem;
+      padding: 0.25rem 0.55rem;
+    }
+    .avatar-sm {
+      width: 42px;
+      height: 42px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .email-code-badge {
+      font-family: 'Consolas', monospace;
+      font-size: 0.75rem;
+      background: rgba(125, 125, 125, 0.12);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+  </style>
 </head>
-<body class="d-flex align-items-center justify-content-center min-vh-100 py-5 position-relative" style="background-color: var(--bg-primary);">
+<body class="d-flex align-items-center justify-content-center min-vh-100 py-4 py-lg-5 position-relative" style="background-color: var(--bg-primary);">
 
   <!-- Floating Background Glows -->
-  <div class="position-absolute top-0 start-50 translate-middle-x rounded-circle opacity-25 pointer-events-none" style="width: 500px; height: 500px; background: radial-gradient(circle, rgba(255, 107, 0, 0.3) 0%, transparent 70%); blur: 60px;"></div>
+  <div class="position-absolute top-0 start-50 translate-middle-x rounded-circle opacity-25 pointer-events-none" style="width: 600px; height: 600px; background: radial-gradient(circle, rgba(255, 107, 0, 0.35) 0%, transparent 70%); filter: blur(70px);"></div>
 
-  <div class="container position-relative z-1" style="max-width: 520px;">
+  <div class="container position-relative z-1" style="max-width: 980px;">
     
     <!-- Top Brand Logo -->
-    <div class="text-center mb-4">
-      <a class="navbar-brand justify-content-center fs-3 mb-2 d-inline-flex" href="index.html">
+    <div class="text-center mb-3">
+      <a class="navbar-brand justify-content-center fs-3 mb-1 d-inline-flex align-items-center text-decoration-none" href="index.html">
         <div class="brand-icon me-2">
-          <i class="fa-solid fa-building-user"></i>
+          <i class="fa-solid fa-building-user text-warning"></i>
         </div>
-        <span>Society<span style="color: var(--accent-blue);">Hub</span></span>
+        <span class="fw-bold text-dark">Society<span style="color: var(--accent-orange);">Hub</span></span>
       </a>
-      <p class="text-muted caption-text mb-0">Enterprise Residential Society Management Platform</p>
+      <p class="text-muted caption-text mb-0">Enterprise Residential Society Management & Role Access Gateway</p>
     </div>
 
     <!-- Auth Card -->
-    <div class="hub-card p-4 p-sm-5 rounded-4 shadow-lg border">
+    <div class="hub-card p-3 p-sm-4 p-md-5 rounded-4 shadow-lg border">
       
       <!-- Nav Tabs for Login / Register -->
       <ul class="nav nav-pills nav-justified mb-4 p-1 rounded-3 bg-secondary bg-opacity-25" id="authTabs" role="tablist">
         <li class="nav-item" role="presentation">
           <button class="nav-link active py-2 rounded-2 fw-semibold" id="tab-login-btn" data-bs-toggle="pill" data-bs-target="#tab-login" type="button">
-            <i class="fa-solid fa-right-to-bracket me-1"></i> Sign In
+            <i class="fa-solid fa-right-to-bracket me-1"></i> Sign In (All Roles & Accounts)
           </button>
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link py-2 rounded-2 fw-semibold" id="tab-register-btn" data-bs-toggle="pill" data-bs-target="#tab-register" type="button">
-            <i class="fa-solid fa-user-plus me-1"></i> Register Member
+            <i class="fa-solid fa-user-plus me-1"></i> Register New Member
           </button>
         </li>
       </ul>
@@ -66,104 +113,192 @@
 
         <!-- TAB 1: Sign In -->
         <div class="tab-pane fade show active" id="tab-login" role="tabpanel">
-          <form id="dedicatedLoginForm">
-            <div class="mb-3">
-              <label class="form-label caption-text fw-semibold">Email or Username</label>
-              <div class="input-group">
-                <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fa-solid fa-envelope"></i></span>
-                <input type="text" class="form-control border-start-0" id="loginEmail" required placeholder="admin@smartsociety.com">
+          <div class="row g-4 align-items-stretch">
+            
+            <!-- Left Column: Form & Selector -->
+            <div class="col-lg-5">
+              <div class="p-3.5 p-sm-4 rounded-3 bg-secondary bg-opacity-10 border border-secondary border-opacity-25 h-100 d-flex flex-column justify-content-between">
+                <div>
+                  <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h5 class="mb-0 fw-bold fs-6"><i class="fa-solid fa-right-to-bracket text-primary me-2"></i>Sign In to Portal</h5>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1"><i class="fa-solid fa-circle-check me-1"></i>Active</span>
+                  </div>
+
+                  <!-- Quick Account Dropdown -->
+                  <div class="mb-3">
+                    <label class="form-label caption-text fw-semibold text-muted d-flex justify-content-between align-items-center">
+                      <span><i class="fa-solid fa-users-gear me-1 text-warning"></i> Select Person / Role</span>
+                      <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-8">11 Accounts</span>
+                    </label>
+                    <select class="form-select form-select-sm shadow-none" id="quickAccountSelect" onchange="onAccountDropdownSelect(this.value)">
+                      <option value="">-- Select Member from Any Portal --</option>
+                      <optgroup label="👑 Super Admin Portal">
+                        <option value="jenilbarad089@gmail.com">Jenil Barad (Admin) — Flat A-101 (jenilbarad089@gmail.com)</option>
+                      </optgroup>
+                      <optgroup label="📊 Committee Management Portal">
+                        <option value="suresh.treasurer@smartsociety.com">Suresh Kumar (Treasurer) — Flat A-402 (suresh.treasurer@smartsociety.com)</option>
+                        <option value="rohan.secretary@smartsociety.com">Rohan Mehta (Secretary) — Flat B-301 (rohan.secretary@smartsociety.com)</option>
+                      </optgroup>
+                      <optgroup label="🛡️ Security Guard Portal">
+                        <option value="guard@smartsociety.com">Bahadur Singh (Head Guard) — Main Gate 1 (guard@smartsociety.com)</option>
+                        <option value="vikram.yadav@gmail.com">Vikram Yadav (Security Guard) — Gate 2 (vikram.yadav@gmail.com)</option>
+                      </optgroup>
+                      <optgroup label="🏠 Resident Portal">
+                        <option value="amit.patel@gmail.com">Amit Patel (Owner) — Flat A-302 (amit.patel@gmail.com)</option>
+                        <option value="priya.v@gmail.com">Priya Verma (Owner) — Flat C-501 (priya.v@gmail.com)</option>
+                        <option value="rahul.sharma@gmail.com">Rahul Sharma (Owner) — Flat B-104 (rahul.sharma@gmail.com)</option>
+                        <option value="neha.gupta@gmail.com">Neha Gupta (Tenant) — Flat B-202 (neha.gupta@gmail.com)</option>
+                        <option value="ananya.d@gmail.com">Ananya Deshmukh (Owner) — Flat A-604 (ananya.d@gmail.com)</option>
+                        <option value="sanjay.sharma@gmail.com">Sanjay Sharma (Pending Resident) — Flat B-304 (sanjay.sharma@gmail.com)</option>
+                      </optgroup>
+                    </select>
+                  </div>
+
+                  <!-- Selected Account Card Preview -->
+                  <div id="selectedAccountCard" class="card border-primary border-opacity-50 bg-primary bg-opacity-10 p-2.5 mb-3 rounded-3 d-none">
+                    <div class="d-flex align-items-center gap-2.5">
+                      <img id="selectedUserAvatar" src="" alt="User" class="rounded-circle border bg-white avatar-sm">
+                      <div class="flex-grow-1 overflow-hidden">
+                        <div class="d-flex align-items-center justify-content-between">
+                          <strong id="selectedUserName" class="fs-7 text-truncate"></strong>
+                          <span id="selectedUserBadge" class="badge fs-8"></span>
+                        </div>
+                        <div class="text-muted fs-8 text-truncate" id="selectedUserEmail"></div>
+                        <div class="text-secondary fs-8 mt-0.5" id="selectedUserUnit"><i class="fa-solid fa-location-dot me-1 text-primary"></i><span id="selectedUserUnitText"></span></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <form id="dedicatedLoginForm">
+                    <div class="mb-3">
+                      <label class="form-label caption-text fw-semibold">Email or Username</label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fa-solid fa-envelope"></i></span>
+                        <input type="text" class="form-control border-start-0" id="loginEmail" required placeholder="Select account or enter email">
+                      </div>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label caption-text fw-semibold">Password</label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fa-solid fa-lock"></i></span>
+                        <input type="password" class="form-control border-start-0 border-end-0" id="loginPassword" required placeholder="••••••••">
+                        <button class="btn btn-outline-secondary border-start-0" type="button" onclick="togglePasswordVisibility()" title="Show/Hide Password">
+                          <i class="fa-regular fa-eye" id="togglePasswordIcon"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mb-3 fs-7">
+                      <div class="form-check mb-0">
+                        <input class="form-check-input" type="checkbox" id="rememberMe" checked>
+                        <label class="form-check-label text-muted" for="rememberMe">Remember me</label>
+                      </div>
+                      <a href="#" class="text-decoration-none text-muted" onclick="alert('Use any member card on the right for 1-click active authentication!')">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-custom w-100 py-2.5 mb-2 fw-semibold" id="btnLoginSubmitBtn">
+                      <i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Sign In to Portal
+                    </button>
+                  </form>
+                </div>
+
+                <div class="pt-2 border-top border-secondary border-opacity-25 mt-3">
+                  <span class="fs-8 text-muted d-block text-center"><i class="fa-solid fa-shield-halved text-success me-1"></i> Secured with Bcrypt + JWT Token Authentication</span>
+                </div>
               </div>
             </div>
 
-            <div class="mb-3">
-              <label class="form-label caption-text fw-semibold">Password</label>
-              <div class="input-group">
-                <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fa-solid fa-lock"></i></span>
-                <input type="password" class="form-control border-start-0" id="loginPassword" required placeholder="••••••••">
+            <!-- Right Column: All Portal Accounts Directory -->
+            <div class="col-lg-7 border-start-lg ps-lg-4">
+              <div class="d-flex flex-column h-100">
+                
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <div>
+                    <h5 class="mb-0 fw-bold fs-6"><i class="fa-solid fa-address-book text-warning me-2"></i>All Portal Accounts by Name & Role</h5>
+                    <small class="text-muted fs-8">Click "Sign In" on any person to immediately authenticate and open their portal</small>
+                  </div>
+                  <span class="badge bg-primary rounded-pill px-2.5 py-1.5" id="memberCountBadge">11 Accounts</span>
+                </div>
+
+                <!-- Search & Role Filter Tabs -->
+                <div class="row g-2 mb-2">
+                  <div class="col-sm-5">
+                    <div class="input-group input-group-sm">
+                      <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                      <input type="text" class="form-control" id="memberSearchInput" placeholder="Search name, email, flat..." oninput="filterMemberDirectory()">
+                    </div>
+                  </div>
+                  <div class="col-sm-7">
+                    <div class="btn-group btn-group-sm w-100" role="group" id="roleFilterGroup">
+                      <button type="button" class="btn btn-outline-secondary role-pill-btn active" onclick="setRoleFilter('All', this)">All (11)</button>
+                      <button type="button" class="btn btn-outline-danger role-pill-btn" onclick="setRoleFilter('Admin', this)">Admin (1)</button>
+                      <button type="button" class="btn btn-outline-info role-pill-btn" onclick="setRoleFilter('Committee', this)">Comm (2)</button>
+                      <button type="button" class="btn btn-outline-warning role-pill-btn" onclick="setRoleFilter('Security', this)">Guard (2)</button>
+                      <button type="button" class="btn btn-outline-primary role-pill-btn" onclick="setRoleFilter('Resident', this)">Res (6)</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Scrollable Account Cards Grid -->
+                <div class="member-directory-container overflow-y-auto pe-1 flex-grow-1" style="max-height: 480px;" id="memberDirectoryList">
+                  <!-- Rendered dynamically by JavaScript -->
+                </div>
+
               </div>
             </div>
 
-            <div class="d-flex align-items-center justify-content-between mb-4 fs-7">
-              <div class="form-check mb-0">
-                <input class="form-check-input" type="checkbox" id="rememberMe" checked>
-                <label class="form-check-label text-muted" for="rememberMe">Remember me</label>
-              </div>
-              <a href="#" class="text-dark text-decoration-none" onclick="alert('Demo Mode: Click any 1-Click Preset below to sign in instantly!')">Forgot password?</a>
-            </div>
-
-            <button type="submit" class="btn btn-primary-custom w-100 py-2.5 mb-3">
-              <i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Sign In to Portal
-            </button>
-          </form>
-
-          <div class="text-center position-relative my-4">
-            <hr class="border-secondary opacity-25">
-            <span class="position-absolute top-50 start-50 translate-middle bg-surface px-3 text-muted caption-text">Quick 1-Click Demo Accounts</span>
-          </div>
-
-          <div class="d-grid gap-2">
-            <button class="btn btn-outline-danger btn-sm rounded-pill py-2" onclick="presetLogin('jenilbarad089@gmail.com', 'admin123')">
-              <i class="fa-solid fa-user-shield me-1"></i> Admin (Jenil Barad)
-            </button>
-            <div class="row g-2">
-              <div class="col-6">
-                <button class="btn btn-outline-primary btn-sm rounded-pill w-100 py-1.5" onclick="presetLogin('amit.patel@gmail.com', 'resident123')">
-                  <i class="fa-solid fa-house-user me-1"></i> Resident
-                </button>
-              </div>
-              <div class="col-6">
-                <button class="btn btn-outline-warning btn-sm rounded-pill w-100 py-1.5" onclick="presetLogin('guard@smartsociety.com', 'guard123')">
-                  <i class="fa-solid fa-shield-halved me-1"></i> Security Guard
-                </button>
-              </div>
-            </div>
-            <button class="btn btn-outline-info btn-sm rounded-pill py-1.5 mt-1" onclick="presetLogin('suresh.treasurer@smartsociety.com', 'committee123')">
-              <i class="fa-solid fa-chart-pie me-1"></i> Committee Member
-            </button>
           </div>
         </div>
 
         <!-- TAB 2: Register Member -->
         <div class="tab-pane fade" id="tab-register" role="tabpanel">
-          <form id="dedicatedRegisterForm">
-            <div class="mb-3">
-              <label class="form-label caption-text fw-semibold">Full Name</label>
-              <input type="text" class="form-control" id="regName" required placeholder="e.g. Vikramaditya Singh">
+          <div style="max-width: 580px; margin: 0 auto;">
+            <div class="text-center mb-3">
+              <h5 class="fw-bold mb-1"><i class="fa-solid fa-user-plus text-primary me-2"></i>Apply for Society Membership</h5>
+              <p class="text-muted fs-7 mb-0">New applications undergo Admin review. Use Invitation Code <code>SOC-MH-4001</code>.</p>
             </div>
 
-            <div class="mb-3">
-              <label class="form-label caption-text fw-semibold">Society Invitation Code</label>
-              <input type="text" class="form-control" id="regSocietyCode" value="SOC-MH-4001" required>
-            </div>
-
-            <div class="row g-2 mb-3">
-              <div class="col-6">
-                <label class="form-label caption-text fw-semibold">Applying Role</label>
-                <select class="form-select" id="regRole">
-                  <option value="Resident">Resident</option>
-                  <option value="Security Guard">Security Guard</option>
-                </select>
+            <form id="dedicatedRegisterForm">
+              <div class="mb-3">
+                <label class="form-label caption-text fw-semibold">Full Name</label>
+                <input type="text" class="form-control" id="regName" required placeholder="e.g. Vikramaditya Singh">
               </div>
-              <div class="col-6">
-                <label class="form-label caption-text fw-semibold">Phone Number</label>
-                <input type="tel" class="form-control" id="regPhone" required placeholder="9876543210">
+
+              <div class="mb-3">
+                <label class="form-label caption-text fw-semibold">Society Invitation Code</label>
+                <input type="text" class="form-control" id="regSocietyCode" value="SOC-MH-4001" required>
               </div>
-            </div>
 
-            <div class="mb-3">
-              <label class="form-label caption-text fw-semibold">Email Address</label>
-              <input type="email" class="form-control" id="regEmail" required placeholder="resident@gmail.com">
-            </div>
+              <div class="row g-2 mb-3">
+                <div class="col-6">
+                  <label class="form-label caption-text fw-semibold">Applying Role</label>
+                  <select class="form-select" id="regRole">
+                    <option value="Resident">Resident</option>
+                    <option value="Security Guard">Security Guard</option>
+                  </select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label caption-text fw-semibold">Phone Number</label>
+                  <input type="tel" class="form-control" id="regPhone" required placeholder="9876543210">
+                </div>
+              </div>
 
-            <div class="mb-3">
-              <label class="form-label caption-text fw-semibold">Create Password</label>
-              <input type="password" class="form-control" id="regPassword" required placeholder="••••••••">
-            </div>
+              <div class="mb-3">
+                <label class="form-label caption-text fw-semibold">Email Address</label>
+                <input type="email" class="form-control" id="regEmail" required placeholder="resident@gmail.com">
+              </div>
 
-            <button type="submit" class="btn btn-primary-custom w-100 py-2.5">
-              <i class="fa-solid fa-paper-plane me-2"></i> Submit Application for Admin Approval
-            </button>
-          </form>
+              <div class="mb-3">
+                <label class="form-label caption-text fw-semibold">Create Password</label>
+                <input type="password" class="form-control" id="regPassword" required placeholder="••••••••">
+              </div>
+
+              <button type="submit" class="btn btn-primary-custom w-100 py-2.5">
+                <i class="fa-solid fa-paper-plane me-2"></i> Submit Application for Admin Approval
+              </button>
+            </form>
+          </div>
         </div>
 
       </div>
@@ -184,10 +319,194 @@
   <script src="js/firebase-auth.js"></script>
   <script src="js/notifications.js"></script>
   <script>
+    const ALL_SOCIETY_ACCOUNTS = [
+      {
+        id: 'USR-101',
+        name: 'Jenil Barad (Admin)',
+        email: 'jenilbarad089@gmail.com',
+        password: 'admin123',
+        role: 'Admin',
+        category: 'Admin',
+        roleLabel: 'Super Admin / Society Lead',
+        unit: 'Flat A-101 / Central Office',
+        status: 'Approved',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&gender=male',
+        badgeClass: 'badge bg-danger-subtle text-danger border border-danger-subtle',
+        icon: 'fa-user-shield',
+        targetPage: 'admin.html',
+        targetLabel: 'Admin Portal'
+      },
+      {
+        id: 'USR-105',
+        name: 'Suresh Kumar',
+        email: 'suresh.treasurer@smartsociety.com',
+        password: 'committee123',
+        role: 'Committee Member',
+        category: 'Committee',
+        roleLabel: 'Treasurer & Accounts',
+        unit: 'Flat A-402',
+        status: 'Approved',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Suresh&gender=male',
+        badgeClass: 'badge bg-info-subtle text-info border border-info-subtle',
+        icon: 'fa-chart-pie',
+        targetPage: 'committee.html',
+        targetLabel: 'Committee Portal'
+      },
+      {
+        id: 'USR-110',
+        name: 'Rohan Mehta',
+        email: 'rohan.secretary@smartsociety.com',
+        password: 'committee123',
+        role: 'Committee Member',
+        category: 'Committee',
+        roleLabel: 'Secretary & Operations',
+        unit: 'Flat B-301',
+        status: 'Approved',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rohan&gender=male',
+        badgeClass: 'badge bg-info-subtle text-info border border-info-subtle',
+        icon: 'fa-file-signature',
+        targetPage: 'committee.html',
+        targetLabel: 'Committee Portal'
+      },
+      {
+        id: 'USR-104',
+        name: 'Bahadur Singh',
+        email: 'guard@smartsociety.com',
+        password: 'guard123',
+        role: 'Security Guard',
+        category: 'Security',
+        roleLabel: 'Head Security Guard',
+        unit: 'Gate 1 (Main Entrance)',
+        status: 'Approved',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Bahadur&gender=male',
+        badgeClass: 'badge bg-warning-subtle text-warning-emphasis border border-warning-subtle',
+        icon: 'fa-shield-halved',
+        targetPage: 'guard.html',
+        targetLabel: 'Guard Portal'
+      },
+      {
+        id: 'USR-108',
+        name: 'Vikram Yadav',
+        email: 'vikram.yadav@gmail.com',
+        password: 'guard123',
+        role: 'Security Guard',
+        category: 'Security',
+        roleLabel: 'Security Officer',
+        unit: 'Gate 2 (Visitor Gate)',
+        status: 'Approved',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Vikram&gender=male',
+        badgeClass: 'badge bg-warning-subtle text-warning-emphasis border border-warning-subtle',
+        icon: 'fa-shield-halved',
+        targetPage: 'guard.html',
+        targetLabel: 'Guard Portal'
+      },
+      {
+        id: 'USR-102',
+        name: 'Amit Patel',
+        email: 'amit.patel@gmail.com',
+        password: 'resident123',
+        role: 'Resident',
+        category: 'Resident',
+        roleLabel: 'Apartment Owner',
+        unit: 'Flat A-302 (Tower A)',
+        status: 'Approved',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Amit&gender=male',
+        badgeClass: 'badge bg-primary-subtle text-primary border border-primary-subtle',
+        icon: 'fa-house-user',
+        targetPage: 'resident.html',
+        targetLabel: 'Resident Portal'
+      },
+      {
+        id: 'USR-103',
+        name: 'Priya Verma',
+        email: 'priya.v@gmail.com',
+        password: 'resident123',
+        role: 'Resident',
+        category: 'Resident',
+        roleLabel: 'Apartment Owner',
+        unit: 'Flat C-501 (Tower C)',
+        status: 'Approved',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Priya&gender=female',
+        badgeClass: 'badge bg-primary-subtle text-primary border border-primary-subtle',
+        icon: 'fa-house-user',
+        targetPage: 'resident.html',
+        targetLabel: 'Resident Portal'
+      },
+      {
+        id: 'USR-106',
+        name: 'Rahul Sharma',
+        email: 'rahul.sharma@gmail.com',
+        password: 'resident123',
+        role: 'Resident',
+        category: 'Resident',
+        roleLabel: 'Apartment Owner',
+        unit: 'Flat B-104 (Tower B)',
+        status: 'Approved',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rahul&gender=male',
+        badgeClass: 'badge bg-primary-subtle text-primary border border-primary-subtle',
+        icon: 'fa-house-user',
+        targetPage: 'resident.html',
+        targetLabel: 'Resident Portal'
+      },
+      {
+        id: 'USR-107',
+        name: 'Neha Gupta',
+        email: 'neha.gupta@gmail.com',
+        password: 'resident123',
+        role: 'Resident',
+        category: 'Resident',
+        roleLabel: 'Tenant Resident',
+        unit: 'Flat B-202 (Tower B)',
+        status: 'Approved',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Neha&gender=female',
+        badgeClass: 'badge bg-primary-subtle text-primary border border-primary-subtle',
+        icon: 'fa-house-user',
+        targetPage: 'resident.html',
+        targetLabel: 'Resident Portal'
+      },
+      {
+        id: 'USR-109',
+        name: 'Ananya Deshmukh',
+        email: 'ananya.d@gmail.com',
+        password: 'resident123',
+        role: 'Resident',
+        category: 'Resident',
+        roleLabel: 'Apartment Owner',
+        unit: 'Flat A-604 (Tower A)',
+        status: 'Approved',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ananya&gender=female',
+        badgeClass: 'badge bg-primary-subtle text-primary border border-primary-subtle',
+        icon: 'fa-house-user',
+        targetPage: 'resident.html',
+        targetLabel: 'Resident Portal'
+      },
+      {
+        id: 'USR-111',
+        name: 'Sanjay Sharma',
+        email: 'sanjay.sharma@gmail.com',
+        password: 'resident123',
+        role: 'Resident',
+        category: 'Resident',
+        roleLabel: 'Applicant (Pending Approval)',
+        unit: 'Flat B-304 (Tower B)',
+        status: 'Pending',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sanjay&gender=male',
+        badgeClass: 'badge bg-warning-subtle text-warning-emphasis border border-warning-subtle',
+        icon: 'fa-clock-rotate-left',
+        targetPage: 'waiting-approval.html',
+        targetLabel: 'Waiting Room'
+      }
+    ];
+
+    let currentRoleFilter = 'All';
+
     document.addEventListener('DOMContentLoaded', async () => {
       await SystemDB.init();
 
-      // If already logged in, show quick resume banner or redirect if requested
+      // Render member directory cards
+      renderMemberDirectory('All');
+
+      // If already logged in, show quick resume banner
       const existingUser = SystemDB.getCurrentUser();
       const params = new URLSearchParams(window.location.search);
       if (existingUser && existingUser.status === 'Approved') {
@@ -195,7 +514,6 @@
           redirectByRole(existingUser.role);
           return;
         }
-        // Show session banner above form
         const bannerContainer = document.getElementById('authTabs');
         if (bannerContainer) {
           const banner = document.createElement('div');
@@ -203,15 +521,159 @@
           const targetUrl = (existingUser.role === 'Admin') ? 'admin.html' :
                             (existingUser.role === 'Security Guard') ? 'guard.html' :
                             (existingUser.role === 'Committee Member') ? 'committee.html' : 'resident.html';
-          banner.innerHTML = `<div><i class="fa-solid fa-user-check me-1"></i> Logged in as <strong>${existingUser.name}</strong></div>
+          banner.innerHTML = `<div><i class="fa-solid fa-user-check me-1"></i> Currently authenticated as <strong>${existingUser.name}</strong> (${existingUser.role})</div>
             <div class="d-flex gap-2">
-              <a href="${targetUrl}" class="btn btn-xs btn-primary py-1 px-2 text-decoration-none">Dashboard</a>
-              <button class="btn btn-xs btn-outline-danger py-1 px-2" onclick="logout(); location.reload();">Logout</button>
+              <a href="${targetUrl}" class="btn btn-xs btn-primary py-1 px-2 text-decoration-none">Go to Dashboard</a>
+              <button class="btn btn-xs btn-outline-danger py-1 px-2" onclick="logout(); location.reload();">Switch Account</button>
             </div>`;
           bannerContainer.parentElement.insertBefore(banner, bannerContainer);
         }
       }
     });
+
+    function renderMemberDirectory(roleFilter = 'All', search = '') {
+      const listContainer = document.getElementById('memberDirectoryList');
+      if (!listContainer) return;
+
+      const q = (search || '').toLowerCase().trim();
+      const filtered = ALL_SOCIETY_ACCOUNTS.filter(acc => {
+        const matchesRole = (roleFilter === 'All') || (acc.category === roleFilter);
+        const matchesQuery = !q || (
+          acc.name.toLowerCase().includes(q) ||
+          acc.email.toLowerCase().includes(q) ||
+          acc.unit.toLowerCase().includes(q) ||
+          acc.roleLabel.toLowerCase().includes(q)
+        );
+        return matchesRole && matchesQuery;
+      });
+
+      document.getElementById('memberCountBadge').textContent = `${filtered.length} of 11 Accounts`;
+
+      if (filtered.length === 0) {
+        listContainer.innerHTML = `
+          <div class="text-center py-5 text-muted">
+            <i class="fa-solid fa-user-slash fs-3 mb-2 opacity-50"></i>
+            <p class="mb-0 fs-7">No member accounts match "${search}".</p>
+          </div>`;
+        return;
+      }
+
+      listContainer.innerHTML = filtered.map(acc => {
+        const isPending = acc.status === 'Pending';
+        const buttonColor = isPending ? 'btn-outline-warning' : (
+          acc.category === 'Admin' ? 'btn-outline-danger' :
+          acc.category === 'Committee' ? 'btn-outline-info' :
+          acc.category === 'Security' ? 'btn-outline-warning' : 'btn-outline-primary'
+        );
+
+        return `
+          <div class="card member-account-card p-2.5 mb-2 rounded-3" data-email="${acc.email}" onclick="selectAccount('${acc.email}', false)">
+            <div class="d-flex align-items-center justify-content-between gap-2">
+              <div class="d-flex align-items-center gap-2.5 overflow-hidden">
+                <img src="${acc.avatar}" alt="${acc.name}" class="rounded-circle avatar-sm border bg-light">
+                <div class="overflow-hidden">
+                  <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                    <strong class="fs-7 text-dark text-truncate">${acc.name}</strong>
+                    <span class="${acc.badgeClass} fs-8 py-0.5 px-1.5">${acc.roleLabel}</span>
+                    ${isPending ? '<span class="badge bg-warning text-dark fs-8"><i class="fa-solid fa-clock me-1"></i>Pending Demo</span>' : ''}
+                  </div>
+                  <div class="d-flex align-items-center gap-2 mt-0.5 flex-wrap">
+                    <span class="email-code-badge text-truncate"><i class="fa-solid fa-envelope me-1 text-muted"></i>${acc.email}</span>
+                    <span class="text-muted fs-8"><i class="fa-solid fa-location-dot me-1"></i>${acc.unit}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex-shrink-0 text-end">
+                <button type="button" class="btn ${buttonColor} btn-sm py-1 px-2.5 rounded-pill fw-semibold" onclick="event.stopPropagation(); presetLogin('${acc.email}', '${acc.password}')">
+                  <i class="fa-solid fa-right-to-bracket me-1"></i> Sign In
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function setRoleFilter(category, btnEl) {
+      currentRoleFilter = category;
+      const group = document.getElementById('roleFilterGroup');
+      if (group) {
+        group.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      }
+      if (btnEl) btnEl.classList.add('active');
+
+      const searchVal = document.getElementById('memberSearchInput').value;
+      renderMemberDirectory(category, searchVal);
+    }
+
+    function filterMemberDirectory() {
+      const searchVal = document.getElementById('memberSearchInput').value;
+      renderMemberDirectory(currentRoleFilter, searchVal);
+    }
+
+    function selectAccount(email, autoSubmit = false) {
+      const account = ALL_SOCIETY_ACCOUNTS.find(a => a.email.toLowerCase() === email.toLowerCase());
+      if (!account) return;
+
+      // Populate form
+      document.getElementById('loginEmail').value = account.email;
+      document.getElementById('loginPassword').value = account.password;
+
+      // Sync dropdown
+      const select = document.getElementById('quickAccountSelect');
+      if (select) select.value = account.email;
+
+      // Update Preview Card
+      const previewCard = document.getElementById('selectedAccountCard');
+      document.getElementById('selectedUserAvatar').src = account.avatar;
+      document.getElementById('selectedUserName').textContent = account.name;
+      document.getElementById('selectedUserEmail').textContent = account.email;
+      document.getElementById('selectedUserBadge').className = account.badgeClass + ' fs-8';
+      document.getElementById('selectedUserBadge').textContent = account.roleLabel;
+      document.getElementById('selectedUserUnitText').textContent = account.unit + ' (' + account.targetLabel + ')';
+      previewCard.classList.remove('d-none');
+
+      // Highlight active card in directory
+      document.querySelectorAll('.member-account-card').forEach(card => {
+        if (card.getAttribute('data-email') === account.email) {
+          card.classList.add('selected-card');
+        } else {
+          card.classList.remove('selected-card');
+        }
+      });
+
+      if (autoSubmit) {
+        document.getElementById('dedicatedLoginForm').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      }
+    }
+
+    function onAccountDropdownSelect(email) {
+      if (!email) {
+        document.getElementById('selectedAccountCard').classList.add('d-none');
+        document.getElementById('loginEmail').value = '';
+        document.getElementById('loginPassword').value = '';
+        document.querySelectorAll('.member-account-card').forEach(c => c.classList.remove('selected-card'));
+        return;
+      }
+      selectAccount(email, false);
+    }
+
+    function togglePasswordVisibility() {
+      const input = document.getElementById('loginPassword');
+      const icon = document.getElementById('togglePasswordIcon');
+      if (!input || !icon) return;
+
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
 
     function redirectByRole(role) {
       if (role === 'Admin') window.location.href = 'admin.html';
@@ -222,8 +684,7 @@
     }
 
     async function presetLogin(email, password) {
-      document.getElementById('loginEmail').value = email;
-      document.getElementById('loginPassword').value = password;
+      selectAccount(email, false);
       document.getElementById('dedicatedLoginForm').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
     }
 
@@ -231,11 +692,11 @@
       e.preventDefault();
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
-      const btn = e.target.querySelector('[type=submit]');
+      const btn = document.getElementById('btnLoginSubmitBtn');
 
       // Loading state
       const origText = btn.innerHTML;
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i> Signing In...';
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i> Authenticating...';
       btn.disabled = true;
 
       try {
@@ -243,19 +704,19 @@
 
         if (res.success) {
           if (typeof showToast === 'function') {
-            showToast(`Welcome back, ${res.user.name}! Redirecting to your portal…`, 'success');
+            showToast(`Welcome back, ${res.user.name}! Redirecting to ${res.user.role} Portal…`, 'success');
           }
           setTimeout(() => redirectByRole(res.user.role), 600);
         } else if (res.status === 'Pending') {
-          if (typeof showToast === 'function') showToast('Your account is pending admin approval.', 'warning');
+          if (typeof showToast === 'function') showToast('Your account is pending admin approval. Redirecting to Waiting Room…', 'warning');
           setTimeout(() => window.location.href = 'waiting-approval.html', 800);
         } else {
-          if (typeof showToast === 'function') showToast(res.message || 'Invalid credentials. Try a demo preset below.', 'error');
+          if (typeof showToast === 'function') showToast(res.message || 'Invalid credentials. Please select an active account.', 'error');
           btn.innerHTML = origText;
           btn.disabled = false;
         }
       } catch (err) {
-        if (typeof showToast === 'function') showToast('Login error. Please try again.', 'error');
+        if (typeof showToast === 'function') showToast('Login error occurred. Please try again.', 'error');
         btn.innerHTML = origText;
         btn.disabled = false;
       }
@@ -271,7 +732,7 @@
       const societyCode = document.getElementById('regSocietyCode').value.trim();
 
       if (societyCode !== 'SOC-MH-4001') {
-        if (typeof showToast === 'function') showToast('Invalid Society Invitation Code. Please check and try again.', 'error');
+        if (typeof showToast === 'function') showToast('Invalid Society Invitation Code. Please use SOC-MH-4001.', 'error');
         return;
       }
 
@@ -283,7 +744,7 @@
       try {
         const res = await firebaseRegisterWithEmail(name, email, password, role, { phone, societyCode });
         if (res.success) {
-          if (typeof showToast === 'function') showToast('Application submitted! Pending Admin approval. You will be notified.', 'success');
+          if (typeof showToast === 'function') showToast('Application submitted! Pending Admin approval.', 'success');
           setTimeout(() => window.location.href = 'waiting-approval.html', 900);
         } else {
           if (typeof showToast === 'function') showToast(res.message || 'Registration failed. Try again.', 'error');

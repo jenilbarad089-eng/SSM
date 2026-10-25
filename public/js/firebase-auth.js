@@ -61,6 +61,19 @@ async function firebaseLoginWithEmail(email, password) {
       } else if (data.message && data.message.includes('Pending')) {
         return { success: false, message: data.message, status: 'Pending' };
       }
+    } else {
+      const data = await res.json().catch(() => null);
+      if (data) {
+        if (data.status === 'Pending' || (data.message && data.message.toLowerCase().includes('pending'))) {
+          return { success: false, message: data.message, status: 'Pending' };
+        }
+        if (data.status === 'Rejected' || data.status === 'Suspended') {
+          return { success: false, message: data.message, status: data.status };
+        }
+        if (data.message && !res.ok && res.status === 401) {
+          return { success: false, message: data.message };
+        }
+      }
     }
   } catch (err) {
     console.warn('Backend API login unavailable, using SystemDB fallback:', err);
@@ -83,7 +96,7 @@ async function firebaseLoginWithEmail(email, password) {
     } else if (['resident', 'resident1', 'amit.patel@gmail.com', 'amit'].includes(lookup)) {
       user = users.find(u => u.email === 'amit.patel@gmail.com');
     } else if (['guard', 'guard@smartsociety.com', 'bahadur'].includes(lookup)) {
-      user = users.find(u => u.role === 'Security Guard' && u.gateAssigned === 'Gate 1');
+      user = users.find(u => u.role === 'Security Guard' && (u.gateAssigned === 'Gate 1' || u.flat === 'Gate 1'));
     } else if (['committee', 'suresh@smartsociety.com', 'suresh.treasurer@smartsociety.com', 'suresh'].includes(lookup)) {
       user = users.find(u => u.email === 'suresh.treasurer@smartsociety.com');
     } else if (['rohan', 'rohan.secretary@smartsociety.com'].includes(lookup)) {
@@ -98,6 +111,8 @@ async function firebaseLoginWithEmail(email, password) {
       user = users.find(u => u.email === 'neha.gupta@gmail.com');
     } else if (['ananya', 'ananya.d@gmail.com'].includes(lookup)) {
       user = users.find(u => u.email === 'ananya.d@gmail.com');
+    } else if (['sanjay', 'sanjay.sharma@gmail.com'].includes(lookup)) {
+      user = users.find(u => u.email === 'sanjay.sharma@gmail.com');
     }
   }
 
