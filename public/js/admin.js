@@ -625,27 +625,39 @@ function logout() {
 
 async function loadPendingApprovals() {
   const token = SystemDB.getToken();
-  if (!token) return;
+  let pendingUsers = [];
 
-  try {
-    const res = await fetch('/api/auth/pending', {
-      headers: { 'Authorization': 'Bearer ' + token }
-    });
-    const data = await res.json();
-    if (data.success) {
-      renderPendingResidents(data.users.filter(u => u.role === 'Resident'));
-      renderPendingGuards(data.users.filter(u => u.role === 'Security Guard'));
-
-      // Update badge
-      const badge = document.getElementById('pendingCountBadge');
-      if (badge) {
-        const count = data.users.length;
-        badge.textContent = count;
-        badge.style.display = count > 0 ? 'inline' : 'none';
+  if (token) {
+    try {
+      const res = await fetch('/api/auth/pending', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.users) {
+          pendingUsers = data.users;
+        }
       }
+    } catch (err) {
+      console.warn('API /api/auth/pending unavailable, falling back to SystemDB:', err);
     }
-  } catch (err) {
-    console.error('Failed to load pending approvals:', err);
+  }
+
+  // Fallback to SystemDB if API returned no data or failed
+  if (!pendingUsers || pendingUsers.length === 0) {
+    const allUsers = SystemDB.getUsers ? SystemDB.getUsers() : [];
+    pendingUsers = allUsers.filter(u => u.status === 'Pending');
+  }
+
+  renderPendingResidents(pendingUsers.filter(u => u.role === 'Resident'));
+  renderPendingGuards(pendingUsers.filter(u => u.role === 'Security Guard'));
+
+  // Update badge
+  const badge = document.getElementById('pendingCountBadge');
+  if (badge) {
+    const count = pendingUsers.length;
+    badge.textContent = count;
+    badge.style.display = count > 0 ? 'inline' : 'none';
   }
 
   // Also load all members
@@ -782,23 +794,42 @@ document.getElementById('approveMemberForm').addEventListener('submit', async (e
   }
   body.notes = document.getElementById('approveNotes').value;
 
-  try {
-    const res = await fetch('/api/auth/approve', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-      body: JSON.stringify(body),
-    });
-    const data = await res.json();
-    if (data.success) {
-      safeHideModal('approveMemberModal');
-      alert('Member approved successfully!');
-      loadPendingApprovals();
-      loadAdminDashboard();
-    } else {
-      alert('Error: ' + data.message);
+  let approved = false;
+  if (token) {
+    try {
+      const res = await fetch('/api/auth/approve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify(body),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          approved = true;
+        }
+      }
+    } catch (err) {
+      console.warn('API approve failed, falling back to local SystemDB:', err);
     }
-  } catch (err) {
-    alert('Server error. Please try again.');
+  }
+
+  // Always sync to local SystemDB
+  if (SystemDB.updateUserAllocation) {
+    SystemDB.updateUserAllocation(userId, body);
+    approved = true;
+  }
+
+  if (approved) {
+    safeHideModal('approveMemberModal');
+    if (typeof showToast === 'function') {
+      showToast('Member approved and activated successfully!', 'success');
+    } else {
+      alert('Member approved and activated successfully!');
+    }
+    loadPendingApprovals();
+    loadAdminDashboard();
+  } else {
+    alert('Failed to approve member. Please check details and try again.');
   }
 });
 
@@ -809,41 +840,75 @@ document.getElementById('rejectMemberForm').addEventListener('submit', async (e)
   const userId = document.getElementById('rejectUserId').value;
   const reason = document.getElementById('rejectReason').value;
 
-  try {
-    const res = await fetch('/api/auth/reject', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-      body: JSON.stringify({ userId, reason }),
-    });
-    const data = await res.json();
-    if (data.success) {
-      safeHideModal('rejectMemberModal');
-      alert('Member registration rejected.');
-      loadPendingApprovals();
-    } else {
-      alert('Error: ' + data.message);
+  let rejected = false;
+  if (token) {
+    try {
+      const res = await fetch('/api/auth/reject', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ userId, reason }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          rejected = true;
+        }
+      }
+    } catch (err) {
+      console.warn('API reject failed, falling back to local SystemDB:', err);
     }
-  } catch (err) {
-    alert('Server error. Please try again.');
+  }
+
+  // Update local SystemDB directly
+  const users = SystemDB.getUsers ? SystemDB.getUsers() : [];
+  const targetUser = users.find(u => u.id === userId);
+  if (targetUser) {
+    targetUser.status = 'Rejected';
+    targetUser.rejectionReason = reason;
+    SystemDB.save();
+    rejected = true;
+  }
+
+  if (rejected) {
+    safeHideModal('rejectMemberModal');
+    if (typeof showToast === 'function') {
+      showToast('Member registration rejected.', 'info');
+    } else {
+      alert('Member registration rejected.');
+    }
+    loadPendingApprovals();
+    loadAdminDashboard();
+  } else {
+    alert('Failed to reject registration. Please try again.');
   }
 });
 
 // Load all members
 async function loadAllMembers() {
   const token = SystemDB.getToken();
-  if (!token) return;
+  let members = [];
 
-  try {
-    const res = await fetch('/api/auth/all', {
-      headers: { 'Authorization': 'Bearer ' + token }
-    });
-    const data = await res.json();
-    if (data.success) {
-      renderAllMembers(data.users);
+  if (token) {
+    try {
+      const res = await fetch('/api/auth/all', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.users) {
+          members = data.users;
+        }
+      }
+    } catch (err) {
+      console.warn('API /api/auth/all unavailable, falling back to SystemDB:', err);
     }
-  } catch (err) {
-    console.error('Failed to load all members:', err);
   }
+
+  if (!members || members.length === 0) {
+    members = SystemDB.getUsers ? SystemDB.getUsers() : [];
+  }
+
+  renderAllMembers(members);
 }
 
 function getMemberAvatar(user) {

@@ -109,6 +109,9 @@
             <button class="nav-link" id="tab-res-notices-btn" data-bs-toggle="pill" data-bs-target="#tab-res-notices" type="button">
               <i class="fa-solid fa-bullhorn text-primary"></i> Notice Board
             </button>
+            <button class="nav-link" id="tab-res-polls-btn" data-bs-toggle="pill" data-bs-target="#tab-res-polls" type="button">
+              <i class="fa-solid fa-square-poll-vertical text-info"></i> Society Polls
+            </button>
           </div>
         </div>
       </div>
@@ -339,6 +342,23 @@
 
             <div class="row g-4" id="resNoticesContainer">
               <!-- Notices populated dynamically -->
+            </div>
+          </div>
+
+          <!-- TAB 7: Society Polls & Voting -->
+          <div class="tab-pane fade" id="tab-res-polls" role="tabpanel">
+            <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+              <div>
+                <h3 class="fw-bold mb-1"><i class="fa-solid fa-square-poll-vertical text-info me-2"></i>Society Polls & Community Voting</h3>
+                <p class="caption-text mb-0">Cast your vote on ongoing housing society initiatives, AGM proposals, and amenity upgrades.</p>
+              </div>
+              <button class="btn btn-outline-primary rounded-pill px-3" onclick="renderResidentPolls()">
+                <i class="fa-solid fa-arrows-rotate me-1"></i> Refresh Polls
+              </button>
+            </div>
+
+            <div class="row g-4" id="resPollsContainer">
+              <!-- Polls populated dynamically -->
             </div>
           </div>
 

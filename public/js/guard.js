@@ -21,6 +21,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   populateFlatDropdown();
   loadGuardDashboard();
 
+  const searchInput = document.getElementById('searchPassInput');
+  if (searchInput) {
+    searchInput.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') {
+        verifyGatePassCode();
+      }
+    });
+  }
+
   document.getElementById('newVisitorForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const name = document.getElementById('visName').value;
@@ -122,6 +131,119 @@ function loadGuardDashboard() {
 function markExit(id) {
   SystemDB.markVisitorExit(id);
   loadGuardDashboard();
+  const alertBox = document.getElementById('verifyPassAlert');
+  if (alertBox && !alertBox.classList.contains('d-none')) {
+    verifyGatePassCode();
+  }
+}
+
+function verifyGatePassCode() {
+  const input = document.getElementById('searchPassInput');
+  const alertBox = document.getElementById('verifyPassAlert');
+  if (!input || !alertBox) return;
+
+  const query = input.value.trim().toUpperCase();
+  if (!query) {
+    resetPassSearch();
+    return;
+  }
+
+  const visitors = SystemDB.getVisitors();
+  const matched = visitors.filter(v => 
+    (v.gatePassCode && v.gatePassCode.toUpperCase() === query) ||
+    (v.phone && v.phone.includes(query)) ||
+    (v.name && v.name.toUpperCase().includes(query))
+  );
+
+  alertBox.classList.remove('d-none');
+
+  if (matched.length > 0) {
+    const v = matched[0];
+    const isInside = v.exitTime === 'Still In Society';
+    const isApproved = v.status === 'Approved';
+
+    alertBox.innerHTML = `
+      <div class="alert ${isApproved ? 'alert-success' : v.status === 'Rejected' ? 'alert-danger' : 'alert-warning'} p-3 rounded-3 mb-0 shadow-sm border">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <div>
+            <div class="fw-bold fs-6">
+              <i class="fa-solid ${isApproved ? 'fa-circle-check text-success' : 'fa-triangle-exclamation'} me-2"></i>
+              Pass Verified: <span class="font-monospace text-primary">${v.gatePassCode}</span> — ${v.name}
+            </div>
+            <div class="small mt-1">
+              Destination: <strong>Flat ${v.flat}</strong> (${v.residentName || 'Resident'}) | Purpose: <strong>${v.purpose}</strong> | Status: <strong>${v.status}</strong>
+              ${v.vehicleNo ? ` | Vehicle: <strong>${v.vehicleNo}</strong>` : ''}
+            </div>
+          </div>
+          <div class="d-flex gap-2">
+            ${isInside ? `
+              <button class="btn btn-sm btn-danger rounded-pill px-3 fw-bold" onclick="markExit('${v.id}')">
+                <i class="fa-solid fa-right-from-bracket me-1"></i> Check-Out Now
+              </button>
+            ` : `
+              <span class="badge bg-secondary py-2 px-3"><i class="fa-solid fa-check me-1"></i> Already Checked Out</span>
+            `}
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Filter table to matched rows
+    renderFilteredVisitors(matched);
+  } else {
+    alertBox.innerHTML = `
+      <div class="alert alert-danger p-3 rounded-3 mb-0 shadow-sm">
+        <i class="fa-solid fa-circle-xmark me-2"></i> No active gate pass found matching <strong>"${query}"</strong>. Please verify code or issue a new pass.
+      </div>
+    `;
+    loadGuardDashboard();
+  }
+}
+
+function resetPassSearch() {
+  const input = document.getElementById('searchPassInput');
+  const alertBox = document.getElementById('verifyPassAlert');
+  if (input) input.value = '';
+  if (alertBox) {
+    alertBox.innerHTML = '';
+    alertBox.classList.add('d-none');
+  }
+  loadGuardDashboard();
+}
+
+function renderFilteredVisitors(visitors) {
+  const tbody = document.getElementById('guardVisitorsTableBody');
+  if (!tbody) return;
+
+  tbody.innerHTML = visitors.map(v => `
+    <tr class="table-warning bg-opacity-25">
+      <td><span class="badge bg-dark text-warning font-monospace fs-7 px-2.5 py-1.5">${v.gatePassCode}</span></td>
+      <td>
+        <div class="fw-semibold text-dark">${v.name}</div>
+        <small class="text-muted"><i class="fa-solid fa-phone me-1"></i>${v.phone}</small>
+        ${v.vehicleNo && v.vehicleNo !== 'N/A' ? `<small class="badge bg-light text-secondary border ms-1">${v.vehicleNo}</small>` : ''}
+      </td>
+      <td>
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-7">${v.flat}</span>
+      </td>
+      <td class="fs-7 text-secondary">${v.purpose}</td>
+      <td class="fs-7 text-muted">${v.entryTime}</td>
+      <td>
+        <span class="badge ${v.status === 'Approved' ? 'bg-success' : v.status === 'Rejected' ? 'bg-danger' : 'bg-warning text-dark'}">
+          ${v.status}
+        </span>
+      </td>
+      <td class="text-end">
+        ${v.exitTime === 'Still In Society' ? `
+          <button class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="markExit('${v.id}')">
+            <i class="fa-solid fa-right-from-bracket me-1"></i> Mark Exit
+          </button>
+        ` : `
+          <span class="text-muted fs-8"><i class="fa-solid fa-check me-1 text-success"></i> ${v.exitTime}</span>
+        `}
+      </td>
+    </tr>
+  `).join('');
 }
 
 function logout() {

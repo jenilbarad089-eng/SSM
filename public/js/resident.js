@@ -107,6 +107,7 @@ function loadResidentDashboard() {
   renderAmenities();
   renderBookings();
   renderNotices();
+  renderResidentPolls();
 }
 
 function checkVisitorApprovalsBanner() {
@@ -361,6 +362,122 @@ function renderNotices() {
       </div>
     </div>
   `).join('');
+}
+
+function renderResidentPolls() {
+  const container = document.getElementById('resPollsContainer');
+  if (!container) return;
+
+  const polls = SystemDB.getPolls();
+  const currentUser = SystemDB.getCurrentUser();
+  const userVotesKey = 'ssm_user_votes_' + (currentUser ? currentUser.id : 'anon');
+  let userVotes = {};
+  try {
+    userVotes = JSON.parse(localStorage.getItem(userVotesKey) || '{}');
+  } catch (e) {
+    userVotes = {};
+  }
+
+  if (!polls || polls.length === 0) {
+    container.innerHTML = `
+      <div class="col-12 text-center text-muted py-5">
+        <i class="fa-solid fa-check-to-slot fs-1 mb-3 text-secondary"></i>
+        <h5>No active society polls at the moment</h5>
+        <p class="caption-text">Check back during AGM or when the committee opens new community proposals.</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = polls.map(p => {
+    const hasVoted = Boolean(userVotes[p.id]);
+    const votedOptionId = userVotes[p.id];
+    const totalVotes = p.totalVotes || p.options.reduce((sum, opt) => sum + (opt.votes || 0), 0) || 1;
+
+    return `
+      <div class="col-lg-6">
+        <div class="hub-card p-4 h-100 d-flex flex-column">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-8">${p.category || 'General'}</span>
+            <span class="badge ${p.status === 'Active' ? 'bg-success' : 'bg-secondary'} fs-8">
+              <i class="fa-solid ${p.status === 'Active' ? 'fa-circle-check' : 'fa-clock'} me-1"></i> ${p.status}
+            </span>
+          </div>
+
+          <h5 class="fw-bold mb-2 text-heading">${p.title}</h5>
+          <p class="caption-text mb-3 flex-grow-1">${p.description}</p>
+
+          <div class="p-3 rounded-3 mb-3" style="background: var(--surface-card, rgba(0,0,0,0.03)); border: 1px solid var(--border-color, rgba(0,0,0,0.08));">
+            <div class="d-flex justify-content-between small text-muted mb-2">
+              <span><i class="fa-solid fa-users me-1"></i> Total Community Votes: <strong>${p.totalVotes || 0}</strong></span>
+              <span><i class="fa-solid fa-calendar me-1"></i> Ends: ${p.endDate}</span>
+            </div>
+
+            <div class="d-flex flex-column gap-2">
+              ${p.options.map(opt => {
+                const votes = opt.votes || 0;
+                const pct = totalVotes > 0 ? Math.round((votes / totalVotes) * 100) : 0;
+                const isSelected = votedOptionId === opt.id;
+
+                return `
+                  <div class="border rounded-3 p-2.5 ${isSelected ? 'border-primary bg-primary bg-opacity-10' : ''}">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <span class="fw-semibold fs-7 ${isSelected ? 'text-primary' : ''}">
+                        ${isSelected ? '<i class="fa-solid fa-circle-check text-primary me-1"></i>' : ''}${opt.text}
+                      </span>
+                      <span class="fs-8 fw-bold text-muted">${votes} votes (${pct}%)</span>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                      <div class="progress-bar ${isSelected ? 'bg-primary' : 'bg-info'}" style="width: ${pct}%"></div>
+                    </div>
+                    ${!hasVoted && p.status === 'Active' ? `
+                      <button class="btn btn-sm btn-outline-primary rounded-pill py-1 px-3 mt-2 fs-8" onclick="castResidentVote('${p.id}', '${opt.id}')">
+                        <i class="fa-solid fa-check me-1"></i> Vote for this option
+                      </button>
+                    ` : ''}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center pt-2 border-top text-muted fs-8">
+            <span>Posted by: <strong>${p.createdBy || 'Society Committee'}</strong></span>
+            ${hasVoted ? '<span class="badge bg-success-subtle text-success"><i class="fa-solid fa-check me-1"></i> Vote Recorded</span>' : '<span class="badge bg-warning-subtle text-warning">Action Required</span>'}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function castResidentVote(pollId, optionId) {
+  const currentUser = SystemDB.getCurrentUser();
+  if (!currentUser) return;
+
+  const userVotesKey = 'ssm_user_votes_' + currentUser.id;
+  let userVotes = {};
+  try {
+    userVotes = JSON.parse(localStorage.getItem(userVotesKey) || '{}');
+  } catch (e) {
+    userVotes = {};
+  }
+
+  if (userVotes[pollId]) {
+    alert('You have already cast your vote for this poll.');
+    return;
+  }
+
+  const res = SystemDB.votePoll(pollId, optionId);
+  if (res.success) {
+    userVotes[pollId] = optionId;
+    localStorage.setItem(userVotesKey, JSON.stringify(userVotes));
+    renderResidentPolls();
+    if (typeof showToast === 'function') {
+      showToast('Your vote has been counted successfully!', 'success');
+    } else {
+      alert('Thank you! Your vote has been recorded.');
+    }
+  }
 }
 
 function logout() {

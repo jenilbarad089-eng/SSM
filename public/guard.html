@@ -165,13 +165,32 @@
         </div>
       </div>
 
-      <!-- Right Column: Active Visitors Table -->
+      <!-- Right Column: Active Visitors Table & Quick Verification -->
       <div class="col-lg-7">
         <div class="hub-card p-4">
           <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
             <h4 class="fw-bold mb-0"><i class="fa-solid fa-list-check text-info me-2"></i> Realtime Gate Activity Log</h4>
             <span class="badge bg-info-subtle text-info fs-8"><i class="fa-solid fa-rotate me-1"></i> Auto-Syncing</span>
           </div>
+
+          <!-- Quick Pass Verification Search -->
+          <div class="row g-2 mb-3 align-items-center">
+            <div class="col-sm-8">
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-qrcode"></i></span>
+                <input type="text" class="form-control" id="searchPassInput" placeholder="Verify Gate Pass Code (e.g. GP-9821 or Phone)..." autocomplete="off">
+              </div>
+            </div>
+            <div class="col-sm-4 d-flex gap-2">
+              <button type="button" class="btn btn-outline-warning w-100 fw-semibold" onclick="verifyGatePassCode()">
+                <i class="fa-solid fa-shield-check me-1"></i> Verify
+              </button>
+              <button type="button" class="btn btn-outline-secondary px-3" onclick="resetPassSearch()" title="Reset / View All">
+                <i class="fa-solid fa-arrows-rotate"></i>
+              </button>
+            </div>
+          </div>
+          <div id="verifyPassAlert" class="mb-3 d-none"></div>
 
           <div class="table-responsive">
             <table class="table table-hover align-middle table-custom mb-0">
@@ -180,7 +199,8 @@
                   <th>Pass Code</th>
                   <th>Visitor & Phone</th>
                   <th>Destination Flat</th>
-                  <th>Check-In</th>
+                  <th>Purpose</th>
+                  <th>Check-In Time</th>
                   <th>Approval Status</th>
                   <th class="text-end">Action</th>
                 </tr>

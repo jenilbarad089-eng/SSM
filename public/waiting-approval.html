@@ -177,6 +177,14 @@
         <span>The dashboard will remain inaccessible until your account is approved.</span>
       </div>
 
+      <div id="approvalLiveNotice" class="my-3"></div>
+
+      <div class="mb-3">
+        <button id="btnCheckStatus" class="btn btn-outline-warning w-100 py-2.5 rounded-pill fw-semibold" onclick="checkStatusNow()">
+          <i class="fa-solid fa-arrows-rotate me-1" id="checkStatusIcon"></i> Check Approval Status Now
+        </button>
+      </div>
+
       <div class="d-flex gap-3 mt-4">
         <button class="btn flex-fill" onclick="handleLogout()" style="background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border-default); border-radius: var(--radius-md); padding: 12px; font-weight: 600;">
           <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
@@ -192,27 +200,117 @@
     </div>
   </div>
 
+  <script src="js/db.js"></script>
   <script>
     function handleLogout() {
       localStorage.removeItem('ssm_auth_token');
       sessionStorage.removeItem('ssm_current_user');
       window.location.href = 'index.html';
     }
-    // Check if user is actually pending
-    (function() {
-      const user = JSON.parse(sessionStorage.getItem('ssm_current_user') || 'null');
+
+    function routeToDashboard(role) {
+      if (role === 'Admin') window.location.href = 'admin.html';
+      else if (role === 'Security Guard') window.location.href = 'guard.html';
+      else if (role === 'Committee Member') window.location.href = 'committee.html';
+      else window.location.href = 'resident.html';
+    }
+
+    async function checkStatusNow(isAuto = false) {
+      const btn = document.getElementById('btnCheckStatus');
+      const icon = document.getElementById('checkStatusIcon');
+      const notice = document.getElementById('approvalLiveNotice');
+
+      if (!isAuto && icon) {
+        icon.classList.add('fa-spin');
+      }
+
+      let user = JSON.parse(sessionStorage.getItem('ssm_current_user') || 'null');
       if (!user) {
         window.location.href = 'index.html';
-      } else if (user.status === 'Approved') {
-        // Already approved, go to dashboard
-        const role = user.role;
-        if (role === 'Admin') window.location.href = 'admin.html';
-        else if (role === 'Resident') window.location.href = 'resident.html';
-        else if (role === 'Security Guard') window.location.href = 'guard.html';
-        else if (role === 'Committee Member') window.location.href = 'committee.html';
-        else window.location.href = 'resident.html';
+        return;
       }
-    })();
+
+      let currentStatus = user.status;
+      let freshUser = null;
+
+      // 1. Try checking via API if token exists
+      const token = localStorage.getItem('ssm_auth_token');
+      if (token) {
+        try {
+          const res = await fetch('/api/auth/me', {
+            headers: { 'Authorization': 'Bearer ' + token }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.success && data.user) {
+              freshUser = data.user;
+              currentStatus = freshUser.status;
+            }
+          }
+        } catch (e) {
+          console.warn('API check skipped:', e);
+        }
+      }
+
+      // 2. Check SystemDB local storage cache
+      if (currentStatus !== 'Approved') {
+        try {
+          await SystemDB.init();
+          const allUsers = SystemDB.getUsers ? SystemDB.getUsers() : [];
+          const match = allUsers.find(u => u.id === user.id || (u.email && u.email.toLowerCase() === user.email.toLowerCase()));
+          if (match) {
+            freshUser = match;
+            currentStatus = match.status;
+          }
+        } catch (e) {
+          console.warn('SystemDB check skipped:', e);
+        }
+      }
+
+      if (!isAuto && icon) {
+        setTimeout(() => icon.classList.remove('fa-spin'), 400);
+      }
+
+      if (currentStatus === 'Approved') {
+        const approvedUser = freshUser || user;
+        approvedUser.status = 'Approved';
+        sessionStorage.setItem('ssm_current_user', JSON.stringify(approvedUser));
+
+        notice.innerHTML = `
+          <div class="alert alert-success p-3 rounded-3 shadow-sm border border-success">
+            <h5 class="fw-bold text-success mb-1"><i class="fa-solid fa-circle-check me-2"></i> Congratulations! Approved!</h5>
+            <p class="mb-2 small">Your account has been verified and allotted by the Society Admin. Redirecting to your dashboard...</p>
+            <div class="spinner-border spinner-border-sm text-success" role="status"></div>
+          </div>
+        `;
+        if (btn) btn.style.display = 'none';
+
+        setTimeout(() => {
+          routeToDashboard(approvedUser.role);
+        }, 1500);
+      } else if (currentStatus === 'Rejected') {
+        notice.innerHTML = `
+          <div class="alert alert-danger p-3 rounded-3 shadow-sm border border-danger">
+            <h5 class="fw-bold text-danger mb-1"><i class="fa-solid fa-circle-xmark me-2"></i> Application Rejected</h5>
+            <p class="mb-0 small">Your registration application was not approved by the admin. Please contact the management office.</p>
+          </div>
+        `;
+      } else if (!isAuto) {
+        notice.innerHTML = `
+          <div class="alert alert-warning py-2 px-3 rounded-3 small">
+            <i class="fa-solid fa-clock me-1"></i> Application is currently under review by Admin. Please check back shortly.
+          </div>
+        `;
+      }
+    }
+
+    // Auto-check every 6 seconds and on load
+    document.addEventListener('DOMContentLoaded', () => {
+      checkStatusNow(true);
+      setInterval(() => {
+        checkStatusNow(true);
+      }, 6000);
+    });
   </script>
 </body>
 </html>

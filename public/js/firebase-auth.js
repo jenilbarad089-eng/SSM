@@ -146,6 +146,7 @@ async function firebaseRegisterWithEmail(name, email, password, role, extra) {
     return { success: false, message: 'An account with this email address already exists.' };
   }
 
+  const extraObj = (typeof extra === 'object' && extra !== null) ? extra : { flat: extra };
   const newUser = {
     id: 'USR-' + (users.length + 101),
     username: email.split('@')[0],
@@ -153,7 +154,9 @@ async function firebaseRegisterWithEmail(name, email, password, role, extra) {
     email: email,
     role: role || 'Resident',
     status: 'Pending',
-    flat: extra || 'A-302',
+    phone: extraObj.phone || '',
+    flat: extraObj.flat || 'Pending Allotment',
+    password: password,
     registeredAt: new Date().toISOString().split('T')[0]
   };
 
