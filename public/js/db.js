@@ -4,7 +4,7 @@
 
 const STORAGE_KEY = 'ssm_database_v1';
 const SEED_VERSION_KEY = 'ssm_seed_version';
-const SEED_VERSION = '3.6'; // bump this to force fresh seed load
+const SEED_VERSION = '4.0'; // bump this to force fresh seed load
 const SESSION_KEY = 'ssm_current_user';
 const TOKEN_KEY = 'ssm_auth_token';
 
@@ -39,6 +39,23 @@ const SystemDB = {
         }
       } catch (err) {
         this.data = this.getDefaultData();
+      }
+    }
+
+    // Cleanse any lingering pending demo entries from maintenance, flats, and users
+    if (this.data) {
+      if (this.data.maintenance) {
+        this.data.maintenance = this.data.maintenance.filter(m =>
+          !m.residentName || (!m.residentName.toLowerCase().includes('sanjay') && m.flat !== 'B-304')
+        );
+      }
+      if (this.data.users) {
+        this.data.users = this.data.users.filter(u =>
+          u.id !== 'USR-111' &&
+          (!u.name || !u.name.toLowerCase().includes('sanjay')) &&
+          (!u.email || !u.email.toLowerCase().includes('sanjay')) &&
+          u.flat !== 'B-304'
+        );
       }
     }
 
@@ -321,7 +338,10 @@ const SystemDB = {
 
   // Maintenance
   getMaintenance() {
-    return this.data.maintenance || [];
+    const list = this.data ? (this.data.maintenance || []) : [];
+    return list.filter(m =>
+      !m.residentName || (!m.residentName.toLowerCase().includes('sanjay') && m.flat !== 'B-304')
+    );
   },
 
   payMaintenance(billId, paymentMethod) {

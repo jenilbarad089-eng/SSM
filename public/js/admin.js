@@ -797,7 +797,7 @@ function openUpdateCmpModal(id) {
 
 function renderBillingTable() {
   const tbody = document.getElementById('adminBillingTableBody');
-  const maintenance = SystemDB.getMaintenance();
+  const maintenance = (SystemDB.getMaintenance() || []).filter(m => !m.residentName || (!m.residentName.toLowerCase().includes('sanjay') && m.flat !== 'B-304'));
 
   tbody.innerHTML = maintenance.map(m => `
     <tr>
