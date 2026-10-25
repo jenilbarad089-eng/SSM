@@ -4,6 +4,7 @@
 
 let billingChartInstance = null;
 let complaintChartInstance = null;
+let complaintFilterState = { status: 'ALL', priority: 'ALL', search: '' };
 
 document.addEventListener('DOMContentLoaded', async () => {
   await SystemDB.init();
@@ -106,10 +107,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       notes: adminDirections || `Status changed to ${status}.`
     });
 
+    // Log admin audit
+    if (SystemDB.logAudit) {
+      SystemDB.logAudit(
+        `Complaint ${id} Updated (${status})`,
+        'Complaints',
+        `Directive: "${adminDirections}" | Assigned: ${assignedTo} | Priority: ${priority}`
+      );
+    }
+
     safeHideModal('updateComplaintModal');
     loadAdminDashboard();
+    renderComplaintResolutionMatrix();
     if (typeof showToast === 'function') {
-      showToast(`Complaint ${id} updated & directives issued to ${assignedTo}.`, "success");
+      showToast(`Complaint ${id} updated & directives issued to ${assignedTo}. Matrix updated live.`, "success");
     }
   });
 
@@ -209,33 +220,8 @@ function renderCharts() {
     });
   }
 
-  // --- Complaint Status Doughnut ---
-  const pending = complaints.filter(c => c.status === 'Pending').length;
-  const inProgress = complaints.filter(c => c.status === 'In Progress').length;
-  const resolved = complaints.filter(c => c.status === 'Resolved').length;
-
-  const complaintCtx = document.getElementById('complaintChart');
-  if (complaintCtx) {
-    if (complaintChartInstance) complaintChartInstance.destroy();
-    complaintChartInstance = new Chart(complaintCtx.getContext('2d'), {
-      type: 'doughnut',
-      data: {
-        labels: ['Pending', 'In Progress', 'Resolved'],
-        datasets: [{
-          data: [pending, inProgress, resolved],
-          backgroundColor: ['#f59e0b', '#0ea5e9', '#10b981'],
-          borderWidth: 0,
-          hoverOffset: 8
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: '65%',
-        plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 13 }, padding: 16 } } }
-      }
-    });
-  }
+  // Render Active Complaint Resolution Matrix & Linked Visualization
+  renderComplaintResolutionMatrix();
 }
 
 function renderResidentsTable() {
@@ -339,50 +325,417 @@ function deleteRes(id) {
   }
 }
 
+
+// ══════════════════════════════════════════════════════════════
+// Active Complaint Resolution Matrix Engine
+// ══════════════════════════════════════════════════════════════
+
+function renderComplaintResolutionMatrix() {
+  const complaints = SystemDB.getComplaints();
+  const total = complaints.length;
+
+  const pending = complaints.filter(c => c.status === 'Pending').length;
+  const inProgress = complaints.filter(c => c.status === 'In Progress').length;
+  const resolved = complaints.filter(c => c.status === 'Resolved').length;
+  const urgent = complaints.filter(c => (c.priority === 'High' || c.priority === 'Emergency') && c.status !== 'Resolved').length;
+  const rate = total > 0 ? Math.round((resolved / total) * 100) : 0;
+
+  // 1. Update KPI Count Badges
+  const rateEl = document.getElementById('matrixResolutionRate');
+  if (rateEl) rateEl.textContent = `${rate}% Resolved (${resolved}/${total})`;
+
+  const pendingCountEl = document.getElementById('matrixPendingCount');
+  if (pendingCountEl) pendingCountEl.textContent = pending;
+
+  const inProgCountEl = document.getElementById('matrixInProgressCount');
+  if (inProgCountEl) inProgCountEl.textContent = inProgress;
+
+  const resolvedCountEl = document.getElementById('matrixResolvedCount');
+  if (resolvedCountEl) resolvedCountEl.textContent = resolved;
+
+  const urgentCountEl = document.getElementById('matrixUrgentCount');
+  if (urgentCountEl) urgentCountEl.textContent = urgent;
+
+  // Tab 3 Filter Pill Counters
+  const fAll = document.getElementById('filterCountAll');
+  if (fAll) fAll.textContent = total;
+  const fPending = document.getElementById('filterCountPending');
+  if (fPending) fPending.textContent = pending;
+  const fInProg = document.getElementById('filterCountInProgress');
+  if (fInProg) fInProg.textContent = inProgress;
+  const fResolved = document.getElementById('filterCountResolved');
+  if (fResolved) fResolved.textContent = resolved;
+  const fUrgent = document.getElementById('filterCountUrgent');
+  if (fUrgent) fUrgent.textContent = urgent;
+
+  // 2. 2D Interactive Matrix Grid: Priority × Lifecycle Stage
+  const gridBody = document.getElementById('matrixGridBody');
+  if (gridBody) {
+    const priorityDefs = [
+      { key: 'High', label: '🔴 High / Urgent', match: c => c.priority === 'High' || c.priority === 'Emergency' },
+      { key: 'Medium', label: '🟠 Medium', match: c => c.priority === 'Medium' || !c.priority },
+      { key: 'Low', label: '⚪ Low', match: c => c.priority === 'Low' }
+    ];
+
+    let pendingColTotal = 0;
+    let inProgColTotal = 0;
+    let resolvedColTotal = 0;
+
+    const rowsHtml = priorityDefs.map(p => {
+      const pComplaints = complaints.filter(p.match);
+      const pPend = pComplaints.filter(c => c.status === 'Pending').length;
+      const pProg = pComplaints.filter(c => c.status === 'In Progress').length;
+      const pRes = pComplaints.filter(c => c.status === 'Resolved').length;
+      const pTot = pComplaints.length;
+
+      pendingColTotal += pPend;
+      inProgColTotal += pProg;
+      resolvedColTotal += pRes;
+
+      return `
+        <tr>
+          <td class="text-start fw-semibold py-1.5">${p.label}</td>
+          <td class="py-1.5">
+            ${pPend > 0 ? `<button type="button" class="btn btn-xs btn-outline-warning rounded-pill px-2 py-0.5 fw-bold" onclick="filterComplaintsByMatrix('Pending', '${p.key}')" title="Filter ${p.key} & Pending">${pPend}</button>` : '<span class="text-muted opacity-50">0</span>'}
+          </td>
+          <td class="py-1.5">
+            ${pProg > 0 ? `<button type="button" class="btn btn-xs btn-outline-info rounded-pill px-2 py-0.5 fw-bold" onclick="filterComplaintsByMatrix('In Progress', '${p.key}')" title="Filter ${p.key} & In Progress">${pProg}</button>` : '<span class="text-muted opacity-50">0</span>'}
+          </td>
+          <td class="py-1.5">
+            ${pRes > 0 ? `<button type="button" class="btn btn-xs btn-outline-success rounded-pill px-2 py-0.5 fw-bold" onclick="filterComplaintsByMatrix('Resolved', '${p.key}')" title="Filter ${p.key} & Resolved">${pRes}</button>` : '<span class="text-muted opacity-50">0</span>'}
+          </td>
+          <td class="py-1.5 fw-bold text-dark">
+            ${pTot > 0 ? `<button type="button" class="btn btn-xs btn-secondary bg-opacity-25 border text-dark rounded-pill px-2 py-0.5 fw-bold" onclick="filterComplaintsByMatrix('ALL', '${p.key}')" title="Filter All ${p.key}">${pTot}</button>` : '<span class="text-muted opacity-50">0</span>'}
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    const footerHtml = `
+      <tr class="table-light fw-bold fs-8 border-top">
+        <td class="text-start">Stage Total</td>
+        <td><button type="button" class="btn btn-xs btn-warning text-dark rounded-pill px-2 py-0.5 fw-bold" onclick="filterComplaintsByMatrix('Pending', 'ALL')">${pendingColTotal}</button></td>
+        <td><button type="button" class="btn btn-xs btn-info text-white rounded-pill px-2 py-0.5 fw-bold" onclick="filterComplaintsByMatrix('In Progress', 'ALL')">${inProgColTotal}</button></td>
+        <td><button type="button" class="btn btn-xs btn-success rounded-pill px-2 py-0.5 fw-bold" onclick="filterComplaintsByMatrix('Resolved', 'ALL')">${resolvedColTotal}</button></td>
+        <td class="text-primary fs-7">${total}</td>
+      </tr>
+    `;
+
+    gridBody.innerHTML = rowsHtml + footerHtml;
+  }
+
+  // 3. Live Directive Highlight
+  const directiveEl = document.getElementById('matrixLatestDirective');
+  if (directiveEl) {
+    const withDirective = complaints.filter(c => c.adminDirections || c.notes);
+    if (withDirective.length > 0) {
+      withDirective.sort((a, b) => (b.updatedAt || b.date || '').localeCompare(a.updatedAt || a.date || ''));
+      const latest = withDirective[0];
+      const dirText = latest.adminDirections || latest.notes;
+      directiveEl.innerHTML = `<strong class="text-dark">${latest.assignedTo || 'Maintenance Desk'}</strong>: "${dirText}" <span class="badge bg-secondary-subtle text-secondary border ms-1 fs-8">${latest.id} • Flat ${latest.flat}</span>`;
+    } else {
+      directiveEl.textContent = 'No directives issued yet. Open a ticket to assign a lead.';
+    }
+  }
+
+  // 4. Doughnut Chart with Clickable Slices
+  const complaintCtx = document.getElementById('complaintChart');
+  if (complaintCtx) {
+    if (complaintChartInstance) complaintChartInstance.destroy();
+    complaintChartInstance = new Chart(complaintCtx.getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Pending', 'In Progress', 'Resolved'],
+        datasets: [{
+          data: [pending, inProgress, resolved],
+          backgroundColor: ['#f59e0b', '#0ea5e9', '#10b981'],
+          borderWidth: 2,
+          borderColor: 'rgba(255, 255, 255, 0.6)',
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '62%',
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { color: '#94a3b8', font: { size: 11 }, padding: 8, boxWidth: 12 }
+          },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => ` ${ctx.label}: ${ctx.raw} tickets (${total > 0 ? Math.round((ctx.raw / total) * 100) : 0}%)`
+            }
+          }
+        },
+        onClick: (evt, activeEls) => {
+          if (activeEls && activeEls.length > 0) {
+            const idx = activeEls[0].index;
+            const statusMap = ['Pending', 'In Progress', 'Resolved'];
+            filterComplaintsByMatrix(statusMap[idx], 'ALL');
+          }
+        }
+      }
+    });
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// Complaint Resolution Matrix Filtering & Navigation
+// ══════════════════════════════════════════════════════════════
+
+function filterComplaintsByMatrix(status, priority) {
+  complaintFilterState.status = status;
+  complaintFilterState.priority = priority;
+  complaintFilterState.search = '';
+
+  const searchInput = document.getElementById('complaintSearchInput');
+  if (searchInput) searchInput.value = '';
+
+  // Switch to Tab 3
+  navigateToComplaintsTab();
+
+  // Update Toolbar Filter Pills
+  updateComplaintFilterPillStyles();
+
+  // Render Complaints Table
+  renderComplaintsTable();
+
+  // Show active filter banner
+  const banner = document.getElementById('complaintActiveFilterBanner');
+  const bannerText = document.getElementById('complaintActiveFilterText');
+  if (banner && bannerText) {
+    banner.classList.remove('d-none');
+    banner.classList.add('d-flex');
+    const sLabel = status === 'ALL' ? 'All Statuses' : status;
+    const pLabel = priority === 'ALL' ? 'All Priorities' : (priority === 'High' ? 'Urgent / High Priority' : priority);
+    bannerText.innerHTML = `Resolution Matrix Filter: <strong>${sLabel}</strong> &bull; <strong>${pLabel}</strong>`;
+  }
+}
+
+function navigateToComplaintsTab() {
+  const tabBtn = document.getElementById('tab-complaints-btn');
+  if (tabBtn) {
+    const tab = new bootstrap.Tab(tabBtn);
+    tab.show();
+    // Smooth scroll to table
+    setTimeout(() => {
+      const container = document.getElementById('tab-complaints');
+      if (container) container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+  }
+}
+
+function setComplaintTabFilter(status, priority, btn) {
+  complaintFilterState.status = status;
+  complaintFilterState.priority = priority;
+
+  updateComplaintFilterPillStyles(btn);
+  renderComplaintsTable();
+
+  const banner = document.getElementById('complaintActiveFilterBanner');
+  const bannerText = document.getElementById('complaintActiveFilterText');
+  if (status === 'ALL' && priority === 'ALL') {
+    if (banner) {
+      banner.classList.add('d-none');
+      banner.classList.remove('d-flex');
+    }
+  } else if (banner && bannerText) {
+    banner.classList.remove('d-none');
+    banner.classList.add('d-flex');
+    const sLabel = status === 'ALL' ? 'All Statuses' : status;
+    const pLabel = priority === 'ALL' ? 'All Priorities' : (priority === 'High' ? 'Urgent / High Priority' : priority);
+    bannerText.innerHTML = `Active Filter: <strong>${sLabel}</strong> &bull; <strong>${pLabel}</strong>`;
+  }
+}
+
+function updateComplaintFilterPillStyles(activeBtn) {
+  const container = document.getElementById('complaintFilterPills');
+  if (!container) return;
+
+  const buttons = container.querySelectorAll('button');
+  buttons.forEach(b => {
+    b.className = 'btn btn-sm btn-outline-secondary rounded-pill px-3';
+  });
+
+  if (activeBtn) {
+    activeBtn.className = 'btn btn-sm btn-primary rounded-pill px-3';
+    return;
+  }
+
+  // Find button matching state
+  buttons.forEach(b => {
+    const text = b.textContent;
+    if (complaintFilterState.status === 'ALL' && complaintFilterState.priority === 'ALL' && text.includes('All')) {
+      b.className = 'btn btn-sm btn-primary rounded-pill px-3';
+    } else if (complaintFilterState.status === 'Pending' && text.includes('Pending')) {
+      b.className = 'btn btn-sm btn-warning text-dark rounded-pill px-3';
+    } else if (complaintFilterState.status === 'In Progress' && text.includes('In Progress')) {
+      b.className = 'btn btn-sm btn-info text-white rounded-pill px-3';
+    } else if (complaintFilterState.status === 'Resolved' && text.includes('Resolved')) {
+      b.className = 'btn btn-sm btn-success rounded-pill px-3';
+    } else if (complaintFilterState.priority === 'High' && text.includes('Urgent')) {
+      b.className = 'btn btn-sm btn-danger rounded-pill px-3';
+    }
+  });
+}
+
+function handleComplaintSearch() {
+  const input = document.getElementById('complaintSearchInput');
+  complaintFilterState.search = input ? input.value.trim().toLowerCase() : '';
+  renderComplaintsTable();
+}
+
+function clearComplaintFilter() {
+  complaintFilterState = { status: 'ALL', priority: 'ALL', search: '' };
+  const searchInput = document.getElementById('complaintSearchInput');
+  if (searchInput) searchInput.value = '';
+
+  const banner = document.getElementById('complaintActiveFilterBanner');
+  if (banner) {
+    banner.classList.add('d-none');
+    banner.classList.remove('d-flex');
+  }
+
+  updateComplaintFilterPillStyles();
+  renderComplaintsTable();
+}
+
+function openAssignCmpModal(id) {
+  openUpdateCmpModal(id);
+  setTimeout(() => {
+    const leadInput = document.getElementById('editCmpAssignedTo');
+    if (leadInput) leadInput.focus();
+  }, 350);
+}
+
+function quickResolveComplaint(id) {
+  const complaints = SystemDB.getComplaints();
+  const c = complaints.find(item => item.id === id);
+  if (!c) return;
+
+  const directive = `Resolved by Administrator & verified with resident.`;
+  SystemDB.updateComplaintStatus(id, {
+    status: 'Resolved',
+    adminDirections: directive,
+    notes: directive
+  });
+
+  if (SystemDB.logAudit) {
+    SystemDB.logAudit(
+      `Complaint ${id} Resolved`,
+      'Complaints',
+      `Admin resolved ${c.title} (Flat ${c.flat}) and completed lifecycle closure.`
+    );
+  }
+
+  loadAdminDashboard();
+  if (typeof showToast === 'function') {
+    showToast(`Complaint ${id} marked as Resolved! Matrix updated live.`, 'success');
+  }
+}
+
+function quickReopenComplaint(id) {
+  const complaints = SystemDB.getComplaints();
+  const c = complaints.find(item => item.id === id);
+  if (!c) return;
+
+  const directive = `Reopened by Admin for technician re-assessment.`;
+  SystemDB.updateComplaintStatus(id, {
+    status: 'In Progress',
+    adminDirections: directive,
+    notes: directive
+  });
+
+  if (SystemDB.logAudit) {
+    SystemDB.logAudit(
+      `Complaint ${id} Reopened`,
+      'Complaints',
+      `Admin reopened ${c.title} (Flat ${c.flat}) and dispatched back to maintenance lead.`
+    );
+  }
+
+  loadAdminDashboard();
+  if (typeof showToast === 'function') {
+    showToast(`Complaint ${id} reopened & set to In Progress. Matrix updated live.`, 'info');
+  }
+}
+
 function renderComplaintsTable() {
   const tbody = document.getElementById('adminComplaintsTableBody');
-  const complaints = SystemDB.getComplaints();
+  if (!tbody) return;
 
-  // Also populate resident select for the Lodge Complaint Modal
+  const allComplaints = SystemDB.getComplaints();
+
+  // Populate resident select for Lodge Modal
   const resSelect = document.getElementById('adminLodgeResidentSelect');
   if (resSelect) {
     const residents = SystemDB.getResidents ? SystemDB.getResidents().filter(r => r.role === 'Resident' && r.status === 'Approved') : [];
     if (residents.length) {
       resSelect.innerHTML = residents.map(r => 
-        `<option value="${r.flat || 'A-101'}||${r.name}">${r.flat || 'Flat'} — ${r.name} (${r.tower || 'Tower A'})</option>`
+        `<option value="${r.flat || 'A-101'}--${r.name}">${r.flat || 'Flat'} — ${r.name} (${r.tower || 'Tower A'})`
       ).join('');
-    } else {
-      resSelect.innerHTML = `
-        <option value="A-302||Amit Patel">A-302 — Amit Patel (Tower A)</option>
-        <option value="C-501||Priya Verma">C-501 — Priya Verma (Tower C)</option>
-        <option value="B-104||Rahul Sharma">B-104 — Rahul Sharma (Tower B)</option>
-        <option value="B-202||Neha Gupta">B-202 — Neha Gupta (Tower B)</option>
-        <option value="A-604||Ananya Deshmukh">A-604 — Ananya Deshmukh (Tower A)</option>
-      `;
     }
   }
 
+  // Apply Lifecycle Filters
+  let complaints = allComplaints;
+
+  if (complaintFilterState.status !== 'ALL') {
+    complaints = complaints.filter(c => c.status === complaintFilterState.status);
+  }
+
+  if (complaintFilterState.priority !== 'ALL') {
+    if (complaintFilterState.priority === 'High') {
+      complaints = complaints.filter(c => c.priority === 'High' || c.priority === 'Emergency');
+    } else {
+      complaints = complaints.filter(c => c.priority === complaintFilterState.priority);
+    }
+  }
+
+  if (complaintFilterState.search) {
+    const s = complaintFilterState.search;
+    complaints = complaints.filter(c => 
+      (c.id && c.id.toLowerCase().includes(s)) ||
+      (c.title && c.title.toLowerCase().includes(s)) ||
+      (c.residentName && c.residentName.toLowerCase().includes(s)) ||
+      (c.flat && c.flat.toLowerCase().includes(s)) ||
+      (c.category && c.category.toLowerCase().includes(s)) ||
+      (c.assignedTo && c.assignedTo.toLowerCase().includes(s)) ||
+      (c.adminDirections && c.adminDirections.toLowerCase().includes(s))
+    );
+  }
+
   if (!complaints.length) {
-    tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-4">No complaint tickets logged.</td></tr>`;
+    const isFiltered = complaintFilterState.status !== 'ALL' || complaintFilterState.priority !== 'ALL' || Boolean(complaintFilterState.search);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8" class="text-center text-muted py-5">
+          <i class="fa-solid fa-clipboard-check fs-2 mb-2 d-block text-secondary opacity-50"></i>
+          <strong>${isFiltered ? 'No complaints match the active filter criteria.' : 'No complaint tickets logged yet.'}</strong>
+          ${isFiltered ? '<br><button class="btn btn-sm btn-outline-primary rounded-pill px-3 mt-2" onclick="clearComplaintFilter()"><i class="fa-solid fa-arrows-rotate me-1"></i> Reset Filter</button>' : ''}
+        </td>
+      </tr>`;
     return;
   }
 
   tbody.innerHTML = complaints.map(c => {
     const assigned = c.assignedTo || 'Maintenance Desk';
-    const directive = c.adminDirections || c.notes || 'No active directive issued.';
+    const directive = c.adminDirections || c.notes || 'Awaiting admin directive.';
     const isEmergency = c.priority === 'Emergency' || c.priority === 'High';
     
     return `
-    <tr>
-      <td class="fw-bold fs-7">${c.id}</td>
+    <tr class="${isEmergency && c.status !== 'Resolved' ? 'table-danger bg-opacity-10' : ''}">
+      <td class="fw-bold fs-7 font-monospace">${c.id}</td>
       <td>
-        <div class="fw-semibold">${c.residentName}</div>
-        <small class="badge bg-primary-subtle text-primary border-0">Flat ${c.flat}</small>
+        <div class="fw-semibold text-dark">${c.residentName}</div>
+        <small class="badge bg-primary-subtle text-primary border border-primary-subtle">Flat ${c.flat}</small>
       </td>
       <td>
-        <div class="fw-semibold">${c.title}</div>
+        <div class="fw-semibold text-dark">${c.title}</div>
         <small class="badge bg-light text-secondary border me-1">${c.category}</small>
-        <small class="text-muted d-block mt-1">${c.description}</small>
+        <small class="text-muted d-block mt-1 text-truncate" style="max-width: 260px;" title="${c.description}">${c.description}</small>
       </td>
       <td>
         <span class="badge ${isEmergency ? 'bg-danger text-white' : c.priority === 'Medium' ? 'bg-warning text-dark' : 'bg-secondary-subtle text-dark'}">
@@ -391,11 +744,11 @@ function renderComplaintsTable() {
       </td>
       <td>
         <span class="${c.status === 'Pending' ? 'badge-pending' : c.status === 'In Progress' ? 'badge-progress' : c.status === 'Resolved' ? 'badge-resolved' : 'badge bg-secondary text-white'}">
-          ${c.status === 'In Progress' ? '<i class="fa-solid fa-spinner fa-spin me-1"></i>' : c.status === 'Resolved' ? '<i class="fa-solid fa-circle-check me-1"></i>' : ''}${c.status}
+          ${c.status === 'In Progress' ? '<i class="fa-solid fa-spinner fa-spin me-1"></i>' : c.status === 'Resolved' ? '<i class="fa-solid fa-circle-check me-1"></i>' : '<i class="fa-solid fa-clock me-1"></i>'}${c.status}
         </span>
       </td>
       <td>
-        <div class="d-flex flex-column gap-1" style="max-width: 240px;">
+        <div class="d-flex flex-column gap-1" style="max-width: 250px;">
           <span class="badge bg-info-subtle text-info text-start text-truncate" title="${assigned}">
             <i class="fa-solid fa-user-gear me-1"></i>${assigned}
           </span>
@@ -405,8 +758,21 @@ function renderComplaintsTable() {
         </div>
       </td>
       <td class="text-muted fs-8">${c.date}</td>
-      <td class="text-end">
-        <button class="btn btn-sm btn-outline-warning rounded-pill px-3" onclick="openUpdateCmpModal('${c.id}')">
+      <td class="text-end text-nowrap">
+        ${c.status === 'Pending' ? `
+          <button class="btn btn-sm btn-outline-info rounded-pill px-2.5 py-1 me-1" onclick="openAssignCmpModal('${c.id}')" title="Assign Technician Lead">
+            <i class="fa-solid fa-user-gear me-1"></i> Assign
+          </button>
+        ` : c.status === 'In Progress' ? `
+          <button class="btn btn-sm btn-outline-success rounded-pill px-2.5 py-1 me-1" onclick="quickResolveComplaint('${c.id}')" title="Mark Ticket Resolved Immediately">
+            <i class="fa-solid fa-check me-1"></i> Resolve
+          </button>
+        ` : `
+          <button class="btn btn-sm btn-outline-secondary rounded-pill px-2.5 py-1 me-1" onclick="quickReopenComplaint('${c.id}')" title="Reopen Ticket">
+            <i class="fa-solid fa-rotate-left me-1"></i> Reopen
+          </button>
+        `}
+        <button class="btn btn-sm btn-outline-warning rounded-pill px-2.5 py-1" onclick="openUpdateCmpModal('${c.id}')" title="Issue Directive / Edit Ticket">
           <i class="fa-solid fa-pen-to-square me-1"></i> Direct
         </button>
       </td>

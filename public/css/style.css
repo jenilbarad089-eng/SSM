@@ -1710,4 +1710,27 @@ button, a, input, select, textarea {
   to { transform: rotate(360deg); }
 }
 
+/* ──── Complaint Resolution Matrix & Interactive Grid ──── */
+.matrix-kpi-box {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+.matrix-kpi-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: var(--accent-orange) !important;
+}
+.matrix-table {
+  border-color: var(--border-color);
+}
+.matrix-table th, .matrix-table td {
+  padding: 5px 6px !important;
+  vertical-align: middle;
+}
+.btn-xs {
+  padding: 2px 8px !important;
+  font-size: 0.75rem !important;
+  line-height: 1.25;
+}
+
 

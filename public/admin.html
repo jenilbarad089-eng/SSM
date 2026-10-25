@@ -181,22 +181,109 @@
               </div>
             </div>
 
-            <!-- Charts Row -->
+            <!-- Charts Row: Financial Trend & Active Complaint Resolution Matrix -->
             <div class="row g-4 mb-4">
-              <div class="col-lg-7">
-                <div class="hub-card h-100">
-                  <h5 class="fw-bold mb-3"><i class="fa-solid fa-chart-bar text-primary me-2"></i> Monthly Maintenance Collection (₹)</h5>
+              <div class="col-lg-6">
+                <div class="hub-card h-100 p-4">
+                  <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h5 class="fw-bold mb-0"><i class="fa-solid fa-chart-bar text-primary me-2"></i> Monthly Maintenance Collection (₹)</h5>
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-8">6-Month Trend</span>
+                  </div>
                   <div style="height: 260px;">
                     <canvas id="billingChart"></canvas>
                   </div>
                 </div>
               </div>
 
-              <div class="col-lg-5">
-                <div class="hub-card h-100">
-                  <h5 class="fw-bold mb-3"><i class="fa-solid fa-chart-pie text-warning me-2"></i> Complaint Resolution Matrix</h5>
-                  <div style="height: 260px;">
-                    <canvas id="complaintChart"></canvas>
+              <!-- Active Complaint Resolution Matrix -->
+              <div class="col-lg-6">
+                <div class="hub-card h-100 p-4">
+                  <!-- Matrix Header with Live Status & Metric Badges -->
+                  <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                    <div>
+                      <div class="d-flex align-items-center gap-2">
+                        <h5 class="fw-bold mb-0 text-heading">
+                          <i class="fa-solid fa-layer-group text-warning me-1"></i> Complaint Resolution Matrix
+                        </h5>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle fs-8">
+                          <i class="fa-solid fa-circle-dot fa-fade me-1"></i> Live Active
+                        </span>
+                      </div>
+                      <small class="text-muted">Real-time cross-tabulation of ticket priority vs. lifecycle stage.</small>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                      <span id="matrixResolutionRate" class="badge bg-primary text-white fs-7 px-3 py-1.5 rounded-pill shadow-sm">
+                        0% Resolved
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Quick Lifecycle KPI Indicators (Interactive click to filter) -->
+                  <div class="row g-2 mb-3 text-center">
+                    <div class="col-3">
+                      <div class="p-2 rounded-3 border bg-warning bg-opacity-10 cursor-pointer matrix-kpi-box" onclick="filterComplaintsByMatrix('Pending', 'ALL')" role="button" title="Click to view all Pending Tickets">
+                        <small class="text-muted d-block fs-8 fw-semibold text-uppercase">Pending</small>
+                        <strong class="fs-5 text-warning" id="matrixPendingCount">0</strong>
+                      </div>
+                    </div>
+                    <div class="col-3">
+                      <div class="p-2 rounded-3 border bg-info bg-opacity-10 cursor-pointer matrix-kpi-box" onclick="filterComplaintsByMatrix('In Progress', 'ALL')" role="button" title="Click to view In-Progress Directives">
+                        <small class="text-muted d-block fs-8 fw-semibold text-uppercase">In Progress</small>
+                        <strong class="fs-5 text-info" id="matrixInProgressCount">0</strong>
+                      </div>
+                    </div>
+                    <div class="col-3">
+                      <div class="p-2 rounded-3 border bg-success bg-opacity-10 cursor-pointer matrix-kpi-box" onclick="filterComplaintsByMatrix('Resolved', 'ALL')" role="button" title="Click to view Resolved Complaints">
+                        <small class="text-muted d-block fs-8 fw-semibold text-uppercase">Resolved</small>
+                        <strong class="fs-5 text-success" id="matrixResolvedCount">0</strong>
+                      </div>
+                    </div>
+                    <div class="col-3">
+                      <div class="p-2 rounded-3 border bg-danger bg-opacity-10 cursor-pointer matrix-kpi-box" onclick="filterComplaintsByMatrix('ALL', 'High')" role="button" title="Click to view High/Emergency Priority Complaints">
+                        <small class="text-muted d-block fs-8 fw-semibold text-uppercase">Urgent SLA</small>
+                        <strong class="fs-5 text-danger" id="matrixUrgentCount">0</strong>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Split View: Doughnut Chart on Left + 2D Interactive Matrix on Right -->
+                  <div class="row g-3 align-items-center mb-3">
+                    <div class="col-sm-5 text-center">
+                      <div style="height: 165px; position: relative;">
+                        <canvas id="complaintChart"></canvas>
+                      </div>
+                      <small class="text-muted d-block mt-1 fs-8">Click slice to filter tickets</small>
+                    </div>
+
+                    <div class="col-sm-7">
+                      <div class="table-responsive">
+                        <table class="table table-sm table-bordered text-center align-middle mb-0 matrix-table">
+                          <thead class="table-light fs-8">
+                            <tr>
+                              <th class="text-start">Priority</th>
+                              <th class="text-warning">Pending</th>
+                              <th class="text-info">In Progress</th>
+                              <th class="text-success">Resolved</th>
+                              <th class="fw-bold">Total</th>
+                            </tr>
+                          </thead>
+                          <tbody class="fs-7" id="matrixGridBody">
+                            <!-- Populated dynamically by admin.js -->
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Live Directive Highlight & Action Link -->
+                  <div class="p-2.5 rounded-3 bg-light bg-opacity-10 border d-flex align-items-center justify-content-between flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-2 fs-8 text-truncate" style="max-width: 75%;">
+                      <span class="badge bg-warning text-dark"><i class="fa-solid fa-bolt me-1"></i> Directive</span>
+                      <span class="text-truncate text-muted" id="matrixLatestDirective">No recent directive issued.</span>
+                    </div>
+                    <button class="btn btn-xs btn-outline-primary rounded-pill px-3 py-1 fs-8 fw-semibold" onclick="navigateToComplaintsTab()">
+                      Manage Tickets <i class="fa-solid fa-arrow-right ms-1"></i>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -346,9 +433,54 @@
                 <h3 class="fw-bold mb-1">Society Complaint Lifecycle & Directives</h3>
                 <p class="caption-text mb-0">Review resident issue tickets, assign technicians, and issue admin directives.</p>
               </div>
-              <button class="btn btn-primary-custom rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#adminLodgeComplaintModal">
-                <i class="fa-solid fa-plus me-1"></i> Lodge Complaint on Behalf
-              </button>
+              <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-outline-secondary rounded-pill px-3" onclick="renderComplaintResolutionMatrix(); renderComplaintsTable();" title="Sync & Refresh Tickets">
+                  <i class="fa-solid fa-arrows-rotate me-1"></i> Sync
+                </button>
+                <button class="btn btn-primary-custom rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#adminLodgeComplaintModal">
+                  <i class="fa-solid fa-plus me-1"></i> Lodge Complaint on Behalf
+                </button>
+              </div>
+            </div>
+
+            <!-- Lifecycle Filter Toolbar & Live Search -->
+            <div class="hub-card p-3 mb-3">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-1 flex-wrap" id="complaintFilterPills">
+                  <button class="btn btn-sm btn-primary rounded-pill px-3" onclick="setComplaintTabFilter('ALL', 'ALL', this)">
+                    All (<span id="filterCountAll">0</span>)
+                  </button>
+                  <button class="btn btn-sm btn-outline-warning rounded-pill px-3" onclick="setComplaintTabFilter('Pending', 'ALL', this)">
+                    <i class="fa-solid fa-clock me-1"></i> Pending (<span id="filterCountPending">0</span>)
+                  </button>
+                  <button class="btn btn-sm btn-outline-info rounded-pill px-3" onclick="setComplaintTabFilter('In Progress', 'ALL', this)">
+                    <i class="fa-solid fa-screwdriver-wrench me-1"></i> In Progress (<span id="filterCountInProgress">0</span>)
+                  </button>
+                  <button class="btn btn-sm btn-outline-success rounded-pill px-3" onclick="setComplaintTabFilter('Resolved', 'ALL', this)">
+                    <i class="fa-solid fa-check me-1"></i> Resolved (<span id="filterCountResolved">0</span>)
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="setComplaintTabFilter('ALL', 'High', this)">
+                    <i class="fa-solid fa-triangle-exclamation me-1"></i> Urgent SLA (<span id="filterCountUrgent">0</span>)
+                  </button>
+                </div>
+                <div class="d-flex align-items-center gap-2" style="min-width: 250px;">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" id="complaintSearchInput" class="form-control" placeholder="Search ticket, flat, resident, lead..." oninput="handleComplaintSearch()">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Active Matrix Filter Banner -->
+              <div id="complaintActiveFilterBanner" class="alert alert-info py-2 px-3 small rounded-3 mt-3 mb-0 d-none align-items-center justify-content-between">
+                <div>
+                  <i class="fa-solid fa-filter text-primary me-2"></i>
+                  <span id="complaintActiveFilterText">Active filter applied from Resolution Matrix.</span>
+                </div>
+                <button class="btn btn-xs btn-outline-secondary py-0.5 px-2" onclick="clearComplaintFilter()">
+                  <i class="fa-solid fa-xmark me-1"></i> Clear Filter
+                </button>
+              </div>
             </div>
 
             <div class="hub-card p-3">
