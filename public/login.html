@@ -128,7 +128,7 @@
                   <div class="mb-3">
                     <label class="form-label caption-text fw-semibold text-muted d-flex justify-content-between align-items-center">
                       <span><i class="fa-solid fa-users-gear me-1 text-warning"></i> Select Person / Role</span>
-                      <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-8">11 Accounts</span>
+                      <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-8">10 Accounts</span>
                     </label>
                     <select class="form-select form-select-sm shadow-none" id="quickAccountSelect" onchange="onAccountDropdownSelect(this.value)">
                       <option value="">-- Select Member from Any Portal --</option>
@@ -149,7 +149,6 @@
                         <option value="rahul.sharma@gmail.com">Rahul Sharma (Owner) — Flat B-104 (rahul.sharma@gmail.com)</option>
                         <option value="neha.gupta@gmail.com">Neha Gupta (Tenant) — Flat B-202 (neha.gupta@gmail.com)</option>
                         <option value="ananya.d@gmail.com">Ananya Deshmukh (Owner) — Flat A-604 (ananya.d@gmail.com)</option>
-                        <option value="sanjay.sharma@gmail.com">Sanjay Sharma (Pending Resident) — Flat B-304 (sanjay.sharma@gmail.com)</option>
                       </optgroup>
                     </select>
                   </div>
@@ -218,7 +217,7 @@
                     <h5 class="mb-0 fw-bold fs-6"><i class="fa-solid fa-address-book text-warning me-2"></i>All Portal Accounts by Name & Role</h5>
                     <small class="text-muted fs-8">Click "Sign In" on any person to immediately authenticate and open their portal</small>
                   </div>
-                  <span class="badge bg-primary rounded-pill px-2.5 py-1.5" id="memberCountBadge">11 Accounts</span>
+                  <span class="badge bg-primary rounded-pill px-2.5 py-1.5" id="memberCountBadge">10 Accounts</span>
                 </div>
 
                 <!-- Search & Role Filter Tabs -->
@@ -231,11 +230,11 @@
                   </div>
                   <div class="col-sm-7">
                     <div class="btn-group btn-group-sm w-100" role="group" id="roleFilterGroup">
-                      <button type="button" class="btn btn-outline-secondary role-pill-btn active" onclick="setRoleFilter('All', this)">All (11)</button>
+                      <button type="button" class="btn btn-outline-secondary role-pill-btn active" onclick="setRoleFilter('All', this)">All (10)</button>
                       <button type="button" class="btn btn-outline-danger role-pill-btn" onclick="setRoleFilter('Admin', this)">Admin (1)</button>
                       <button type="button" class="btn btn-outline-info role-pill-btn" onclick="setRoleFilter('Committee', this)">Comm (2)</button>
                       <button type="button" class="btn btn-outline-warning role-pill-btn" onclick="setRoleFilter('Security', this)">Guard (2)</button>
-                      <button type="button" class="btn btn-outline-primary role-pill-btn" onclick="setRoleFilter('Resident', this)">Res (6)</button>
+                      <button type="button" class="btn btn-outline-primary role-pill-btn" onclick="setRoleFilter('Resident', this)">Res (5)</button>
                     </div>
                   </div>
                 </div>
@@ -479,22 +478,6 @@
         icon: 'fa-house-user',
         targetPage: 'resident.html',
         targetLabel: 'Resident Portal'
-      },
-      {
-        id: 'USR-111',
-        name: 'Sanjay Sharma',
-        email: 'sanjay.sharma@gmail.com',
-        password: 'resident123',
-        role: 'Resident',
-        category: 'Resident',
-        roleLabel: 'Applicant (Pending Approval)',
-        unit: 'Flat B-304 (Tower B)',
-        status: 'Pending',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sanjay&gender=male',
-        badgeClass: 'badge bg-warning-subtle text-warning-emphasis border border-warning-subtle',
-        icon: 'fa-clock-rotate-left',
-        targetPage: 'waiting-approval.html',
-        targetLabel: 'Waiting Room'
       }
     ];
 
@@ -547,7 +530,7 @@
         return matchesRole && matchesQuery;
       });
 
-      document.getElementById('memberCountBadge').textContent = `${filtered.length} of 11 Accounts`;
+      document.getElementById('memberCountBadge').textContent = `${filtered.length} of 10 Accounts`;
 
       if (filtered.length === 0) {
         listContainer.innerHTML = `
@@ -559,12 +542,9 @@
       }
 
       listContainer.innerHTML = filtered.map(acc => {
-        const isPending = acc.status === 'Pending';
-        const buttonColor = isPending ? 'btn-outline-warning' : (
-          acc.category === 'Admin' ? 'btn-outline-danger' :
+        const buttonColor = acc.category === 'Admin' ? 'btn-outline-danger' :
           acc.category === 'Committee' ? 'btn-outline-info' :
-          acc.category === 'Security' ? 'btn-outline-warning' : 'btn-outline-primary'
-        );
+          acc.category === 'Security' ? 'btn-outline-warning' : 'btn-outline-primary';
 
         return `
           <div class="card member-account-card p-2.5 mb-2 rounded-3" data-email="${acc.email}" onclick="selectAccount('${acc.email}', false)">
@@ -575,7 +555,6 @@
                   <div class="d-flex align-items-center gap-1.5 flex-wrap">
                     <strong class="fs-7 text-dark text-truncate">${acc.name}</strong>
                     <span class="${acc.badgeClass} fs-8 py-0.5 px-1.5">${acc.roleLabel}</span>
-                    ${isPending ? '<span class="badge bg-warning text-dark fs-8"><i class="fa-solid fa-clock me-1"></i>Pending Demo</span>' : ''}
                   </div>
                   <div class="d-flex align-items-center gap-2 mt-0.5 flex-wrap">
                     <span class="email-code-badge text-truncate"><i class="fa-solid fa-envelope me-1 text-muted"></i>${acc.email}</span>

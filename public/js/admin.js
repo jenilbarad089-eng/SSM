@@ -1010,7 +1010,7 @@ async function loadPendingApprovals() {
   }
 
   // Fallback to SystemDB if API returned no data or failed
-  if (!pendingUsers || pendingUsers.length === 0) {
+  if (pendingUsers === null || pendingUsers === undefined) {
     const allUsers = SystemDB.getUsers ? SystemDB.getUsers() : [];
     pendingUsers = allUsers.filter(u => u.status === 'Pending');
   }

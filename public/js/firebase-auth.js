@@ -111,8 +111,6 @@ async function firebaseLoginWithEmail(email, password) {
       user = users.find(u => u.email === 'neha.gupta@gmail.com');
     } else if (['ananya', 'ananya.d@gmail.com'].includes(lookup)) {
       user = users.find(u => u.email === 'ananya.d@gmail.com');
-    } else if (['sanjay', 'sanjay.sharma@gmail.com'].includes(lookup)) {
-      user = users.find(u => u.email === 'sanjay.sharma@gmail.com');
     }
   }
 

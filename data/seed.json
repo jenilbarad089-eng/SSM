@@ -245,22 +245,6 @@
       "registeredAt": "2026-01-15",
       "approvedAt": "2026-01-15",
       "approvedBy": "USR-101"
-    },
-    {
-      "id": "USR-111",
-      "username": "sanjay.sharma",
-      "password": "$2a$10$jTJQtEpj8xxVmXsEo4IuPufi5OS8mIwe6Nx7FOqyEcZFzKTPYvHli",
-      "name": "Sanjay Sharma",
-      "role": "Resident",
-      "status": "Pending",
-      "tower": "Tower B",
-      "flat": "B-304",
-      "flatNo": "B-304",
-      "residentType": "Owner",
-      "email": "sanjay.sharma@gmail.com",
-      "phone": "9811223399",
-      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sanjay&gender=male",
-      "registeredAt": "2026-10-01"
     }
   ],
   "complaints": [
