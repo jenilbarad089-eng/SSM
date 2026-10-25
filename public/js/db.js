@@ -4,7 +4,7 @@
 
 const STORAGE_KEY = 'ssm_database_v1';
 const SEED_VERSION_KEY = 'ssm_seed_version';
-const SEED_VERSION = '4.0'; // bump this to force fresh seed load
+const SEED_VERSION = '4.1'; // bump this to force fresh seed load
 const SESSION_KEY = 'ssm_current_user';
 const TOKEN_KEY = 'ssm_auth_token';
 
@@ -647,7 +647,8 @@ const SystemDB = {
         { id: "USR-107", username: "neha.gupta", name: "Neha Gupta", role: "Resident", status: "Approved", tower: "Tower B", flat: "B-202", flatNo: "B-202", residentType: "Tenant", rentAmount: "₹20,000/month", maintenanceDues: "₹3,500/month", parkingSlot: "P-19", block: "Phase 1", moveInDate: "2024-04-15", familyCount: "2 Members", email: "neha.gupta@gmail.com", phone: "9822334455", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Neha&gender=female", registeredAt: "2026-04-10", approvedAt: "2026-04-10" },
         { id: "USR-108", username: "vikram.yadav", name: "Vikram Yadav", role: "Security Guard", status: "Approved", empId: "EMP-108", shift: "Evening (14:00 - 22:00)", gateAssigned: "Gate 2", salary: "₹18,000/month", flat: "Gate 2", email: "vikram.yadav@gmail.com", phone: "9833445566", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Vikram&gender=male", registeredAt: "2026-05-01", approvedAt: "2026-05-01" },
         { id: "USR-109", username: "ananya.d", name: "Ananya Deshmukh", role: "Resident", status: "Approved", tower: "Tower A", flat: "A-604", flatNo: "A-604", residentType: "Owner", rentAmount: "₹25,000/month", maintenanceDues: "₹4,200/month", parkingSlot: "P-33", block: "Phase 2", moveInDate: "2024-05-01", familyCount: "4 Members", email: "ananya.d@gmail.com", phone: "9844556677", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ananya&gender=female", registeredAt: "2026-05-15", approvedAt: "2026-05-15" },
-        { id: "USR-110", username: "rohan.m", name: "Rohan Mehta", role: "Committee Member", status: "Approved", flat: "B-301", email: "rohan.secretary@smartsociety.com", phone: "9855667788", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rohan&gender=male", registeredAt: "2026-01-15", approvedAt: "2026-01-15" }
+        { id: "USR-110", username: "rohan.m", name: "Rohan Mehta", role: "Committee Member", status: "Approved", flat: "B-301", email: "rohan.secretary@smartsociety.com", phone: "9855667788", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rohan&gender=male", registeredAt: "2026-01-15", approvedAt: "2026-01-15" },
+        { id: "USR-112", username: "vikramaditya.singh", name: "Vikramaditya Singh", role: "Resident", status: "Pending", tower: "Tower C", flat: "C-302", flatNo: "C-302", residentType: "Owner", email: "vikramaditya.singh@gmail.com", phone: "9876543210", aadhaar: "AADHAAR-8821-4401", familyMembers: "Sunita Singh (Spouse), Aarav Singh (Child)", vehicleNumbers: "MH 02 AB 1234 (SUV)", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Vikramaditya&gender=male", registeredAt: "2026-10-24" }
       ],
       complaints: [],
       maintenance: [],

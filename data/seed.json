@@ -245,6 +245,25 @@
       "registeredAt": "2026-01-15",
       "approvedAt": "2026-01-15",
       "approvedBy": "USR-101"
+    },
+    {
+      "id": "USR-112",
+      "username": "vikramaditya.singh",
+      "password": "$2a$10$dn.36Xt5q0KMyOZAU2ykoeEs9V0Vn7r1uTqePw1MqwHcBknaoihMO",
+      "name": "Vikramaditya Singh",
+      "role": "Resident",
+      "status": "Pending",
+      "tower": "Tower C",
+      "flat": "C-302",
+      "flatNo": "C-302",
+      "residentType": "Owner",
+      "email": "vikramaditya.singh@gmail.com",
+      "phone": "9876543210",
+      "aadhaar": "AADHAAR-8821-4401",
+      "familyMembers": "Sunita Singh (Spouse), Aarav Singh (Child)",
+      "vehicleNumbers": "MH 02 AB 1234 (SUV)",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Vikramaditya&gender=male",
+      "registeredAt": "2026-10-24"
     }
   ],
   "complaints": [

@@ -1009,8 +1009,8 @@ async function loadPendingApprovals() {
     }
   }
 
-  // Fallback to SystemDB if API returned no data or failed
-  if (pendingUsers === null || pendingUsers === undefined) {
+  // Fallback to SystemDB if API was unavailable or did not succeed
+  if (!pendingUsers || pendingUsers.length === 0) {
     const allUsers = SystemDB.getUsers ? SystemDB.getUsers() : [];
     pendingUsers = allUsers.filter(u => u.status === 'Pending');
   }
